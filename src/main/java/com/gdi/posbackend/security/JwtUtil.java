@@ -11,7 +11,7 @@ import java.util.Date;
 @Slf4j
 @Component
 public class JwtUtil {
-    public String generateAccessToken(Long userId, String subject, String tokenId) {
+    public String generateAccessToken(String userId, String subject, String tokenId) {
         Date expiresAt = new Date(System.currentTimeMillis() + JwtAuthenticationProperties.EXPIRATION_TIME);
 
         Algorithm sign = Algorithm.HMAC512(JwtAuthenticationProperties.KEY.getBytes());
@@ -56,11 +56,11 @@ public class JwtUtil {
     }
 
 
-    public Long getUserId(DecodedJWT decodedJWT) {
-        return decodedJWT.getClaim("userId").asLong();
+    public String getUserId(DecodedJWT decodedJWT) {
+        return decodedJWT.getClaim("userId").asString();
     }
 
-    public Long getUserId(String accessToken) {
+    public String getUserId(String accessToken) {
         return getUserId(decode(accessToken));
     }
 

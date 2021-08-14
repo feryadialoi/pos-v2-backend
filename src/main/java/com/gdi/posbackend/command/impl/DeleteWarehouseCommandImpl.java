@@ -27,7 +27,7 @@ public class DeleteWarehouseCommandImpl implements DeleteWarehouseCommand {
     private final WarehouseRepository warehouseRepository;
 
     @Override
-    public Long execute(DeleteWarehouseCommandRequest request) {
+    public String execute(DeleteWarehouseCommandRequest request) {
         Optional<Warehouse> optional = warehouseRepository.findById(request.getWarehouseId());
         if (optional.isEmpty()) {
             throw new WarehouseNotFoundException("warehouse with id " + request.getWarehouseId() + " not found");

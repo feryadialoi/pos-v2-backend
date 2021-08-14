@@ -14,10 +14,10 @@ import java.util.Optional;
  * @date 8/5/2021 4:14 AM
  */
 @Component("auditorProvider")
-public class AuditorProvider implements AuditorAware<Long> {
+public class AuditorProvider implements AuditorAware<String> {
 
     @Override
-    public Optional<Long> getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null) {
             if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
                 return Optional.ofNullable(SecurityContextHolder.getContext())

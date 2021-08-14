@@ -35,7 +35,7 @@ public class ProductController extends BaseController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> getProduct(@PathVariable(name = "productId") Long productId) {
+    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> getProduct(@PathVariable(name = "productId") String productId) {
         return response("get product success",
                 productService.getProduct(productId)
         );
@@ -51,15 +51,13 @@ public class ProductController extends BaseController {
     @PostMapping
     public Object createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
 
-//        return response("create product success",
-//                productService.createProduct(createProductRequest)
-//        );
-
-        return createProductRequest;
+        return response("create product success",
+                productService.createProduct(createProductRequest)
+        );
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> updateProduct(@PathVariable(name = "productId") Long productId,
+    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> updateProduct(@PathVariable(name = "productId") String productId,
                                                                                       @Valid @RequestBody UpdateProductRequest updateProductRequest) {
         return response("update product success",
                 productService.updateProduct(productId, updateProductRequest)
@@ -67,7 +65,7 @@ public class ProductController extends BaseController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<ApiResponse<Long, Object>> deleteProduct(@PathVariable(name = "productId") Long productId) {
+    public ResponseEntity<ApiResponse<Object, Object>> deleteProduct(@PathVariable(name = "productId") String productId) {
         return response("delete product success",
                 productService.deleteProduct(productId)
         );

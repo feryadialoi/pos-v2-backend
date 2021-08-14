@@ -34,7 +34,7 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<CategoryResponse, Object>> getCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<ApiResponse<CategoryResponse, Object>> getCategory(@PathVariable("categoryId") String categoryId) {
         return response("",
                 categoryService.getCategory(categoryId)
         );
@@ -48,7 +48,7 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<CategoryResponse, Object>> updateCategory(@PathVariable("categoryId") Long categoryId,
+    public ResponseEntity<ApiResponse<CategoryResponse, Object>> updateCategory(@PathVariable("categoryId") String categoryId,
                                                                                 @Valid @RequestBody UpdateCategoryRequest updateCategoryRequest) {
         return response("update category success",
                 categoryService.updateCategory(categoryId, updateCategoryRequest)
@@ -56,7 +56,7 @@ public class CategoryController extends BaseController {
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<Object, Object>> deleteCategory(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<ApiResponse<Object, Object>> deleteCategory(@PathVariable("categoryId") String categoryId) {
         return response("delete category success",
                 categoryService.deleteCategory(categoryId)
         );

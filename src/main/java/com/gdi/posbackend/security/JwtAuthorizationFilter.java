@@ -53,7 +53,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken authenticate(String token) {
         DecodedJWT decodedJWT = jwtUtil.verifyToken(token);
-        Long userId = jwtUtil.getUserId(decodedJWT);
+        String userId = jwtUtil.getUserId(decodedJWT);
         String subject = jwtUtil.getSubject(decodedJWT);
         log.info("Token [subject = \"" + subject + "\", id = \"" + userId + "\"]");
 

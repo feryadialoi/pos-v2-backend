@@ -16,9 +16,9 @@ public interface BrandService {
 
     BrandResponse createBrand(CreateBrandRequest createBrandRequest);
 
-    BrandResponse getBrand(Long brandId);
+    BrandResponse getBrand(String brandId);
 
-    BrandResponse updateBrand(Long brandId, UpdateBrandRequest updateBrandRequest);
+    BrandResponse updateBrand(String brandId, UpdateBrandRequest updateBrandRequest);
 
-    Object deleteBrand(Long brandId);
+    Object deleteBrand(String brandId);
 }

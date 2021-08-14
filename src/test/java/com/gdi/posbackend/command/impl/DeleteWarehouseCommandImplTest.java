@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,10 +32,14 @@ class DeleteWarehouseCommandImplTest {
     @MockBean
     private WarehouseRepository warehouseRepository;
 
+    private String warehouseId;
+
     @BeforeEach
     void setUp() {
+        warehouseId = UUID.randomUUID().toString();
+
         Warehouse warehouse = new Warehouse();
-        warehouse.setId(1L);
+        warehouse.setId(UUID.randomUUID().toString());
         warehouse.setName("warehouse");
 //        Mockito.when(warehouseRepository.findById(1L)).thenReturn(Optional.of(warehouse));
     }
@@ -48,8 +53,8 @@ class DeleteWarehouseCommandImplTest {
         Assertions.assertThrows(WarehouseNotFoundException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
-                DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest(1L);
-                Long warehouseId = deleteWarehouseCommand.execute(deleteWarehouseCommandRequest);
+                DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest("");
+                String warehouseId = deleteWarehouseCommand.execute(deleteWarehouseCommandRequest);
             }
         });
     }

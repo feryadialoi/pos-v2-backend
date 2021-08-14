@@ -27,7 +27,7 @@ public class LoginMapperImpl implements LoginMapper {
     public LoginResponse mapAuthenticationToLoginResponse(Authentication authentication, User user) {
 
         String subject = authentication.getName();
-        Long userId = ((ApplicationUserDetails) authentication.getPrincipal()).getId();
+        String userId = ((ApplicationUserDetails) authentication.getPrincipal()).getId();
         String tokenId = UUID.randomUUID().toString();
         String accessToken = jwtUtil.generateAccessToken(userId, subject, tokenId);
         String refreshToken = jwtUtil.generateRefreshToken(tokenId);

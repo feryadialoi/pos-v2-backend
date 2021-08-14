@@ -17,7 +17,7 @@ import java.util.Collection;
 @Data
 public class ApplicationUserDetails implements UserDetails {
 
-    private Long id;
+    private String id;
     private Collection<? extends GrantedAuthority> authorities;
     private String password;
     private String username;
@@ -27,7 +27,7 @@ public class ApplicationUserDetails implements UserDetails {
     private boolean enabled;
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

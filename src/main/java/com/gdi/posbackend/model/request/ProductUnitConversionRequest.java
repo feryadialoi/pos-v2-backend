@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class ProductUnitConversionRequest {
-    private Long fromUnitId;
+    private String fromUnitId;
     private BigDecimal multiplier;
-    private Long toUnitId;
+    private String toUnitId;
 }

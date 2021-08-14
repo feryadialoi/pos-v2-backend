@@ -1,6 +1,6 @@
 create table permissions
 (
-    id                 bigint unsigned auto_increment,
+    id                 varchar(36),
     name               varchar(255),
     display_name       varchar(255),
     description        varchar(255),
@@ -8,7 +8,7 @@ create table permissions
     created_date       timestamp,
     last_modified_date timestamp,
     deleted_date       timestamp,
-    created_by         bigint unsigned,
-    last_modified_by   bigint unsigned,
+    created_by         varchar(36),
+    last_modified_by   varchar(36),
     primary key (id)
 ) engine = InnoDB;

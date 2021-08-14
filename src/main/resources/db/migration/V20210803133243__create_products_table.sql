@@ -1,19 +1,12 @@
 create table products
 (
-    id                 bigint unsigned auto_increment primary key,
+    id                 varchar(36) primary key,
     code               varchar(255),
     name               varchar(255),
-    category_id        bigint unsigned,
+    category_id        varchar(36),
+    brand_id           varchar(36),
 
-    default_unit       ENUM ('LARGE', 'MEDIUM', 'SMALL'),
-
-    unit_large_id      bigint unsigned,
-    unit_medium_id     bigint unsigned,
-    unit_small_id      bigint unsigned,
-
-    unit_large_price   decimal(19, 2),
-    unit_medium_price  decimal(19, 2),
-    unit_small_price   decimal(19, 2),
+    idempotent_key     varchar(36),
 
     stock              decimal(19, 2),
     minimum_stock      decimal(19, 2),
@@ -21,8 +14,8 @@ create table products
     created_date       timestamp,
     last_modified_date timestamp,
     deleted_date       timestamp,
-    created_by         bigint unsigned,
-    last_modified_by   bigint unsigned
+    created_by         varchar(36),
+    last_modified_by   varchar(36)
 ) engine = InnoDB;
 
 

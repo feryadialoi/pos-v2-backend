@@ -2,6 +2,7 @@ package com.gdi.posbackend.entity.auth;
 
 import com.gdi.posbackend.entity.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -37,8 +38,9 @@ public class Role extends BaseEntity {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    private String id;
 
     @Column(name = "name")
     private String name;

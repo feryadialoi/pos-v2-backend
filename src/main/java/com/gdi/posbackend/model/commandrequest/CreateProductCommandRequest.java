@@ -1,6 +1,7 @@
 package com.gdi.posbackend.model.commandrequest;
 
 import com.gdi.posbackend.model.request.CreateProductRequest;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 8/13/2021 1:48 PM
  */
 @Data
-public class CreateProductCommandRequest {
+@AllArgsConstructor
+public class CreateProductCommandRequest implements CommandRequest {
     private CreateProductRequest createProductRequest;
 }

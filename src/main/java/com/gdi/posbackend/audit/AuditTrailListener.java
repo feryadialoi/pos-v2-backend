@@ -16,7 +16,7 @@ public class AuditTrailListener {
     @PreUpdate
     @PreRemove
     private void beforeAnyUpdate(User user) {
-        if (user.getId() == 0) {
+        if (user.getId() == null) {
             log.info("[USER AUDIT] About to add a user");
         } else {
             log.info("[USER AUDIT] About to update/delete user: " + user.getId());

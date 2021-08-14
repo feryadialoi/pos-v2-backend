@@ -1,6 +1,6 @@
 create table running_numbers
 (
-    id          bigint unsigned auto_increment,
+    id          varchar(36),
     prefix      varchar(255),
     description varchar(255),
     number      int,

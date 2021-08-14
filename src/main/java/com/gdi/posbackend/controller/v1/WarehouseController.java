@@ -38,7 +38,7 @@ public class WarehouseController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','GET_WAREHOUSE')")
     @GetMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> getWarehouse(@PathVariable(name = "warehouseId") Long warehouseId) {
+    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> getWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
         return response("get warehouse success",
                 warehouseService.getWarehouse(warehouseId)
         );
@@ -54,7 +54,7 @@ public class WarehouseController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','UPDATE_WAREHOUSE')")
     @PutMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> updateWarehouse(@PathVariable(name = "warehouseId") Long warehouseId,
+    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> updateWarehouse(@PathVariable(name = "warehouseId") String warehouseId,
                                                                                           @Valid @RequestBody UpdateWarehouseRequest updateWarehouseRequest) {
         return response("update warehouse success",
                 warehouseService.updateWarehouse(warehouseId, updateWarehouseRequest)
@@ -62,7 +62,7 @@ public class WarehouseController extends BaseController {
     }
 
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<Long, Object>> deleteWarehouse(@PathVariable(name = "warehouseId") Long warehouseId) {
+    public ResponseEntity<ApiResponse<Object, Object>> deleteWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
         return response("delete warehouse success",
                 warehouseService.deleteWarehouse(warehouseId)
         );

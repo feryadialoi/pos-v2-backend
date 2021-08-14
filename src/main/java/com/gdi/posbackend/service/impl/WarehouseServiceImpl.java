@@ -33,7 +33,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public DetailedWarehouseResponse getWarehouse(Long warehouseId) {
+    public DetailedWarehouseResponse getWarehouse(String warehouseId) {
         return serviceExecutor.execute(GetWarehouseCommand.class,
                 new GetWarehouseCommandRequest(warehouseId)
         );
@@ -47,14 +47,14 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public DetailedWarehouseResponse updateWarehouse(Long warehouseId, UpdateWarehouseRequest updateWarehouseRequest) {
+    public DetailedWarehouseResponse updateWarehouse(String warehouseId, UpdateWarehouseRequest updateWarehouseRequest) {
         return serviceExecutor.execute(UpdateWarehouseCommand.class,
                 new UpdateWarehouseCommandRequest(warehouseId, updateWarehouseRequest)
         );
     }
 
     @Override
-    public Long deleteWarehouse(Long warehouseId) {
+    public Object deleteWarehouse(String warehouseId) {
         return serviceExecutor.execute(DeleteWarehouseCommand.class,
                 new DeleteWarehouseCommandRequest(warehouseId)
         );

@@ -9,6 +9,6 @@ import java.util.List;
  * @author Feryadialoi
  * @date 8/4/2021 2:15 PM
  */
-public interface PermissionRepository extends JpaRepository<Permission, Long> {
+public interface PermissionRepository extends JpaRepository<Permission, String> {
     List<Permission> findAllByNameIn(List<String> names);
 }

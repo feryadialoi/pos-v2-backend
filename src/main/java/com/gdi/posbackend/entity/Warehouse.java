@@ -1,6 +1,7 @@
 package com.gdi.posbackend.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -23,8 +24,9 @@ import java.util.List;
 @Where(clause = "deleted_date is null")
 public class Warehouse extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    private String id;
 
     @Column(name = "name")
     private String name;

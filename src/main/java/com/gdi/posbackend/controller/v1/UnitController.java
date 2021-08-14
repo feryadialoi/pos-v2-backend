@@ -38,7 +38,7 @@ public class UnitController extends BaseController {
     }
 
     @GetMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<UnitResponse, Object>> getUnit(@PathVariable("unitId") Long unitId) {
+    public ResponseEntity<ApiResponse<UnitResponse, Object>> getUnit(@PathVariable("unitId") String unitId) {
         return response("get unit success",
                 unitService.getUnit(unitId)
         );
@@ -52,7 +52,7 @@ public class UnitController extends BaseController {
     }
 
     @PutMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<UnitResponse, Object>> updateUnit(@PathVariable("unitId") Long unitId,
+    public ResponseEntity<ApiResponse<UnitResponse, Object>> updateUnit(@PathVariable("unitId") String unitId,
                                                                         @Valid @RequestBody UpdateUnitRequest updateUnitRequest) {
         return response("update unit success",
                 unitService.updateUnit(unitId, updateUnitRequest)
@@ -60,7 +60,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<Object, Object>> deleteUnit(@PathVariable("unitId") Long unitId) {
+    public ResponseEntity<ApiResponse<Object, Object>> deleteUnit(@PathVariable("unitId") String unitId) {
         return response("delete unit success",
                 unitService.deleteUnit(unitId)
         );

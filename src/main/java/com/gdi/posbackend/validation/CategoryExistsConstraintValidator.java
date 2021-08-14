@@ -11,13 +11,13 @@ import javax.validation.ConstraintValidatorContext;
  * @author Feryadialoi
  * @date 8/13/2021 3:45 PM
  */
-public class CategoryExistsConstraintValidator implements ConstraintValidator<CategoryExistsConstraint, Long> {
+public class CategoryExistsConstraintValidator implements ConstraintValidator<CategoryExistsConstraint, String> {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Override
-    public boolean isValid(Long categoryId, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(String categoryId, ConstraintValidatorContext constraintValidatorContext) {
         return categoryRepository.existsById(categoryId);
     }
 }

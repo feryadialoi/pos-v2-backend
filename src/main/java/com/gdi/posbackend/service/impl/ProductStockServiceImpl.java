@@ -21,12 +21,12 @@ public class ProductStockServiceImpl implements ProductStockService {
     }
 
     @Override
-    public Object getProductStock(Long productStockId) {
+    public Object getProductStock(String productStockId) {
         return null;
     }
 
     @Override
-    public Object updateProductStock(Long productStockId, UpdateProductStockRequest updateProductStockRequest) {
+    public Object updateProductStock(String productStockId, UpdateProductStockRequest updateProductStockRequest) {
         return null;
     }
 }

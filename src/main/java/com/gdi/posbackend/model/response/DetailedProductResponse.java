@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DetailedProductResponse {
-    private Long id;
+    private String id;
     private String name;
 }

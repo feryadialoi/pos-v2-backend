@@ -51,14 +51,14 @@ public class ProductStockController extends BaseController {
      * product unit
      */
     @GetMapping("/{productStockId}")
-    public Object getProductStock(@PathVariable("productStockId") Long productStockId) {
+    public Object getProductStock(@PathVariable("productStockId") String productStockId) {
         return response("get product stock success",
                 productStockService.getProductStock(productStockId)
         );
     }
 
     @PutMapping("/{productStockId}")
-    public Object updateProductStock(@PathVariable("productStockId") Long productStockId,
+    public Object updateProductStock(@PathVariable("productStockId") String productStockId,
                                      @Valid @RequestBody UpdateProductStockRequest updateProductStockRequest) {
         return response("update product stock success",
                 productStockService.updateProductStock(productStockId, updateProductStockRequest)

@@ -1,4 +1,4 @@
-package com.gdi.posbackend.db.seed.ordered;
+package com.gdi.posbackend.db.seed;
 
 import com.gdi.posbackend.entity.auth.Role;
 import com.gdi.posbackend.entity.auth.User;
@@ -18,50 +18,58 @@ import java.util.Optional;
 
 /**
  * @author Feryadialoi
- * @date 8/4/2021 4:38 PM
+ * @date 8/4/2021 4:44 PM
  */
 @Slf4j
 @Component
 @Transactional
 @AllArgsConstructor
-public class O3_UserSeed implements ApplicationListener<ApplicationReadyEvent>, Ordered {
+public class SeedUserAndRole implements ApplicationListener<ApplicationReadyEvent>, Ordered {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         Optional<User> optionalUser = userRepository.findByUsername("superadmin");
-        if (optionalUser.isEmpty()) {
-            seedUser();
+        Optional<Role> optionalRole = roleRepository.findByName("SUPER_ADMIN");
+
+
+        if (optionalUser.isPresent() && optionalRole.isPresent()) {
+            log.info("no need to seed user & role data");
         } else {
-            log.info("no need to seed user data");
+            seedRoleAndUser();
         }
     }
 
-    private void seedUser() {
-        Optional<Role> optionalRole = roleRepository.findByName("SUPER_ADMIN");
-        if (optionalRole.isPresent()) {
-            Role role = optionalRole.get();
 
-            User user = new User();
-            user.setName("Super Admin");
-            user.setUsername("superadmin");
-            user.setEmail("superadmin@app.com");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setRoles(List.of(role));
+    private void seedRoleAndUser() {
 
-            userRepository.save(user);
+        Role role = new Role();
+        role.setName("SUPER_ADMIN");
+        role.setDescription("Super admin");
+        role.setDisplayName("Super Admin");
 
-            log.info("seed data user success");
-        } else {
-            log.info("role SUPER_ADMIN not found");
-        }
+        role = roleRepository.save(role);
+        log.info("seed data role success");
+
+        User user = new User();
+        user.setName("Super Admin");
+        user.setUsername("superadmin");
+        user.setEmail("superadmin@app.com");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setRoles(List.of(role));
+
+        userRepository.save(user);
+
+        log.info("seed data user success");
+
+
     }
 
     @Override
     public int getOrder() {
-        return 3;
+        return 1;
     }
 }

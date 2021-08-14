@@ -2,7 +2,6 @@ package com.gdi.posbackend;
 
 import com.gdi.posbackend.constant.LocaleOptions;
 import com.gdi.posbackend.entity.enums.BalanceSheetFormat;
-import com.gdi.posbackend.entity.enums.ProductDefaultUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -53,15 +52,6 @@ public class ETCTest {
         System.out.println(new Locale("in", "ID").equals(LocaleOptions.indonesia));
     }
 
-    @Test
-    void productDefaultUnitTest_shouldThrowIllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                ProductDefaultUnit.valueOf("LARGEE");
-            }
-        });
-    }
 
     enum OrderStatus {
         PARTIALLY_SHIPPED;

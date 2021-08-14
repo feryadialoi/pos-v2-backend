@@ -32,7 +32,7 @@ class CategoryRepositoryTest {
 
     @Test
     void findByNameIgnoreCase() {
-        Optional<Category> makanan = categoryRepository.findByNameIgnoreCase("Makanan");
+        Optional<Category> makanan = categoryRepository.findByName("Makanan");
         Assertions.assertTrue(makanan.isPresent());
         Category category = makanan.get();
         log.info("id            = {}", category.getId());

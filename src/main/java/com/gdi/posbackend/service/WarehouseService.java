@@ -15,11 +15,11 @@ import org.springframework.data.domain.Pageable;
 public interface WarehouseService {
     Page<WarehouseResponse> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable);
 
-    DetailedWarehouseResponse getWarehouse(Long warehouseId);
+    DetailedWarehouseResponse getWarehouse(String warehouseId);
 
     DetailedWarehouseResponse createWarehouse(CreateWarehouseRequest createWarehouseRequest);
 
-    DetailedWarehouseResponse updateWarehouse(Long warehouseId, UpdateWarehouseRequest updateWarehouseRequest);
+    DetailedWarehouseResponse updateWarehouse(String warehouseId, UpdateWarehouseRequest updateWarehouseRequest);
 
-    Long deleteWarehouse(Long warehouseId);
+    Object deleteWarehouse(String warehouseId);
 }

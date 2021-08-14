@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 public interface ProductStockService {
     Page<Object> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable);
 
-    Object getProductStock(Long productStockId);
+    Object getProductStock(String productStockId);
 
-    Object updateProductStock(Long productStockId, UpdateProductStockRequest updateProductStockRequest);
+    Object updateProductStock(String productStockId, UpdateProductStockRequest updateProductStockRequest);
 }

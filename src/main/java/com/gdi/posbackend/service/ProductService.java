@@ -16,11 +16,11 @@ public interface ProductService {
 
      Page<ProductResponse> getProducts(ProductCriteria productCriteria, Pageable pageable);
 
-     DetailedProductResponse getProduct(Long productId);
+     DetailedProductResponse getProduct(String productId);
 
      DetailedProductResponse createProduct(CreateProductRequest createProductRequest);
 
-     DetailedProductResponse updateProduct(Long productId, UpdateProductRequest updateProductRequest);
+     DetailedProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest);
 
-     Long deleteProduct(Long productId);
+     Object deleteProduct(String productId);
 }

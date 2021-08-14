@@ -1,6 +1,6 @@
 create table users_roles
 (
-    user_id bigint unsigned,
-    role_id bigint unsigned,
+    user_id varchar(36),
+    role_id varchar(36),
     primary key (user_id, role_id)
 ) engine = InnoDB;

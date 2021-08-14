@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetWarehouseCommandRequest implements CommandRequest {
-    private Long warehouseId;
+    private String warehouseId;
 }

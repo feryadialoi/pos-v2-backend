@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse getCategory(Long categoryId) {
+    public CategoryResponse getCategory(String categoryId) {
         Optional<Category> optional = categoryRepository.findById(categoryId);
         if (optional.isEmpty()) throw new CategoryNotFoundException("category with id " + categoryId + " not found");
 
@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse updateCategory(Long categoryId, UpdateCategoryRequest updateCategoryRequest) {
+    public CategoryResponse updateCategory(String categoryId, UpdateCategoryRequest updateCategoryRequest) {
         Optional<Category> optional = categoryRepository.findById(categoryId);
         if (optional.isEmpty()) throw new CategoryNotFoundException("category with id " + categoryId + " not found");
 
@@ -74,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Object deleteCategory(Long categoryId) {
+    public Object deleteCategory(String categoryId) {
         Optional<Category> optional = categoryRepository.findById(categoryId);
         if (optional.isEmpty()) throw new CategoryNotFoundException("category with id " + categoryId + " not found");
 

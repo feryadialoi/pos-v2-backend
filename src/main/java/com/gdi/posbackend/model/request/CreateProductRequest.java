@@ -23,15 +23,19 @@ public class CreateProductRequest {
 
     @NotNull
     @CategoryExistsConstraint
-    private Long categoryId;
+    private String categoryId;
 
     @NotNull
     @BrandExistsConstraint
-    private Long brandId;
+    private String brandId;
 
     @NotNull
-    private List<Long> unitIds;
+    private List<String> unitIds;
 
     @NotNull
     private List<ProductUnitConversionRequest> unitConversions;
+
+    @NotNull
+    @NotBlank
+    private String idempotentKey;
 }

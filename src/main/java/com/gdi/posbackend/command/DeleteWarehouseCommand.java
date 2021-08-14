@@ -7,5 +7,5 @@ import com.gdi.posbackend.model.commandrequest.warehouse.DeleteWarehouseCommandR
  * @author Feryadialoi
  * @date 8/5/2021 12:01 AM
  */
-public interface DeleteWarehouseCommand extends ConsumerSupplierCommand<Long, DeleteWarehouseCommandRequest> {
+public interface DeleteWarehouseCommand extends ConsumerSupplierCommand<String, DeleteWarehouseCommandRequest> {
 }

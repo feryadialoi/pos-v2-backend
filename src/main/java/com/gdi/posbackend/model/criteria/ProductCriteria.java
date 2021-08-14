@@ -1,9 +1,6 @@
 package com.gdi.posbackend.model.criteria;
 
-import com.gdi.posbackend.entity.enums.ProductDefaultUnit;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * @author Feryadialoi

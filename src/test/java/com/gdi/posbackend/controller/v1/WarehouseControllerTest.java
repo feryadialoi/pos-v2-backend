@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Feryadialoi
@@ -49,8 +50,9 @@ class WarehouseControllerTest {
 
     @BeforeEach
     void setUp() {
+        String id = UUID.randomUUID().toString();
         ApplicationUserDetails userDetails = ApplicationUserDetails.builder()
-                .id(1L)
+                .id(id)
                 .username("superadmin")
                 .password("password")
                 .authorities(List.of(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN")))
@@ -59,7 +61,7 @@ class WarehouseControllerTest {
                 .credentialsNonExpired(true)
                 .enabled(true)
                 .build();
-        Mockito.when(warehouseService.deleteWarehouse(1L)).thenThrow(new WarehouseNotFoundException("warehouse with id 1 not found"));
+        Mockito.when(warehouseService.deleteWarehouse("")).thenThrow(new WarehouseNotFoundException("warehouse with id 1 not found"));
         Mockito.when(userDetailsService.loadUserByUsername("")).thenReturn(userDetails);
 
     }

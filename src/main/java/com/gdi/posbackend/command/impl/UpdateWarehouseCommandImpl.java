@@ -26,7 +26,7 @@ public class UpdateWarehouseCommandImpl implements UpdateWarehouseCommand {
 
     @Override
     public DetailedWarehouseResponse execute(UpdateWarehouseCommandRequest request) {
-        Long warehouseId = request.getWarehouseId();
+        String warehouseId = request.getWarehouseId();
         UpdateWarehouseRequest updateWarehouseRequest = request.getUpdateWarehouseRequest();
 
         Optional<Warehouse> optional = warehouseRepository.findById(warehouseId);

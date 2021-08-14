@@ -14,12 +14,12 @@ import org.springframework.data.domain.Pageable;
 public interface CategoryService {
     Page<CategoryResponse> getCategories(CategoryCriteria categoryCriteria, Pageable pageable);
 
-    CategoryResponse getCategory(Long categoryId);
+    CategoryResponse getCategory(String categoryId);
 
     CategoryResponse createCategory(CreateCategoryRequest createCategoryRequest);
 
-    CategoryResponse updateCategory(Long categoryId, UpdateCategoryRequest updateCategoryRequest);
+    CategoryResponse updateCategory(String categoryId, UpdateCategoryRequest updateCategoryRequest);
 
-    Object deleteCategory(Long categoryId);
+    Object deleteCategory(String categoryId);
 
 }

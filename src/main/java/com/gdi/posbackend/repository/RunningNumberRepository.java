@@ -13,7 +13,7 @@ import java.util.List;
  * @author Feryadialoi
  * @date 8/4/2021 2:07 PM
  */
-public interface RunningNumberRepository extends JpaRepository<RunningNumber, Long> {
+public interface RunningNumberRepository extends JpaRepository<RunningNumber, String> {
 
     RunningNumber findByPrefix(String prefix);
 

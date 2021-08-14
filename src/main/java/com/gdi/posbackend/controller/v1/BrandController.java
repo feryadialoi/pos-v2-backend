@@ -36,18 +36,18 @@ public class BrandController extends BaseController {
     }
 
     @GetMapping("/{brandId}")
-    public ResponseEntity<ApiResponse<BrandResponse, Object>> getBrand(@PathVariable(name = "brandId") Long brandId) {
+    public ResponseEntity<ApiResponse<BrandResponse, Object>> getBrand(@PathVariable(name = "brandId") String brandId) {
         return response("get brand success", brandService.getBrand(brandId));
     }
 
     @PutMapping("/{brandId}")
-    public ResponseEntity<ApiResponse<BrandResponse, Object>> updateBrand(@PathVariable(name = "brandId") Long brandId,
+    public ResponseEntity<ApiResponse<BrandResponse, Object>> updateBrand(@PathVariable(name = "brandId") String brandId,
                                                                           @Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return response("update brand success", brandService.updateBrand(brandId, updateBrandRequest));
     }
 
     @DeleteMapping("/{brandId}")
-    public Object deleteBrand(@PathVariable(name = "brandId") Long branId) {
+    public Object deleteBrand(@PathVariable(name = "brandId") String branId) {
         return response("delete brand success", brandService.deleteBrand(branId));
     }
 }

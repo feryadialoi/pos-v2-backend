@@ -52,7 +52,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponse getBrand(Long brandId) {
+    public BrandResponse getBrand(String brandId) {
         Optional<Brand> optionalBrand = brandRepository.findById(brandId);
         if (optionalBrand.isPresent()) {
             Brand brand = optionalBrand.get();
@@ -63,7 +63,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandResponse updateBrand(Long brandId, UpdateBrandRequest updateBrandRequest) {
+    public BrandResponse updateBrand(String brandId, UpdateBrandRequest updateBrandRequest) {
         Optional<Brand> optionalBrand = brandRepository.findById(brandId);
         if (optionalBrand.isPresent()) {
             Brand brand = optionalBrand.get();
@@ -81,7 +81,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Object deleteBrand(Long brandId) {
+    public Object deleteBrand(String brandId) {
         Optional<Brand> optionalBrand = brandRepository.findById(brandId);
         if (optionalBrand.isPresent()) {
             Brand brand = optionalBrand.get();

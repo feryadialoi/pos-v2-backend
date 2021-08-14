@@ -14,11 +14,11 @@ import org.springframework.data.domain.Pageable;
 public interface UnitService {
     Page<UnitResponse> getUnits(UnitCriteria unitCriteria, Pageable pageable);
 
-    UnitResponse getUnit(Long unitId);
+    UnitResponse getUnit(String unitId);
 
     UnitResponse createUnit(CreateUnitRequest createUnitRequest);
 
-    UnitResponse updateUnit(Long unitId, UpdateUnitRequest updateUnitRequest);
+    UnitResponse updateUnit(String unitId, UpdateUnitRequest updateUnitRequest);
 
-    Object deleteUnit(Long unitId);
+    Object deleteUnit(String unitId);
 }

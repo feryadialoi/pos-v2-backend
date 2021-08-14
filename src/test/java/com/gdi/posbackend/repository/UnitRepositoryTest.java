@@ -45,15 +45,4 @@ class UnitRepositoryTest {
         Assertions.assertEquals(2, count);
     }
 
-    @Test
-    void countAllByIdIn() {
-        List<Long> ids1 = List.of(1L, 2L, 3L);
-        long exists1 = unitRepository.existsAllByIdIn(ids1, ids1.size());
-        Assertions.assertEquals(1, exists1);
-
-        List<Long> ids2 = List.of(1L, 2L, 20L);
-        long exists2 = unitRepository.existsAllByIdIn(ids2, ids2.size());
-        Assertions.assertEquals(0, exists2);
-    }
-
 }

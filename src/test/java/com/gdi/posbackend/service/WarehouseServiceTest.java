@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -25,10 +27,15 @@ class WarehouseServiceTest {
     @MockBean
     private DeleteWarehouseCommand deleteWarehouseCommand;
 
+
+    private String warehouseId;
+
     @BeforeEach
     void setUp() {
-        DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest(1L);
-        Mockito.when(deleteWarehouseCommand.execute(deleteWarehouseCommandRequest)).thenReturn(1L);
+        warehouseId = UUID.randomUUID().toString();
+
+        DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest(warehouseId);
+        Mockito.when(deleteWarehouseCommand.execute(deleteWarehouseCommandRequest)).thenReturn(warehouseId);
     }
 
     @AfterEach
@@ -53,7 +60,7 @@ class WarehouseServiceTest {
 
     @Test
     void deleteWarehouse() {
-        Long warehouseId = warehouseService.deleteWarehouse(1L);
-        Assertions.assertEquals(1L, warehouseId);
+        Object result = warehouseService.deleteWarehouse(warehouseId);
+        Assertions.assertNotNull(result);
     }
 }

@@ -1,6 +1,8 @@
 package com.gdi.posbackend.service.impl;
 
+import com.gdi.posbackend.command.CreateProductCommand;
 import com.gdi.posbackend.command.GetProductsCommand;
+import com.gdi.posbackend.model.commandrequest.CreateProductCommandRequest;
 import com.gdi.posbackend.model.commandrequest.GetProductsCommandRequest;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.request.CreateProductRequest;
@@ -32,22 +34,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public DetailedProductResponse getProduct(Long productId) {
+    public DetailedProductResponse getProduct(String productId) {
         return null;
     }
 
     @Override
     public DetailedProductResponse createProduct(CreateProductRequest createProductRequest) {
+        return serviceExecutor.execute(CreateProductCommand.class,
+                new CreateProductCommandRequest(createProductRequest)
+        );
+    }
+
+    @Override
+    public DetailedProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) {
         return null;
     }
 
     @Override
-    public DetailedProductResponse updateProduct(Long productId, UpdateProductRequest updateProductRequest) {
-        return null;
-    }
-
-    @Override
-    public Long deleteProduct(Long productId) {
+    public Object deleteProduct(String productId) {
         return null;
     }
 }

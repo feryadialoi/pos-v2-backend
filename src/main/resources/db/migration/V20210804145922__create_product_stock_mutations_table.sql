@@ -1,8 +1,8 @@
 create table product_stock_mutations
 (
-    id                      bigint unsigned auto_increment,
-    product_stock_id        bigint unsigned,
-    product_stock_detail_id bigint unsigned,
+    id                      varchar(36),
+    product_stock_id        varchar(36),
+    product_stock_detail_id varchar(36),
     quantity_in             decimal(19, 2),
     quantity_out            decimal(19, 2),
     event                   ENUM ('SALE','PURCHASE','SALE_RETURN','PURCHASE_RETURN'),
@@ -11,7 +11,7 @@ create table product_stock_mutations
     created_date            timestamp,
     last_modified_date      timestamp,
     deleted_date            timestamp,
-    created_by              bigint unsigned,
-    last_modified_by        bigint unsigned,
+    created_by              varchar(36),
+    last_modified_by        varchar(36),
     primary key (id)
 ) engine = InnoDB;

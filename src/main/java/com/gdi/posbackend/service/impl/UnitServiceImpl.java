@@ -41,7 +41,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public UnitResponse getUnit(Long unitId) {
+    public UnitResponse getUnit(String unitId) {
         Optional<Unit> optional = unitRepository.findById(unitId);
         if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
         Unit unit = optional.get();
@@ -58,7 +58,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public UnitResponse updateUnit(Long unitId, UpdateUnitRequest updateUnitRequest) {
+    public UnitResponse updateUnit(String unitId, UpdateUnitRequest updateUnitRequest) {
         Optional<Unit> optional = unitRepository.findById(unitId);
         if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
         Unit unit = optional.get();
@@ -71,7 +71,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Object deleteUnit(Long unitId) {
+    public Object deleteUnit(String unitId) {
         Optional<Unit> optional = unitRepository.findById(unitId);
         if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
 
