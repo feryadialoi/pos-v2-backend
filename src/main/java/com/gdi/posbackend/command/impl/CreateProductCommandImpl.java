@@ -54,6 +54,7 @@ public class CreateProductCommandImpl implements CreateProductCommand {
         product.setCode(createProductRequest.getCode());
         product.setCategory(getCategory(createProductRequest.getCategoryId()));
         product.setBrand(getBrand(createProductRequest.getBrandId()));
+        product.setUnits(getUnits(createProductRequest.getUnitIds()));
         product.setUnitConversions(getUnitConversions(createProductRequest, product));
         product.setStock(BigDecimal.ZERO);
         product.setMinimumStock(BigDecimal.ZERO);
@@ -63,6 +64,11 @@ public class CreateProductCommandImpl implements CreateProductCommand {
 
         return productMapper.mapProductToDetailedProductResponse(product);
 
+    }
+
+    private List<Unit> getUnits(List<String> unitIds) {
+        // there are gap/change or units not valid in count/existence
+        return unitRepository.findAllById(unitIds);
     }
 
     // ** private method of helper
