@@ -28,7 +28,6 @@ public class WarehouseController extends BaseController {
 
     private final WarehouseService warehouseService;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','GET_WAREHOUSES')")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<WarehouseResponse>, Object>> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable) {
         return response("get warehouses success",
@@ -36,7 +35,13 @@ public class WarehouseController extends BaseController {
         );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','GET_WAREHOUSE')")
+    @GetMapping("/list")
+    public Object getListWarehouse() {
+        return response("get list warehouse success",
+                warehouseService.getListWarehouse()
+        );
+    }
+
     @GetMapping("/{warehouseId}")
     public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> getWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
         return response("get warehouse success",
@@ -44,7 +49,6 @@ public class WarehouseController extends BaseController {
         );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','CREATE_WAREHOUSES')")
     @PostMapping
     public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> createWarehouse(@Valid @RequestBody CreateWarehouseRequest createWarehouseRequest) {
         return response("create warehouse success",
@@ -52,7 +56,6 @@ public class WarehouseController extends BaseController {
         );
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','ROLE_WAREHOUSE_ADMIN','UPDATE_WAREHOUSE')")
     @PutMapping("/{warehouseId}")
     public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> updateWarehouse(@PathVariable(name = "warehouseId") String warehouseId,
                                                                                           @Valid @RequestBody UpdateWarehouseRequest updateWarehouseRequest) {
