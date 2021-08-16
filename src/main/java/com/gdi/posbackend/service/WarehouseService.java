@@ -8,6 +8,8 @@ import com.gdi.posbackend.model.response.WarehouseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * @author Feryadialoi
  * @date 8/4/2021 9:59 PM
@@ -22,4 +24,6 @@ public interface WarehouseService {
     DetailedWarehouseResponse updateWarehouse(String warehouseId, UpdateWarehouseRequest updateWarehouseRequest);
 
     Object deleteWarehouse(String warehouseId);
+
+    List<WarehouseResponse> getListWarehouse();
 }
