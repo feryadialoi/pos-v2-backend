@@ -24,10 +24,6 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE product_goods_receipts SET deleted_date = NOW() WHERE id = ?")
 @Where(clause = "deleted_date is null")
 public class ProductGoodsReceipt extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
 
     @Column(name = "batch")
     private String batch;

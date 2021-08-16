@@ -23,10 +23,6 @@ import java.math.BigDecimal;
 @SQLDelete(sql = "UPDATE unit_conversions SET deleted_date = NOW() WHERE id = ?")
 @Where(clause = "deleted_date is null")
 public class UnitConversion extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -43,10 +39,4 @@ public class UnitConversion extends BaseEntity {
     @JoinColumn(name = "to_unit_id", referencedColumnName = "id")
     private Unit toUnit;
 
-    public UnitConversion(Product product, Unit fromUnit, BigDecimal multiplier, Unit toUnit) {
-        this.product = product;
-        this.fromUnit = fromUnit;
-        this.multiplier = multiplier;
-        this.toUnit = toUnit;
-    }
 }

@@ -22,17 +22,6 @@ import javax.persistence.*;
 @SQLDelete(sql = "UPDATE units SET deleted_date = NOW() WHERE id = ?")
 @Where(clause = "deleted_date is null")
 public class Unit extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
-
     @Column(name = "name")
     private String name;
 }
-
-/**
- * property isUseInSale
- * property isUseInPurchase
- *
- */

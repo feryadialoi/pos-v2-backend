@@ -23,10 +23,6 @@ import java.math.BigDecimal;
 @SQLDelete(sql = "UPDATE product_goods_receipt_details SET deleted_date = NOW() WHERE id = ?")
 @Where(clause = "deleted_date is null")
 public class ProductGoodsReceiptDetail extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
 
     @ManyToOne
     @JoinColumn(name = "product_goods_receipt_id", referencedColumnName = "id")
@@ -38,4 +34,5 @@ public class ProductGoodsReceiptDetail extends BaseEntity {
 
     @Column(name = "quantity")
     private BigDecimal quantity;
+
 }

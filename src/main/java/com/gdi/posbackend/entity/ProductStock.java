@@ -24,10 +24,6 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE product_stocks SET deleted_date = NOW() WHERE id = ?")
 @Where(clause = "deleted_date is null")
 public class ProductStock extends BaseEntity {
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")

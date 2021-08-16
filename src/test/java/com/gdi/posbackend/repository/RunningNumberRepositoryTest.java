@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,8 +25,8 @@ class RunningNumberRepositoryTest {
 
     @Test
     void findByPrefix() {
-        RunningNumber runningNumber = runningNumberRepository.findByPrefix("SO");
-        Assertions.assertNotNull(runningNumber);
+        Optional<RunningNumber> optionalRunningNumber = runningNumberRepository.findByPrefix("SO");
+        Assertions.assertNotNull(optionalRunningNumber.get());
     }
 
     @Test

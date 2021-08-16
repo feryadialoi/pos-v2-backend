@@ -25,11 +25,6 @@ import java.util.List;
 @Where(clause = "deleted_date is null")
 public class Product extends BaseEntity {
 
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
-
     @Column(name = "code")
     private String code;
 

@@ -1,6 +1,9 @@
 package com.gdi.posbackend;
 
 import com.gdi.posbackend.constant.LocaleOptions;
+import com.gdi.posbackend.entity.Category;
+import com.gdi.posbackend.entity.Product;
+import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.entity.enums.BalanceSheetFormat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,6 +11,8 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -66,6 +71,16 @@ public class ETCTest {
         OrderStatus orderStatus = OrderStatus.PARTIALLY_SHIPPED;
         System.out.println(orderStatus);
         System.out.println(orderStatus.name());
+
+    }
+
+    @Test
+    void testLocalDateTime() {
+        System.out.println(LocalDateTime.now());
+    }
+
+    @Test
+    void testEntityConstructor() {
 
     }
 

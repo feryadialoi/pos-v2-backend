@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class InvoiceCodeUtilTest {
+class RunningNumberCodeUtilTest {
 
     @Autowired
-    private InvoiceCodeUtil invoiceCodeUtil;
+    private RunningNumberCodeUtil runningNumberCodeUtil;
 
     @BeforeEach
     void setUp() {
@@ -32,19 +32,19 @@ class InvoiceCodeUtilTest {
 
     @Test
     void test() {
-        RunningNumber runningNumberSO = new RunningNumber(null, "SO", "Sale Order", 0);
-        RunningNumber runningNumberS = new RunningNumber(null, "S", "Sale", 0);
-        RunningNumber runningNumberPO = new RunningNumber(null, "PO", "Purchase Order", 0);
-        RunningNumber runningNumberP = new RunningNumber(null, "P", "Purchase", 0);
-        RunningNumber runningNumberDO = new RunningNumber(null, "DO", "Delivery Order", 0);
+        RunningNumber runningNumberSO = new RunningNumber("SO", "Sale Order", 0);
+        RunningNumber runningNumberS = new RunningNumber("S", "Sale", 0);
+        RunningNumber runningNumberPO = new RunningNumber("PO", "Purchase Order", 0);
+        RunningNumber runningNumberP = new RunningNumber("P", "Purchase", 0);
+        RunningNumber runningNumberDO = new RunningNumber("DO", "Delivery Order", 0);
 
         LocalDateTime time = LocalDateTime.of(2021, 7, 1, 0, 0);
 
-        String codeSO = invoiceCodeUtil.getFormattedCode(runningNumberSO, time);
-        String codeS = invoiceCodeUtil.getFormattedCode(runningNumberS, time);
-        String codePO = invoiceCodeUtil.getFormattedCode(runningNumberPO, time);
-        String codeP = invoiceCodeUtil.getFormattedCode(runningNumberP, time);
-        String codeDO = invoiceCodeUtil.getFormattedCode(runningNumberDO, time);
+        String codeSO = runningNumberCodeUtil.getFormattedCode(runningNumberSO, time);
+        String codeS = runningNumberCodeUtil.getFormattedCode(runningNumberS, time);
+        String codePO = runningNumberCodeUtil.getFormattedCode(runningNumberPO, time);
+        String codeP = runningNumberCodeUtil.getFormattedCode(runningNumberP, time);
+        String codeDO = runningNumberCodeUtil.getFormattedCode(runningNumberDO, time);
 
         log.info(codeSO);
         log.info(codeS);

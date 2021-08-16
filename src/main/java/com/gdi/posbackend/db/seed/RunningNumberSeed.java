@@ -30,12 +30,12 @@ public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEv
                 List.of("SO", "PO", "S", "P", "DO", "SP")
         );
         if (count == 0) {
-            RunningNumber runningNumber1 = new RunningNumber(null, "SO", "Sale Order", 0);
-            RunningNumber runningNumber2 = new RunningNumber(null, "S", "Sale", 0);
-            RunningNumber runningNumber3 = new RunningNumber(null, "PO", "Purchase Order", 0);
-            RunningNumber runningNumber4 = new RunningNumber(null, "P", "Purchase", 0);
-            RunningNumber runningNumber5 = new RunningNumber(null, "DO", "Delivery Order", 0);
-            RunningNumber runningNumber6 = new RunningNumber(null, "SP", "Supplier", 0);
+            RunningNumber runningNumber1 = new RunningNumber("SO", "Sale Order", 0);
+            RunningNumber runningNumber2 = new RunningNumber("S", "Sale", 0);
+            RunningNumber runningNumber3 = new RunningNumber("PO", "Purchase Order", 0);
+            RunningNumber runningNumber4 = new RunningNumber("P", "Purchase", 0);
+            RunningNumber runningNumber5 = new RunningNumber("DO", "Delivery Order", 0);
+            RunningNumber runningNumber6 = new RunningNumber("SP", "Supplier", 0);
 
             runningNumberRepository.saveAll(Arrays.asList(
                     runningNumber1,

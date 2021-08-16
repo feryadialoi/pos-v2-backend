@@ -18,12 +18,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "running_numbers")
-public class RunningNumber {
-
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
+public class RunningNumber extends BaseEntity {
 
     @Column(name = "prefix")
     private String prefix;
@@ -33,6 +28,5 @@ public class RunningNumber {
 
     @Column(name = "number")
     private Integer number;
-
 
 }
