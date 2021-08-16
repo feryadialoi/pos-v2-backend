@@ -27,7 +27,7 @@ public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEv
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         long count = runningNumberRepository.countByPrefixIn(
-                List.of("SO", "PO", "S", "P", "DO")
+                List.of("SO", "PO", "S", "P", "DO", "SP")
         );
         if (count == 0) {
             RunningNumber runningNumber1 = new RunningNumber(null, "SO", "Sale Order", 0);
@@ -35,15 +35,20 @@ public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEv
             RunningNumber runningNumber3 = new RunningNumber(null, "PO", "Purchase Order", 0);
             RunningNumber runningNumber4 = new RunningNumber(null, "P", "Purchase", 0);
             RunningNumber runningNumber5 = new RunningNumber(null, "DO", "Delivery Order", 0);
+            RunningNumber runningNumber6 = new RunningNumber(null, "SP", "Supplier", 0);
 
             runningNumberRepository.saveAll(Arrays.asList(
-                    runningNumber1, runningNumber2, runningNumber3, runningNumber4, runningNumber5)
+                    runningNumber1,
+                    runningNumber2,
+                    runningNumber3,
+                    runningNumber4,
+                    runningNumber5,
+                    runningNumber6)
             );
             log.info("running number seed success");
         } else {
             log.info("no need to seed running number");
         }
-
 
     }
 }
