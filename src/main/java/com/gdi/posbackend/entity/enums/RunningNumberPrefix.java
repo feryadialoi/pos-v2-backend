@@ -5,5 +5,8 @@ package com.gdi.posbackend.entity.enums;
  * @date 7/30/2021 2:36 PM
  */
 public enum RunningNumberPrefix {
-    SO, S, PO, P, DO
+    SO, S, SR,
+    PO, P, PR,
+    DO,
+    SP
 }
