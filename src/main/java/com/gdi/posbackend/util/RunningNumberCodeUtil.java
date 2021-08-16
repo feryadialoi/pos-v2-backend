@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Component
-public class InvoiceCodeUtil {
+public class RunningNumberCodeUtil {
 
     /**
      * code format = PP-YYYY-MM-XXXXX
