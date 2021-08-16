@@ -43,6 +43,7 @@ public class ProductMapperImpl implements ProductMapper {
                         .build()).collect(Collectors.toList()))
                 .unitConversions(product.getUnitConversions().stream().map(unitConversion -> ProductUnitConversionResponse
                         .builder()
+                        .id(unitConversion.getId())
                         .fromUnit(unitMapper.mapUnitToUnitResponse(unitConversion.getFromUnit()))
                         .multiplier(unitConversion.getMultiplier())
                         .toUnit(unitMapper.mapUnitToUnitResponse(unitConversion.getToUnit()))
