@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductUnitConversionResponse {
+    private String id;
     private UnitResponse fromUnit;
     private BigDecimal multiplier;
     private UnitResponse toUnit;
