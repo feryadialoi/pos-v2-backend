@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import java.util.List;
+
 /**
  * @author Feryadialoi
  * @date 7/16/2021 11:02 AM
@@ -36,7 +38,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(httpServletRequest -> new CorsConfiguration().applyPermitDefaultValues());
+        http.cors().configurationSource(httpServletRequest -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.addAllowedMethod(HttpMethod.GET);
+            corsConfiguration.addAllowedMethod(HttpMethod.POST);
+            corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+            corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+
+            return corsConfiguration.applyPermitDefaultValues();
+        });
 
         http.csrf().disable();
 
