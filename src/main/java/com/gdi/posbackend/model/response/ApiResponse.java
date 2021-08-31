@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 /**
  * @author Feryadialoi
@@ -14,8 +13,8 @@ import org.springframework.data.domain.Page;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse<D, E> {
+public class ApiResponse<T> {
     private String message;
-    private D data;
-    private E error;
+    private T data;
+    private Object error;
 }

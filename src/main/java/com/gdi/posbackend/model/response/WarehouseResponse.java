@@ -19,7 +19,4 @@ public class WarehouseResponse {
     private String id;
     private String name;
     private String address;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
-    private LocalDateTime deletedDate;
 }

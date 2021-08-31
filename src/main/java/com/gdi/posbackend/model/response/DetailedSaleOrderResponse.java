@@ -5,18 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * @author Feryadialoi
- * @date 8/4/2021 10:03 PM
+ * @date 8/18/2021 11:53 PM
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailedWarehouseResponse {
+public class DetailedSaleOrderResponse {
     private String id;
-    private String name;
-    private String address;
 }
