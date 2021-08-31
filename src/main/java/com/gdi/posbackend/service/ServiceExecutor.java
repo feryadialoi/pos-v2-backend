@@ -2,7 +2,7 @@ package com.gdi.posbackend.service;
 
 import com.gdi.posbackend.command.core.ConsumerSupplierCommand;
 import com.gdi.posbackend.command.core.SupplierCommand;
-import com.gdi.posbackend.model.commandrequest.CommandRequest;
+import com.gdi.posbackend.model.commandparam.CommandParam;
 
 /**
  * @author Feryadialoi
@@ -10,7 +10,7 @@ import com.gdi.posbackend.model.commandrequest.CommandRequest;
  */
 public interface ServiceExecutor {
 
-    <RESPONSE, REQUEST extends CommandRequest> RESPONSE execute(
+    <RESPONSE, REQUEST extends CommandParam> RESPONSE execute(
             Class<? extends ConsumerSupplierCommand<RESPONSE, REQUEST>> commandClass,
             REQUEST request
     );

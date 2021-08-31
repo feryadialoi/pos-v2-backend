@@ -2,11 +2,10 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.command.core.ConsumerSupplierCommand;
 import com.gdi.posbackend.command.core.SupplierCommand;
-import com.gdi.posbackend.model.commandrequest.CommandRequest;
+import com.gdi.posbackend.model.commandparam.CommandParam;
 import com.gdi.posbackend.service.ServiceExecutor;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +19,7 @@ public class ServiceExecutorImpl implements ServiceExecutor {
     private final ApplicationContext applicationContext;
 
     @Override
-    public <RESPONSE, REQUEST extends CommandRequest> RESPONSE execute(Class<? extends ConsumerSupplierCommand<RESPONSE, REQUEST>> commandClass, REQUEST request) {
+    public <RESPONSE, REQUEST extends CommandParam> RESPONSE execute(Class<? extends ConsumerSupplierCommand<RESPONSE, REQUEST>> commandClass, REQUEST request) {
         return applicationContext.getBean(commandClass).execute(request);
     }
 
