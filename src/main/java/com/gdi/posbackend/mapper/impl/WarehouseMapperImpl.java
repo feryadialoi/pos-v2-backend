@@ -18,21 +18,16 @@ public class WarehouseMapperImpl implements WarehouseMapper {
                 .id(warehouse.getId())
                 .name(warehouse.getName())
                 .address(warehouse.getAddress())
-                .createdDate(warehouse.getCreatedDate())
-                .lastModifiedDate(warehouse.getLastModifiedDate())
-                .deletedDate(warehouse.getDeletedDate())
                 .build();
     }
 
     @Override
     public WarehouseResponse mapWarehouseToWarehouseResponse(Warehouse warehouse) {
+        if (warehouse == null) return null;
         return WarehouseResponse.builder()
                 .id(warehouse.getId())
                 .name(warehouse.getName())
                 .address(warehouse.getAddress())
-                .createdDate(warehouse.getCreatedDate())
-                .lastModifiedDate(warehouse.getLastModifiedDate())
-                .deletedDate(warehouse.getDeletedDate())
                 .build();
     }
 }

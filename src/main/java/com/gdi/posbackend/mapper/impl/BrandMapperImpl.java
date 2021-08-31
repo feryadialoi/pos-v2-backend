@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class BrandMapperImpl implements BrandMapper {
     @Override
     public BrandResponse mapBrandToBrandResponse(Brand brand) {
+        if (brand == null) return null;
         return BrandResponse.builder()
                 .id(brand.getId())
                 .name(brand.getName())
