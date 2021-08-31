@@ -2,7 +2,8 @@ package com.gdi.posbackend.service;
 
 /**
  * @author Feryadialoi
- * @date 8/6/2021 1:44 AM
+ * @date 8/20/2021 3:09 AM
  */
-public interface ProductStockService {
+public interface BookKeepingService {
+
 }
