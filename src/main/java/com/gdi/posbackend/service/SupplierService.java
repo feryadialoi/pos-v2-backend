@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Supplier;
 import com.gdi.posbackend.model.criteria.SupplierCriteria;
 import com.gdi.posbackend.model.request.CreateSupplierRequest;
 import com.gdi.posbackend.model.request.UpdateSupplierRequest;
@@ -21,4 +22,6 @@ public interface SupplierService {
     SupplierResponse createSupplier(CreateSupplierRequest createSupplierRequest);
 
     SupplierResponse updateSupplier(String supplierId, UpdateSupplierRequest updateSupplierRequest);
+
+    Supplier findSupplierByIdOrThrowNotFound(String supplierId);
 }

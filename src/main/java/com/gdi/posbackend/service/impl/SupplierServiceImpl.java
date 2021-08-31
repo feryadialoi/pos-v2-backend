@@ -100,13 +100,7 @@ public class SupplierServiceImpl implements SupplierService {
         Supplier supplier = new Supplier();
         supplier.setName(createSupplierRequest.getName());
         supplier.setAddress(createSupplierRequest.getAddress());
-        supplier.setCode(
-                runningNumberCodeUtil.getFormattedCode(
-                        runningNumberService.getRunningNumber(
-                                RunningNumberPrefix.SP
-                        )
-                )
-        );
+        supplier.setCode(runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.SP)));
 
         supplier.setPic(createSupplierRequest.getPic());
         supplier.setPhone(createSupplierRequest.getPhone());
@@ -165,6 +159,12 @@ public class SupplierServiceImpl implements SupplierService {
 
                     return supplierMapper.mapSupplierToSupplierResponse(supplier);
                 })
+                .orElseThrow(() -> new SupplierNotFoundException("supplier with id " + supplierId + " not found"));
+    }
+
+    @Override
+    public Supplier findSupplierByIdOrThrowNotFound(String supplierId) {
+        return supplierRepository.findById(supplierId)
                 .orElseThrow(() -> new SupplierNotFoundException("supplier with id " + supplierId + " not found"));
     }
 
