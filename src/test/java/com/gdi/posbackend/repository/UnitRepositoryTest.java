@@ -1,5 +1,6 @@
 package com.gdi.posbackend.repository;
 
+import com.gdi.posbackend.entity.Unit;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,14 @@ class UnitRepositoryTest {
     void countByNameInIgnoreCase() {
         long count = unitRepository.countByNameInIgnoreCase(List.of("Kotak", "Pcs"));
         Assertions.assertEquals(2, count);
+    }
+
+    @Test
+    void testInsertMany() {
+        unitRepository.saveAll(List.of(
+                new Unit("Pack"),
+                new Unit("Pcs")
+        ));
     }
 
 }

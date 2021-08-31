@@ -1,23 +1,20 @@
 package com.gdi.posbackend.command.impl;
 
+import com.gdi.posbackend.command.impl.warehouse.DeleteWarehouseCommandImpl;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.exception.WarehouseNotFoundException;
-import com.gdi.posbackend.model.commandrequest.warehouse.DeleteWarehouseCommandRequest;
+import com.gdi.posbackend.model.commandparam.warehouse.DeleteWarehouseCommandParam;
 import com.gdi.posbackend.repository.WarehouseRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Optional;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Feryadialoi
@@ -53,7 +50,7 @@ class DeleteWarehouseCommandImplTest {
         Assertions.assertThrows(WarehouseNotFoundException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
-                DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest("");
+                DeleteWarehouseCommandParam deleteWarehouseCommandRequest = new DeleteWarehouseCommandParam("");
                 String warehouseId = deleteWarehouseCommand.execute(deleteWarehouseCommandRequest);
             }
         });

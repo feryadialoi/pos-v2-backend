@@ -5,6 +5,10 @@ import com.gdi.posbackend.entity.Category;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.entity.enums.BalanceSheetFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -12,8 +16,14 @@ import org.junit.jupiter.api.function.Executable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 /**
  * @author Feryadialoi
@@ -57,7 +67,6 @@ public class ETCTest {
         System.out.println(new Locale("in", "ID").equals(LocaleOptions.indonesia));
     }
 
-
     enum OrderStatus {
         PARTIALLY_SHIPPED;
     }
@@ -81,7 +90,30 @@ public class ETCTest {
 
     @Test
     void testEntityConstructor() {
+        Product product = new Product();
+        Category category = new Category();
+    }
+
+    @Test
+    void testCompletableFuture() throws InterruptedException, ExecutionException {
+        System.out.println("before getString");
+        getString();
+        System.out.println("after getString");
 
     }
+
+    Future<String> getString() throws InterruptedException {
+        return CompletableFuture.supplyAsync(new Supplier<String>() {
+            @SneakyThrows
+            @Override
+            public String get() {
+                System.out.println("start async");
+                Thread.sleep(2000);
+                System.out.println("inside supply async");
+                return "hello";
+            }
+        });
+    }
+
 
 }

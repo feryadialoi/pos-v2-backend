@@ -1,7 +1,7 @@
 package com.gdi.posbackend.service;
 
-import com.gdi.posbackend.command.DeleteWarehouseCommand;
-import com.gdi.posbackend.model.commandrequest.warehouse.DeleteWarehouseCommandRequest;
+import com.gdi.posbackend.command.warehouse.DeleteWarehouseCommand;
+import com.gdi.posbackend.model.commandparam.warehouse.DeleteWarehouseCommandParam;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Feryadialoi
@@ -34,7 +32,7 @@ class WarehouseServiceTest {
     void setUp() {
         warehouseId = UUID.randomUUID().toString();
 
-        DeleteWarehouseCommandRequest deleteWarehouseCommandRequest = new DeleteWarehouseCommandRequest(warehouseId);
+        DeleteWarehouseCommandParam deleteWarehouseCommandRequest = new DeleteWarehouseCommandParam(warehouseId);
         Mockito.when(deleteWarehouseCommand.execute(deleteWarehouseCommandRequest)).thenReturn(warehouseId);
     }
 
