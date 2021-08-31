@@ -1,9 +1,9 @@
-package com.gdi.posbackend.command.impl;
+package com.gdi.posbackend.command.impl.product;
 
-import com.gdi.posbackend.command.GetProductsCommand;
+import com.gdi.posbackend.command.product.GetProductsCommand;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.mapper.ProductMapper;
-import com.gdi.posbackend.model.commandrequest.GetProductsCommandRequest;
+import com.gdi.posbackend.model.commandparam.GetProductsCommandParam;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.response.ProductResponse;
 import com.gdi.posbackend.repository.ProductRepository;
@@ -27,7 +27,7 @@ public class GetProductsCommandImpl implements GetProductsCommand {
     private final ProductMapper productMapper;
 
     @Override
-    public Page<ProductResponse> execute(GetProductsCommandRequest request) {
+    public Page<ProductResponse> execute(GetProductsCommandParam request) {
         ProductCriteria productCriteria = request.getProductCriteria();
         Pageable pageable = request.getPageable();
 
