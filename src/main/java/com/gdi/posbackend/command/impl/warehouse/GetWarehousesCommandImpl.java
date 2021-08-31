@@ -1,9 +1,9 @@
-package com.gdi.posbackend.command.impl;
+package com.gdi.posbackend.command.impl.warehouse;
 
-import com.gdi.posbackend.command.GetWarehousesCommand;
+import com.gdi.posbackend.command.warehouse.GetWarehousesCommand;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.mapper.WarehouseMapper;
-import com.gdi.posbackend.model.commandrequest.warehouse.GetWarehousesCommandRequest;
+import com.gdi.posbackend.model.commandparam.warehouse.GetWarehousesCommandParam;
 import com.gdi.posbackend.model.criteria.WarehouseCriteria;
 import com.gdi.posbackend.model.response.WarehouseResponse;
 import com.gdi.posbackend.repository.WarehouseRepository;
@@ -26,7 +26,7 @@ public class GetWarehousesCommandImpl implements GetWarehousesCommand {
     private final WarehouseMapper warehouseMapper;
 
     @Override
-    public Page<WarehouseResponse> execute(GetWarehousesCommandRequest request) {
+    public Page<WarehouseResponse> execute(GetWarehousesCommandParam request) {
         WarehouseCriteria warehouseCriteria = request.getWarehouseCriteria();
         Pageable pageable = request.getPageable();
 

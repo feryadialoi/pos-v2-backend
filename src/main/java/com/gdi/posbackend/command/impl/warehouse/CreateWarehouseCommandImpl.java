@@ -1,9 +1,9 @@
-package com.gdi.posbackend.command.impl;
+package com.gdi.posbackend.command.impl.warehouse;
 
-import com.gdi.posbackend.command.CreateWarehouseCommand;
+import com.gdi.posbackend.command.warehouse.CreateWarehouseCommand;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.mapper.WarehouseMapper;
-import com.gdi.posbackend.model.commandrequest.warehouse.CreateWarehouseCommandRequest;
+import com.gdi.posbackend.model.commandparam.warehouse.CreateWarehouseCommandParam;
 import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.repository.WarehouseRepository;
@@ -22,7 +22,7 @@ public class CreateWarehouseCommandImpl implements CreateWarehouseCommand {
     private final WarehouseMapper warehouseMapper;
 
     @Override
-    public DetailedWarehouseResponse execute(CreateWarehouseCommandRequest request) {
+    public DetailedWarehouseResponse execute(CreateWarehouseCommandParam request) {
         CreateWarehouseRequest createWarehouseRequest = request.getCreateWarehouseRequest();
 
         Warehouse warehouse = new Warehouse();

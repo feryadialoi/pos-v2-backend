@@ -1,10 +1,10 @@
-package com.gdi.posbackend.command.impl;
+package com.gdi.posbackend.command.impl.warehouse;
 
-import com.gdi.posbackend.command.UpdateWarehouseCommand;
+import com.gdi.posbackend.command.warehouse.UpdateWarehouseCommand;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import com.gdi.posbackend.mapper.WarehouseMapper;
-import com.gdi.posbackend.model.commandrequest.warehouse.UpdateWarehouseCommandRequest;
+import com.gdi.posbackend.model.commandparam.warehouse.UpdateWarehouseCommandParam;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.repository.WarehouseRepository;
@@ -25,7 +25,7 @@ public class UpdateWarehouseCommandImpl implements UpdateWarehouseCommand {
     private final WarehouseMapper warehouseMapper;
 
     @Override
-    public DetailedWarehouseResponse execute(UpdateWarehouseCommandRequest request) {
+    public DetailedWarehouseResponse execute(UpdateWarehouseCommandParam request) {
         String warehouseId = request.getWarehouseId();
         UpdateWarehouseRequest updateWarehouseRequest = request.getUpdateWarehouseRequest();
 
