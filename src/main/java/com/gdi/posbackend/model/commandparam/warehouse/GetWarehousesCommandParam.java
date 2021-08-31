@@ -1,6 +1,6 @@
-package com.gdi.posbackend.model.commandrequest.warehouse;
+package com.gdi.posbackend.model.commandparam.warehouse;
 
-import com.gdi.posbackend.model.commandrequest.CommandRequest;
+import com.gdi.posbackend.model.commandparam.CommandParam;
 import com.gdi.posbackend.model.criteria.WarehouseCriteria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetWarehousesCommandRequest implements CommandRequest {
+public class GetWarehousesCommandParam implements CommandParam {
     private WarehouseCriteria warehouseCriteria;
     private Pageable pageable;
 }

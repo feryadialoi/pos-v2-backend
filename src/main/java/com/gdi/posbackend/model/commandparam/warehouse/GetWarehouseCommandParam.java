@@ -1,6 +1,6 @@
-package com.gdi.posbackend.model.commandrequest.warehouse;
+package com.gdi.posbackend.model.commandparam.warehouse;
 
-import com.gdi.posbackend.model.commandrequest.CommandRequest;
+import com.gdi.posbackend.model.commandparam.CommandParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetWarehouseCommandRequest implements CommandRequest {
+public class GetWarehouseCommandParam implements CommandParam {
     private String warehouseId;
 }
