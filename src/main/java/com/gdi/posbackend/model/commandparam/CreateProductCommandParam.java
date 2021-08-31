@@ -1,4 +1,4 @@
-package com.gdi.posbackend.model.commandrequest;
+package com.gdi.posbackend.model.commandparam;
 
 import com.gdi.posbackend.model.request.CreateProductRequest;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class CreateProductCommandRequest implements CommandRequest {
+public class CreateProductCommandParam implements CommandParam {
     private CreateProductRequest createProductRequest;
 }

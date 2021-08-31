@@ -1,4 +1,4 @@
-package com.gdi.posbackend.model.commandrequest;
+package com.gdi.posbackend.model.commandparam;
 
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProductsCommandRequest implements CommandRequest {
+public class GetProductsCommandParam implements CommandParam {
     private ProductCriteria productCriteria;
     private Pageable pageable;
 }
