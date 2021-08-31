@@ -82,4 +82,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryId;
     }
+
+    @Override
+    public Category findCategoryByIdOrThrowNotFound(String categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException("category with id " + categoryId + " not found"));
+    }
 }

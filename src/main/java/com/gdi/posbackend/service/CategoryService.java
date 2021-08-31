@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Category;
 import com.gdi.posbackend.model.criteria.CategoryCriteria;
 import com.gdi.posbackend.model.request.CreateCategoryRequest;
 import com.gdi.posbackend.model.request.UpdateCategoryRequest;
@@ -22,4 +23,5 @@ public interface CategoryService {
 
     Object deleteCategory(String categoryId);
 
+    Category findCategoryByIdOrThrowNotFound(String categoryId);
 }
