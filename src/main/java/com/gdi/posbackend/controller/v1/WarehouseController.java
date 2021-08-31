@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Feryadialoi
@@ -29,46 +30,33 @@ public class WarehouseController extends BaseController {
     private final WarehouseService warehouseService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<WarehouseResponse>, Object>> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable) {
-        return response("get warehouses success",
-                warehouseService.getWarehouses(warehouseCriteria, pageable)
-        );
+    public ResponseEntity<ApiResponse<Page<WarehouseResponse>>> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable) {
+        return response("get warehouses success", warehouseService.getWarehouses(warehouseCriteria, pageable));
     }
 
     @GetMapping("/list")
-    public Object getListWarehouse() {
-        return response("get list warehouse success",
-                warehouseService.getListWarehouse()
-        );
+    public ResponseEntity<ApiResponse<List<WarehouseResponse>>> getListWarehouse() {
+        return response("get list warehouse success", warehouseService.getListWarehouse());
     }
 
     @GetMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> getWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
-        return response("get warehouse success",
-                warehouseService.getWarehouse(warehouseId)
-        );
+    public ResponseEntity<ApiResponse<DetailedWarehouseResponse>> getWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
+        return response("get warehouse success", warehouseService.getWarehouse(warehouseId));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> createWarehouse(@Valid @RequestBody CreateWarehouseRequest createWarehouseRequest) {
-        return response("create warehouse success",
-                warehouseService.createWarehouse(createWarehouseRequest)
-        );
+    public ResponseEntity<ApiResponse<DetailedWarehouseResponse>> createWarehouse(@Valid @RequestBody CreateWarehouseRequest createWarehouseRequest) {
+        return response("create warehouse success", warehouseService.createWarehouse(createWarehouseRequest));
     }
 
     @PutMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<DetailedWarehouseResponse, Object>> updateWarehouse(@PathVariable(name = "warehouseId") String warehouseId,
-                                                                                          @Valid @RequestBody UpdateWarehouseRequest updateWarehouseRequest) {
-        return response("update warehouse success",
-                warehouseService.updateWarehouse(warehouseId, updateWarehouseRequest)
-        );
+    public ResponseEntity<ApiResponse<DetailedWarehouseResponse>> updateWarehouse(@PathVariable(name = "warehouseId") String warehouseId, @Valid @RequestBody UpdateWarehouseRequest updateWarehouseRequest) {
+        return response("update warehouse success", warehouseService.updateWarehouse(warehouseId, updateWarehouseRequest));
     }
 
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<ApiResponse<Object, Object>> deleteWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
-        return response("delete warehouse success",
-                warehouseService.deleteWarehouse(warehouseId)
-        );
+    public ResponseEntity<ApiResponse<Object>> deleteWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
+        return response("delete warehouse success", warehouseService.deleteWarehouse(warehouseId));
     }
 
 }

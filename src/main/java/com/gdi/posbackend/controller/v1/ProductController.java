@@ -28,47 +28,28 @@ public class ProductController extends BaseController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ProductResponse>, Object>> getProducts(ProductCriteria productCriteria, Pageable pageable) {
-        return response("get products success",
-                productService.getProducts(productCriteria, pageable)
-        );
+    public ResponseEntity<ApiResponse<Page<ProductResponse>>> getProducts(ProductCriteria productCriteria, Pageable pageable) {
+        return response("get products success", productService.getProducts(productCriteria, pageable));
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> getProduct(@PathVariable(name = "productId") String productId) {
-        return response("get product success",
-                productService.getProduct(productId)
-        );
+    public ResponseEntity<ApiResponse<DetailedProductResponse>> getProduct(@PathVariable(name = "productId") String productId) {
+        return response("get product success", productService.getProduct(productId));
     }
 
-//    @PostMapping
-//    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
-//        return response("create product success",
-//                productService.createProduct(createProductRequest)
-//        );
-//    }
-
     @PostMapping
-    public Object createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
-
-        return response("create product success",
-                productService.createProduct(createProductRequest)
-        );
+    public ResponseEntity<ApiResponse<DetailedProductResponse>> createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
+        return response("create product success", productService.createProduct(createProductRequest));
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ApiResponse<DetailedProductResponse, Object>> updateProduct(@PathVariable(name = "productId") String productId,
-                                                                                      @Valid @RequestBody UpdateProductRequest updateProductRequest) {
-        return response("update product success",
-                productService.updateProduct(productId, updateProductRequest)
-        );
+    public ResponseEntity<ApiResponse<DetailedProductResponse>> updateProduct(@PathVariable(name = "productId") String productId, @Valid @RequestBody UpdateProductRequest updateProductRequest) {
+        return response("update product success", productService.updateProduct(productId, updateProductRequest));
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<ApiResponse<Object, Object>> deleteProduct(@PathVariable(name = "productId") String productId) {
-        return response("delete product success",
-                productService.deleteProduct(productId)
-        );
+    public ResponseEntity<ApiResponse<Object>> deleteProduct(@PathVariable(name = "productId") String productId) {
+        return response("delete product success", productService.deleteProduct(productId));
     }
 
 }

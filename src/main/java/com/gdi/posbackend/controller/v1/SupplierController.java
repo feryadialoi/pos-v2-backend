@@ -28,25 +28,22 @@ public class SupplierController extends BaseController {
     private final SupplierService supplierService;
 
     @GetMapping("/list")
-    public ResponseEntity<ApiResponse<List<SupplierResponse>, Object>> getListSupplier() {
+    public ResponseEntity<ApiResponse<List<SupplierResponse>>> getListSupplier() {
         return response("get list supplier success", supplierService.getListSupplier());
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<SupplierResponse>, Object>> getSuppliers(SupplierCriteria supplierCriteria, Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<SupplierResponse>>> getSuppliers(SupplierCriteria supplierCriteria, Pageable pageable) {
         return response("get suppliers success", supplierService.getSuppliers(supplierCriteria, pageable));
     }
 
-
     @PostMapping
-    public Object createSupplier(@Valid @RequestBody CreateSupplierRequest createSupplierRequest) {
+    public ResponseEntity<ApiResponse<SupplierResponse>> createSupplier(@Valid @RequestBody CreateSupplierRequest createSupplierRequest) {
         return response("create supplier success", supplierService.createSupplier(createSupplierRequest));
     }
 
-
     @PutMapping("/{supplierId}")
-    public Object updateSupplier(@PathVariable(name = "supplierId") String supplierId,
-                                 @Valid @RequestBody UpdateSupplierRequest updateSupplierRequest) {
+    public ResponseEntity<ApiResponse<SupplierResponse>> updateSupplier(@PathVariable(name = "supplierId") String supplierId, @Valid @RequestBody UpdateSupplierRequest updateSupplierRequest) {
         return response("update supplier success", supplierService.updateSupplier(supplierId, updateSupplierRequest));
     }
 

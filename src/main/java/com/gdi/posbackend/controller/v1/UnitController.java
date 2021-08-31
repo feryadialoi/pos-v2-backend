@@ -28,42 +28,28 @@ public class UnitController extends BaseController {
     private final UnitService unitService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<UnitResponse>, Object>> getUnits(UnitCriteria unitCriteria, Pageable pageable) {
-        log.info("pageSize {}, pageNumber {}", pageable.getPageSize(), pageable.getPageNumber());
-        log.info(unitCriteria.toString());
-
-        return response("get units success",
-                unitService.getUnits(unitCriteria, pageable)
-        );
+    public ResponseEntity<ApiResponse<Page<UnitResponse>>> getUnits(UnitCriteria unitCriteria, Pageable pageable) {
+        return response("get units success", unitService.getUnits(unitCriteria, pageable));
     }
 
     @GetMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<UnitResponse, Object>> getUnit(@PathVariable("unitId") String unitId) {
-        return response("get unit success",
-                unitService.getUnit(unitId)
-        );
+    public ResponseEntity<ApiResponse<UnitResponse>> getUnit(@PathVariable("unitId") String unitId) {
+        return response("get unit success", unitService.getUnit(unitId));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UnitResponse, Object>> createUnit(@Valid @RequestBody CreateUnitRequest createUnitRequest) {
-        return response("create unit success",
-                unitService.createUnit(createUnitRequest)
-        );
+    public ResponseEntity<ApiResponse<UnitResponse>> createUnit(@Valid @RequestBody CreateUnitRequest createUnitRequest) {
+        return response("create unit success", unitService.createUnit(createUnitRequest));
     }
 
     @PutMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<UnitResponse, Object>> updateUnit(@PathVariable("unitId") String unitId,
-                                                                        @Valid @RequestBody UpdateUnitRequest updateUnitRequest) {
-        return response("update unit success",
-                unitService.updateUnit(unitId, updateUnitRequest)
-        );
+    public ResponseEntity<ApiResponse<UnitResponse>> updateUnit(@PathVariable("unitId") String unitId, @Valid @RequestBody UpdateUnitRequest updateUnitRequest) {
+        return response("update unit success", unitService.updateUnit(unitId, updateUnitRequest));
     }
 
     @DeleteMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<Object, Object>> deleteUnit(@PathVariable("unitId") String unitId) {
-        return response("delete unit success",
-                unitService.deleteUnit(unitId)
-        );
+    public ResponseEntity<ApiResponse<Object>> deleteUnit(@PathVariable("unitId") String unitId) {
+        return response("delete unit success", unitService.deleteUnit(unitId));
     }
 
 }

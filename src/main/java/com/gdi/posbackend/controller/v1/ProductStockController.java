@@ -38,10 +38,8 @@ public class ProductStockController extends BaseController {
      * name, code, category name, stock(all), price, stock(stok minimum)
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<Object>, Object>> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
-        return response("get product stocks success",
-                productStockService.getProductStocks(productStockCriteria, pageable)
-        );
+    public ResponseEntity<ApiResponse<Page<Object>>> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
+        return response("get product stocks success", productStockService.getProductStocks(productStockCriteria, pageable));
     }
 
     /**
@@ -51,17 +49,15 @@ public class ProductStockController extends BaseController {
      * product unit
      */
     @GetMapping("/{productStockId}")
-    public Object getProductStock(@PathVariable("productStockId") String productStockId) {
-        return response("get product stock success",
-                productStockService.getProductStock(productStockId)
-        );
+    public ResponseEntity<ApiResponse<Object>> getProductStock(@PathVariable("productStockId") String productStockId) {
+        return response("get product stock success", productStockService.getProductStock(productStockId));
     }
 
     @PutMapping("/{productStockId}")
-    public Object updateProductStock(@PathVariable("productStockId") String productStockId,
-                                     @Valid @RequestBody UpdateProductStockRequest updateProductStockRequest) {
-        return response("update product stock success",
-                productStockService.updateProductStock(productStockId, updateProductStockRequest)
-        );
+    public ResponseEntity<ApiResponse<Object>> updateProductStock(@PathVariable("productStockId") String productStockId, @Valid @RequestBody UpdateProductStockRequest updateProductStockRequest) {
+        return response("update product stock success", productStockService.updateProductStock(productStockId, updateProductStockRequest));
     }
+
+    // ========================== CRUD Action =============================
+
 }

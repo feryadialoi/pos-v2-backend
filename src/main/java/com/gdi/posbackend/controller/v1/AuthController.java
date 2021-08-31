@@ -27,18 +27,13 @@ public class AuthController extends BaseController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse, Object>> login(@Valid @RequestBody LoginRequest loginRequest) {
-        return response("login success",
-                authService.login(loginRequest)
-        );
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return response("login success", authService.login(loginRequest));
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<ApiResponse<RefreshTokenResponse, Object>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        log.info(refreshTokenRequest.toString());
-        return response("refresh token success",
-                authService.refreshToken(refreshTokenRequest)
-        );
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return response("refresh token success", authService.refreshToken(refreshTokenRequest));
     }
 
 }

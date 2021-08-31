@@ -26,28 +26,28 @@ public class BrandController extends BaseController {
     private final BrandService brandService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<BrandResponse>, Object>> getBrands(BrandCriteria brandCriteria, Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<BrandResponse>>> getBrands(BrandCriteria brandCriteria, Pageable pageable) {
         return response("get brands success", brandService.getBrands(brandCriteria, pageable));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BrandResponse, Object>> createBrand(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
+    public ResponseEntity<ApiResponse<BrandResponse>> createBrand(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
         return response("create brand success", brandService.createBrand(createBrandRequest));
     }
 
     @GetMapping("/{brandId}")
-    public ResponseEntity<ApiResponse<BrandResponse, Object>> getBrand(@PathVariable(name = "brandId") String brandId) {
+    public ResponseEntity<ApiResponse<BrandResponse>> getBrand(@PathVariable(name = "brandId") String brandId) {
         return response("get brand success", brandService.getBrand(brandId));
     }
 
     @PutMapping("/{brandId}")
-    public ResponseEntity<ApiResponse<BrandResponse, Object>> updateBrand(@PathVariable(name = "brandId") String brandId,
-                                                                          @Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
+    public ResponseEntity<ApiResponse<BrandResponse>> updateBrand(@PathVariable(name = "brandId") String brandId,
+                                                                  @Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return response("update brand success", brandService.updateBrand(brandId, updateBrandRequest));
     }
 
     @DeleteMapping("/{brandId}")
-    public Object deleteBrand(@PathVariable(name = "brandId") String branId) {
+    public ResponseEntity<ApiResponse<String>> deleteBrand(@PathVariable(name = "brandId") String branId) {
         return response("delete brand success", brandService.deleteBrand(branId));
     }
 }
