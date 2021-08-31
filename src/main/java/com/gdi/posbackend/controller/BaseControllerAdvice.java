@@ -22,13 +22,11 @@ public abstract class BaseControllerAdvice {
         return headers;
     }
 
-    public <E> ResponseEntity<ApiResponse<Object, E>> response(String message, E error, HttpStatus httpStatus) {
-
+    public ResponseEntity<ApiResponse<Object>> response(String message, Object error, HttpStatus httpStatus) {
         return response(message, error, null, httpStatus);
     }
 
-    public <E> ResponseEntity<ApiResponse<Object, E>> response(String message, E error, MultiValueMap<String, String> headers, HttpStatus httpStatus) {
-
+    public ResponseEntity<ApiResponse<Object>> response(String message, Object error, MultiValueMap<String, String> headers, HttpStatus httpStatus) {
         return new ResponseEntity<>(
                 new ApiResponse<>(message, null, error),
                 headers,
