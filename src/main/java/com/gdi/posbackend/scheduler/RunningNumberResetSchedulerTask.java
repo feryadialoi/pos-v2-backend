@@ -28,7 +28,7 @@ public class RunningNumberResetSchedulerTask {
      * at 00:00 on first day of every month
      * TODO create testing, untested
      */
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void resetRunningNumber() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
