@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Brand;
 import com.gdi.posbackend.model.criteria.BrandCriteria;
 import com.gdi.posbackend.model.request.CreateBrandRequest;
 import com.gdi.posbackend.model.request.UpdateBrandRequest;
@@ -20,5 +21,7 @@ public interface BrandService {
 
     BrandResponse updateBrand(String brandId, UpdateBrandRequest updateBrandRequest);
 
-    Object deleteBrand(String brandId);
+    String deleteBrand(String brandId);
+
+    Brand findBrandByIdOrThrowNotFound(String brandId);
 }

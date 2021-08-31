@@ -81,7 +81,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Object deleteBrand(String brandId) {
+    public String deleteBrand(String brandId) {
         Optional<Brand> optionalBrand = brandRepository.findById(brandId);
         if (optionalBrand.isPresent()) {
             Brand brand = optionalBrand.get();
@@ -92,5 +92,11 @@ public class BrandServiceImpl implements BrandService {
         } else {
             throw new BrandNotFoundException("Brand with id " + brandId + " not found");
         }
+    }
+
+    @Override
+    public Brand findBrandByIdOrThrowNotFound(String brandId) {
+        return brandRepository.findById(brandId)
+                .orElseThrow(() -> new BrandNotFoundException("brand with id " + brandId + " not found"));
     }
 }
