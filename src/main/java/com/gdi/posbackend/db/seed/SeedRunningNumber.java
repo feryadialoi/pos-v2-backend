@@ -20,15 +20,13 @@ import java.util.List;
 @Component
 @Transactional
 @AllArgsConstructor
-public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEvent> {
+public class SeedRunningNumber {
 
     private final RunningNumberRepository runningNumberRepository;
 
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        long count = runningNumberRepository.countByPrefixIn(
-                List.of("SO", "PO", "S", "P", "DO", "SP")
-        );
+    public void seed() {
+        long count = runningNumberRepository.countByPrefixIn(List.of("SO", "PO", "S", "P", "DO", "SP", "BP"));
+
         if (count == 0) {
             RunningNumber runningNumber1 = new RunningNumber("SO", "Sale Order", 0);
             RunningNumber runningNumber2 = new RunningNumber("S", "Sale", 0);
@@ -36,6 +34,7 @@ public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEv
             RunningNumber runningNumber4 = new RunningNumber("P", "Purchase", 0);
             RunningNumber runningNumber5 = new RunningNumber("DO", "Delivery Order", 0);
             RunningNumber runningNumber6 = new RunningNumber("SP", "Supplier", 0);
+            RunningNumber runningNumber7 = new RunningNumber("BP", "Batch of Product", 0);
 
             runningNumberRepository.saveAll(Arrays.asList(
                     runningNumber1,
@@ -43,8 +42,8 @@ public class RunningNumberSeed implements ApplicationListener<ApplicationReadyEv
                     runningNumber3,
                     runningNumber4,
                     runningNumber5,
-                    runningNumber6)
-            );
+                    runningNumber7
+            ));
             log.info("running number seed success");
         } else {
             log.info("no need to seed running number");

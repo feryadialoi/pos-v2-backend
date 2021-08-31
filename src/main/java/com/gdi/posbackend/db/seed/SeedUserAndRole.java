@@ -24,17 +24,16 @@ import java.util.Optional;
 @Component
 @Transactional
 @AllArgsConstructor
-public class SeedUserAndRole implements ApplicationListener<ApplicationReadyEvent>, Ordered {
+public class SeedUserAndRole {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+
+    public void seed() {
         Optional<User> optionalUser = userRepository.findByUsername("superadmin");
         Optional<Role> optionalRole = roleRepository.findByName("SUPER_ADMIN");
-
 
         if (optionalUser.isPresent() && optionalRole.isPresent()) {
             log.info("no need to seed user & role data");
@@ -45,15 +44,11 @@ public class SeedUserAndRole implements ApplicationListener<ApplicationReadyEven
 
 
     private void seedRoleAndUser() {
+        Role role = createRole();
+        createUser(role);
+    }
 
-        Role role = new Role();
-        role.setName("SUPER_ADMIN");
-        role.setDescription("Super admin");
-        role.setDisplayName("Super Admin");
-
-        role = roleRepository.save(role);
-        log.info("seed data role success");
-
+    private void createUser(Role role) {
         User user = new User();
         user.setName("Super Admin");
         user.setUsername("superadmin");
@@ -62,14 +57,17 @@ public class SeedUserAndRole implements ApplicationListener<ApplicationReadyEven
         user.setRoles(List.of(role));
 
         userRepository.save(user);
-
         log.info("seed data user success");
-
-
     }
 
-    @Override
-    public int getOrder() {
-        return 1;
+    private Role createRole() {
+        Role role = new Role();
+        role.setName("SUPER_ADMIN");
+        role.setDescription("Super admin");
+        role.setDisplayName("Super Admin");
+
+        role = roleRepository.save(role);
+        log.info("seed data role success");
+        return role;
     }
 }
