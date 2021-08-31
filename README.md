@@ -1,58 +1,15 @@
-# Pencatatan transaksi
+#JAVA
 
-# BELI
+- build/compile/package with skip test
 
-## Pemesanan Pembelian (PO)
+`mvn clean package -DskipTest`
 
-***
+- run java jav application
 
-## Revisi Pembelian
+`java -jar <application.jar>`
 
-***
+#DOCKER
 
-## Pembelian
+- command for docker compose
 
-### pembelian secara tunai
-
-### pembelian secara kredit
-
-***
-
-## Retur Pembelian
-
-### retur pembelian secara tunai
-
-### retur pembelian secara kredit
-
-***
-
-# JUAL
-
-## Pemesanan Penjualan (SO)
-
-###    
-
-***
-
-## Penjualan
-
-### penjualan secara tunai
-
-### penjualan secara kredit
-
-***
-
-## Retur Penjualan
-
-### retur penjualan secara tunai
-
-### retur penjualan secara kredit
-
-***
-
-# Penjurnalan (Posting jurnal)
-
-## pembelian tunai
-
-## pembelian kredit
-
+`docker-compose -f docker-compose.yml up -d`
