@@ -1,20 +1,22 @@
 package com.gdi.posbackend.service.impl;
 
-import com.gdi.posbackend.command.CreateProductCommand;
-import com.gdi.posbackend.command.GetProductsCommand;
-import com.gdi.posbackend.model.commandrequest.CreateProductCommandRequest;
-import com.gdi.posbackend.model.commandrequest.GetProductsCommandRequest;
+import com.gdi.posbackend.command.product.CreateProductCommand;
+import com.gdi.posbackend.command.product.GetProductsCommand;
+import com.gdi.posbackend.entity.Product;
+import com.gdi.posbackend.exception.ProductNotFoundException;
+import com.gdi.posbackend.model.commandparam.CreateProductCommandParam;
+import com.gdi.posbackend.model.commandparam.GetProductsCommandParam;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.request.CreateProductRequest;
 import com.gdi.posbackend.model.request.UpdateProductRequest;
 import com.gdi.posbackend.model.response.DetailedProductResponse;
 import com.gdi.posbackend.model.response.ProductResponse;
+import com.gdi.posbackend.repository.ProductRepository;
 import com.gdi.posbackend.service.ProductService;
 import com.gdi.posbackend.service.ServiceExecutor;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,13 +26,13 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
+
     private final ServiceExecutor serviceExecutor;
+    private final ProductRepository productRepository;
 
     @Override
     public Page<ProductResponse> getProducts(ProductCriteria productCriteria, Pageable pageable) {
-        return serviceExecutor.execute(GetProductsCommand.class,
-                new GetProductsCommandRequest(productCriteria, pageable)
-        );
+        return serviceExecutor.execute(GetProductsCommand.class, new GetProductsCommandParam(productCriteria, pageable));
     }
 
     @Override
@@ -40,9 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DetailedProductResponse createProduct(CreateProductRequest createProductRequest) {
-        return serviceExecutor.execute(CreateProductCommand.class,
-                new CreateProductCommandRequest(createProductRequest)
-        );
+        return serviceExecutor.execute(CreateProductCommand.class, new CreateProductCommandParam(createProductRequest));
     }
 
     @Override
@@ -53,5 +53,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Object deleteProduct(String productId) {
         return null;
+    }
+
+    @Override
+    public Product findProductByIdOrThrowNotFound(String productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("product with id " + productId + " not found"));
     }
 }

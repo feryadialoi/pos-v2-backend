@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.request.CreateProductRequest;
 import com.gdi.posbackend.model.request.UpdateProductRequest;
@@ -23,4 +24,6 @@ public interface ProductService {
      DetailedProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest);
 
      Object deleteProduct(String productId);
+
+    Product findProductByIdOrThrowNotFound(String productId);
 }
