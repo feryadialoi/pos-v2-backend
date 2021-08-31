@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service.impl;
 
+import com.gdi.posbackend.entity.BaseEntity;
 import com.gdi.posbackend.entity.Unit;
 import com.gdi.posbackend.exception.UnitNotFoundException;
 import com.gdi.posbackend.mapper.UnitMapper;
@@ -16,7 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Feryadialoi
@@ -78,5 +83,22 @@ public class UnitServiceImpl implements UnitService {
         unitRepository.deleteById(unitId);
 
         return unitId;
+    }
+
+    @Override
+    public Unit findUnitByIdOrThrowNotFound(String unitId) {
+        return unitRepository.findById(unitId)
+                .orElseThrow(() -> new UnitNotFoundException("unit with id " + unitId + " not found"));
+    }
+
+    @Override
+    public List<Unit> findUnitsByIdsOrThrowNotFound(List<String> unitIds) {
+        List<Unit> units = unitRepository.findAllById(unitIds);
+        if (units.size() != unitIds.size()) {
+            List<String> existingIds = units.stream().map(BaseEntity::getId).collect(Collectors.toList());
+            List<String> notExistingIds = unitIds.stream().filter(id -> !existingIds.contains(id)).collect(Collectors.toList());
+            throw new UnitNotFoundException("units with id (" + notExistingIds + ") not found");
+        }
+        return units;
     }
 }
