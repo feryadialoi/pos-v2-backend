@@ -46,6 +46,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             chain.doFilter(request, response);
         } catch (Exception e) {
+            log.error(e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }
