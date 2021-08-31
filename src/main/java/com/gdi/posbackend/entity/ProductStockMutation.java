@@ -33,6 +33,10 @@ public class ProductStockMutation extends BaseEntity {
     @JoinColumn(name = "product_stock_detail_id", referencedColumnName = "id")
     private ProductStockDetail productStockDetail;
 
+    @ManyToOne
+    @JoinColumn(name = "unit_id", referencedColumnName = "id")
+    private Unit unit;
+
     @Column(name = "quantity_in")
     private BigDecimal quantityIn;
 

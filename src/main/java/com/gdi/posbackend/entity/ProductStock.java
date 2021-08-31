@@ -33,6 +33,10 @@ public class ProductStock extends BaseEntity {
     @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
     private Warehouse warehouse;
 
+    @ManyToOne
+    @JoinColumn(name = "unit_id", referencedColumnName = "id")
+    private Unit unit;
+
     @Column(name = "stock")
     private BigDecimal stock;
 
