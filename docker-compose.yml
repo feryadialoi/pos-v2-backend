@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  pos-backend:
+    container_name: pos-backend
+    image: pos-backend:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_USERNAME:
+      DATABASE_PASSWORD:
+      DATABASE_URL:
