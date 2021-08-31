@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.model.criteria.WarehouseCriteria;
 import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
@@ -26,4 +27,6 @@ public interface WarehouseService {
     Object deleteWarehouse(String warehouseId);
 
     List<WarehouseResponse> getListWarehouse();
+
+    Warehouse findWarehouseByIdOrThrowNotFound(String warehouseId);
 }
