@@ -58,6 +58,9 @@ public class Purchase extends BaseEntity {
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
+    @Column(name = "term")
+    private Integer term;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_type", columnDefinition = "enum('CASH','CREDIT')")
     private PaymentType paymentType;
