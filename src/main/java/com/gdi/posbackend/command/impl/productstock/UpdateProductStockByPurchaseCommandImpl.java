@@ -5,14 +5,9 @@ import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.ProductStockMutationEvent;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
 import com.gdi.posbackend.model.commandparam.UpdateProductStockByPurchaseCommandParam;
-import com.gdi.posbackend.repository.ProductRepository;
-import com.gdi.posbackend.repository.ProductStockDetailRepository;
 import com.gdi.posbackend.repository.ProductStockMutationRepository;
 import com.gdi.posbackend.repository.ProductStockRepository;
-import com.gdi.posbackend.service.CogsService;
 import com.gdi.posbackend.service.RunningNumberService;
-import com.gdi.posbackend.service.ServiceExecutor;
-import com.gdi.posbackend.util.CompanySettingValueUtil;
 import com.gdi.posbackend.util.RunningNumberCodeUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Feryadialoi
@@ -43,40 +39,51 @@ public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductSto
 
     @Override
     public Void execute(UpdateProductStockByPurchaseCommandParam updateProductStockByPurchaseCommandParam) {
-
         Purchase purchase = updateProductStockByPurchaseCommandParam.getPurchase();
 
         for (PurchaseDetail purchaseDetail : purchase.getPurchaseDetails()) {
-
-            ProductStock productStock = findOrCreateProductStockOfProductInRelatedWarehouseAndUnit(purchaseDetail.getProduct(), purchaseDetail.getWarehouse(), purchaseDetail.getUnit());
-
-            productStock.setStock(productStock.getStock().add(purchaseDetail.getQuantity()));
-
-            ProductStockDetail productStockDetail = new ProductStockDetail(
-                    productStock,
-                    purchaseDetail.getQuantity(),
-                    runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.BP))
-            );
-
-            productStock.getProductStockDetails().add(productStockDetail);
-
-            productStockRepository.save(productStock);
-
-            ProductStockMutation productStockMutation = new ProductStockMutation(
-                    productStock,
-                    productStockDetail,
-                    purchaseDetail.getUnit(),
-                    purchaseDetail.getQuantity(),
-                    BigDecimal.ZERO,
-                    ProductStockMutationEvent.PURCHASE,
-                    purchase.getReference()
-            );
-
-            productStockMutationRepository.save(productStockMutation);
-
+            updateProductStock(purchase, purchaseDetail);
         }
 
         return null;
+    }
+
+    private void updateProductStock(Purchase purchase, PurchaseDetail purchaseDetail) {
+        ProductStock productStock = findOrCreateProductStockOfProductInRelatedWarehouseAndUnit(
+                purchaseDetail.getProduct(),
+                purchaseDetail.getWarehouse(),
+                purchaseDetail.getUnit()
+        );
+
+        ProductStockDetail productStockDetail = new ProductStockDetail(
+                productStock,
+                purchaseDetail.getQuantity(),
+                runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.BP))
+        );
+
+        productStock.setProductStockDetails(List.of(productStockDetail));
+
+        productStock.setStock(
+                productStock.getStock().add(purchaseDetail.getQuantity())
+        );
+
+        productStockRepository.save(productStock);
+
+        createProductStockMutationOfPurchase(purchase, purchaseDetail, productStock, productStockDetail);
+    }
+
+    private void createProductStockMutationOfPurchase(Purchase purchase, PurchaseDetail purchaseDetail, ProductStock productStock, ProductStockDetail productStockDetail) {
+        ProductStockMutation productStockMutation = new ProductStockMutation(
+                productStock,
+                productStockDetail,
+                purchaseDetail.getUnit(),
+                purchaseDetail.getQuantity(),
+                BigDecimal.ZERO,
+                ProductStockMutationEvent.PURCHASE,
+                purchase.getReference()
+        );
+
+        productStockMutationRepository.save(productStockMutation);
     }
 
     private ProductStock findOrCreateProductStockOfProductInRelatedWarehouseAndUnit(Product product, Warehouse warehouse, Unit unit) {
