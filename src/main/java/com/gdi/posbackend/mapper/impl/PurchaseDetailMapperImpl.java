@@ -29,7 +29,7 @@ public class PurchaseDetailMapperImpl implements PurchaseDetailMapper {
                 .quantity(purchaseDetail.getQuantity())
                 .tax(purchaseDetail.getTax())
                 .discount(purchaseDetail.getDiscount())
-                .amount(purchaseDetail.getAmount())
+                .total(purchaseDetail.getTotal())
                 .build();
     }
 }
