@@ -35,7 +35,7 @@ public class PurchaseOrderDetailMapperImpl implements PurchaseOrderDetailMapper 
                 .taxFormat(purchaseOrderDetail.getTaxFormat())
                 .discount(purchaseOrderDetail.getDiscount())
                 .discountFormat(purchaseOrderDetail.getDiscountFormat())
-                .amount(purchaseOrderDetail.getAmount())
+                .total(purchaseOrderDetail.getTotal())
                 .build();
 
     }
