@@ -15,6 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.gdi.posbackend.specification.ProductSpecification.*;
+
 /**
  * @author Feryadialoi
  * @date 8/5/2021 10:37 AM
@@ -22,7 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @AllArgsConstructor
-public class GetProductsCommandImpl implements GetProductsCommand {
+public class
+GetProductsCommandImpl implements GetProductsCommand {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
@@ -31,17 +34,17 @@ public class GetProductsCommandImpl implements GetProductsCommand {
         ProductCriteria productCriteria = request.getProductCriteria();
         Pageable pageable = request.getPageable();
 
+        String code = productCriteria.getCode();
+        String name = productCriteria.getName();
+        String categoryName = productCriteria.getCategoryName();
+
         Specification<Product> specification = Specification.where(null);
 
-        if (productCriteria.getCode() != null)
-            specification = specification.and(ProductSpecification.codeIsLike(productCriteria.getCode()));
+        if (code != null) specification = specification.and(codeIsLike(code));
 
-        if (productCriteria.getName() != null)
-            specification = specification.and(ProductSpecification.nameIsLike(productCriteria.getName()));
+        if (name != null) specification = specification.and(nameIsLike(name));
 
-        if (productCriteria.getCategoryName() != null) {
-            specification = specification.and(ProductSpecification.categoryNameIsLike(productCriteria.getCategoryName()));
-        }
+        if (categoryName != null) specification = specification.and(categoryNameIsLike(categoryName));
 
         Page<Product> page = productRepository.findAll(specification, pageable);
         return page.map(productMapper::mapProductToProductResponse);
