@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.SaleOrder;
 import com.gdi.posbackend.model.criteria.SaleOrderCriteria;
 import com.gdi.posbackend.model.request.CreateSaleOrderRequest;
 import com.gdi.posbackend.model.response.DetailedSaleOrderResponse;
@@ -17,4 +18,6 @@ public interface SaleOrderService {
     DetailedSaleOrderResponse getSaleOrder(String saleOrderId);
 
     DetailedSaleOrderResponse createSaleOrder(CreateSaleOrderRequest createSaleOrderRequest);
+
+    SaleOrder findSaleOrderByIdOrThrowNotFound(String saleOrderId);
 }
