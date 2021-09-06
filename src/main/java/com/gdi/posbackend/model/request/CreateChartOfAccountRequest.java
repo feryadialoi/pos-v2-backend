@@ -1,5 +1,6 @@
 package com.gdi.posbackend.model.request;
 
+import com.gdi.posbackend.entity.enums.NormalBalance;
 import lombok.Data;
 
 /**
@@ -9,7 +10,8 @@ import lombok.Data;
 @Data
 public class CreateChartOfAccountRequest {
     private String name;
-    private String accountCode;
-    private String level;
+    private Integer accountCode;
+    private Integer level;
     private String parentId;
+    private NormalBalance normalBalance;
 }

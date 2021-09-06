@@ -9,20 +9,15 @@ import java.math.BigDecimal;
 
 /**
  * @author Feryadialoi
- * @date 8/25/2021 9:48 AM
+ * @date 9/6/2021 3:11 PM
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseDetailResponse {
-    private String id;
-    private ProductResponse product;
+public class ProductStockResponse {
+    private ProductOfProductStockResponse product;
     private WarehouseResponse warehouse;
+    private BigDecimal stock;
     private UnitResponse unit;
-    private BigDecimal quantity;
-    private BigDecimal price;
-    private BigDecimal tax;
-    private BigDecimal discount;
-    private BigDecimal total;
 }

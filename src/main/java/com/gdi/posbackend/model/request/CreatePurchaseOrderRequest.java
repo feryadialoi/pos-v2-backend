@@ -31,6 +31,8 @@ public class CreatePurchaseOrderRequest {
     @NotBlank
     private String dueDate;
 
+    private Integer term;
+
     private String reference;
 
     private String note;
@@ -50,7 +52,6 @@ public class CreatePurchaseOrderRequest {
     @ProductOfCreatePurchaseOrderRequestConstraint
     private List<ProductOfCreatePurchaseOrderRequest> products;
 
-    @NotNull
     private PurchaseOrderStatus status;
 
 }

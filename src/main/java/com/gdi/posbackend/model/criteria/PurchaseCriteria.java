@@ -1,5 +1,6 @@
 package com.gdi.posbackend.model.criteria;
 
+import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import lombok.Data;
 
 /**
@@ -8,7 +9,9 @@ import lombok.Data;
  */
 @Data
 public class PurchaseCriteria {
-    private String code;
     private String startDate;
     private String endDate;
+    private String supplierName;
+    private String code;
+    private PurchaseStatus status;
 }

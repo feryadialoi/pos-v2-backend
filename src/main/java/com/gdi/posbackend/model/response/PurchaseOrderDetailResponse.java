@@ -28,5 +28,5 @@ public class PurchaseOrderDetailResponse {
     private TaxFormat taxFormat;
     private BigDecimal discount;
     private DiscountFormat discountFormat;
-    private BigDecimal amount;
+    private BigDecimal total;
 }

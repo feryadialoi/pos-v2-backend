@@ -2,7 +2,7 @@ package com.gdi.posbackend.model.request;
 
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.PaymentType;
-import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseOrderRequestConstraint;
+import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseRequestConstraint;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -21,8 +21,6 @@ public class CreatePurchaseRequest {
     @NotBlank
     private String supplierId;
 
-    @NotNull
-    @NotBlank
     private String purchaseOrderId;
 
     @NotNull
@@ -32,6 +30,8 @@ public class CreatePurchaseRequest {
     @NotNull
     @NotBlank
     private String dueDate;
+
+    private Integer term;
 
     private String reference;
 
@@ -49,9 +49,9 @@ public class CreatePurchaseRequest {
     private String otherFeeDescription;
 
     @NotNull
-    @ProductOfCreatePurchaseOrderRequestConstraint
+    @ProductOfCreatePurchaseRequestConstraint
     private List<ProductOfCreatePurchaseRequest> products;
 
-    @NotNull
     private PurchaseStatus status;
+
 }

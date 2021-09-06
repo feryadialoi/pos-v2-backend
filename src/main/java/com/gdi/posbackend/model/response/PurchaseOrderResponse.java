@@ -23,6 +23,7 @@ public class PurchaseOrderResponse {
     private String code;
     private LocalDateTime entryDate;
     private LocalDateTime dueDate;
+    private Integer term;
     private SupplierResponse supplier;
     private String reference;
     private String note;
