@@ -56,12 +56,15 @@ public class PurchaseOrder extends BaseEntity {
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
+    @Column(name = "term")
+    private Integer term;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_type", columnDefinition = "enum('CASH','CREDIT')")
     private PaymentType paymentType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "enum('DRAFT','APPROVED', 'AWAITING_APPROVAL')")
+    @Column(name = "status", columnDefinition = "enum('DRAFT','APPROVED', 'AWAITING_APPROVAL', 'REFUSED', 'COMPLETE', 'VOID')")
     private PurchaseOrderStatus status;
 
     @Column(name = "total")
