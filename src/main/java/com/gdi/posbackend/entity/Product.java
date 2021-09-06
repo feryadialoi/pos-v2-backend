@@ -31,11 +31,14 @@ public class Product extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 
