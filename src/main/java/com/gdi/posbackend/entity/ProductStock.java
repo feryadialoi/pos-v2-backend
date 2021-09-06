@@ -40,7 +40,7 @@ public class ProductStock extends BaseEntity {
     @Column(name = "stock")
     private BigDecimal stock;
 
-    @OneToMany(mappedBy = "productStock")
+    @OneToMany(mappedBy = "productStock", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ToString.Exclude
     private List<ProductStockDetail> productStockDetails;
 
