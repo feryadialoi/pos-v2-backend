@@ -2,46 +2,34 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.command.purchaseorder.CreatePurchaseOrderCommand;
 import com.gdi.posbackend.entity.*;
-import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
-import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
-import com.gdi.posbackend.exception.ProductNotFoundException;
-import com.gdi.posbackend.exception.PurchaseOrderNotFoundException;
-import com.gdi.posbackend.exception.SupplierNotFoundException;
-import com.gdi.posbackend.exception.UnitNotFoundException;
+import com.gdi.posbackend.exception.*;
 import com.gdi.posbackend.mapper.PurchaseOrderMapper;
-import com.gdi.posbackend.model.PurchaseOrderCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreatePurchaseOrderCommandParam;
 import com.gdi.posbackend.model.criteria.PurchaseOrderCriteria;
-import com.gdi.posbackend.model.request.ApprovePurchaseOrderRequest;
 import com.gdi.posbackend.model.request.CreatePurchaseOrderRequest;
-import com.gdi.posbackend.model.request.ProductOfCreatePurchaseOrderRequest;
-import com.gdi.posbackend.model.response.DetailedPurchaseOrderResponse;
-import com.gdi.posbackend.model.response.PurchaseOrderResponse;
-import com.gdi.posbackend.repository.ProductRepository;
+import com.gdi.posbackend.model.request.UpdatePurchaseOrderStatusRequest;
+import com.gdi.posbackend.model.response.*;
 import com.gdi.posbackend.repository.PurchaseOrderRepository;
-import com.gdi.posbackend.repository.SupplierRepository;
-import com.gdi.posbackend.repository.UnitRepository;
 import com.gdi.posbackend.service.PurchaseOrderService;
-import com.gdi.posbackend.service.RunningNumberService;
 import com.gdi.posbackend.service.ServiceExecutor;
-import com.gdi.posbackend.specification.PurchaseOrderSpecification;
-import com.gdi.posbackend.util.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.gdi.posbackend.specification.PurchaseOrderSpecification.*;
 
 /**
  * @author Feryadialoi
  * @date 8/19/2021 12:54 AM
  */
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
@@ -60,21 +48,28 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public Page<PurchaseOrderResponse> getPurchaseOrders(PurchaseOrderCriteria purchaseOrderCriteria, Pageable pageable) {
 
+        PurchaseOrderStatus status = purchaseOrderCriteria.getStatus();
+        String supplierName = purchaseOrderCriteria.getSupplierName();
+        String code = purchaseOrderCriteria.getCode();
+        String startDate = purchaseOrderCriteria.getStartDate();
+        String endDate = purchaseOrderCriteria.getEndDate();
+        List<PurchaseOrderStatus> statuses = purchaseOrderCriteria.getStatuses();
+
+        log.info(purchaseOrderCriteria.toString());
+
         Specification<PurchaseOrder> specification = Specification.where(null);
-        if (purchaseOrderCriteria.getStatus() != null)
-            specification = specification.and(PurchaseOrderSpecification.statusIs(purchaseOrderCriteria.getStatus()));
 
-        if (purchaseOrderCriteria.getSupplierName() != null)
-            specification = specification.and(PurchaseOrderSpecification.supplierNameIsLike(purchaseOrderCriteria.getSupplierName()));
+        if (status != null) specification = specification.and(statusIs(status));
 
-        if (purchaseOrderCriteria.getCode() != null)
-            specification = specification.and(PurchaseOrderSpecification.codeIsLike(purchaseOrderCriteria.getCode()));
+        if (statuses != null) specification = specification.and(statusesIn(statuses));
 
-        if (purchaseOrderCriteria.getStartDate() != null)
-            specification = specification.and(PurchaseOrderSpecification.startDateIs(purchaseOrderCriteria.getStartDate()));
+        if (supplierName != null) specification = specification.and(supplierNameIsLike(supplierName));
 
-        if (purchaseOrderCriteria.getEndDate() != null)
-            specification = specification.and(PurchaseOrderSpecification.endDateIs(purchaseOrderCriteria.getEndDate()));
+        if (code != null) specification = specification.and(codeIsLike(code));
+
+        if (startDate != null) specification = specification.and(startDateGreaterThanOrEqual(startDate));
+
+        if (endDate != null) specification = specification.and(endDateLessThanOrEqual(endDate));
 
         return purchaseOrderRepository.findAll(specification, pageable).map(purchaseOrderMapper::mapPurchaseOrderToPurchaseOrderResponse);
 
@@ -92,22 +87,67 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return serviceExecutor.execute(CreatePurchaseOrderCommand.class, new CreatePurchaseOrderCommandParam(createPurchaseOrderRequest));
     }
 
-    @Override
-    public Object approvePurchaseOrder(ApprovePurchaseOrderRequest approvePurchaseOrderRequest) {
-        return purchaseOrderRepository.findById(approvePurchaseOrderRequest.getPurchaseOrderId()).map(purchaseOrder -> {
-            purchaseOrder.setStatus(PurchaseOrderStatus.APPROVED);
-            return purchaseOrder.getStatus();
-        }).orElseThrow(() -> new PurchaseOrderNotFoundException("purchase order with id "
-                + approvePurchaseOrderRequest.getPurchaseOrderId()
-                + " not found")
-        );
-    }
 
     @Override
     public PurchaseOrder findPurchaseOrderByIdOrThrowNotFound(String purchaseOrderId) {
-        return purchaseOrderRepository.findById(purchaseOrderId)
+        return purchaseOrderRepository
+                .findById(purchaseOrderId)
                 .orElseThrow(() -> new PurchaseOrderNotFoundException("purchase order with id " + purchaseOrderId + " not found"));
     }
 
+    @Override
+    public void completePurchaseOrderStatus(String purchaseOrderId) {
+        PurchaseOrder purchaseOrder = findPurchaseOrderByIdOrThrowNotFound(purchaseOrderId);
+
+        if (purchaseOrder.getStatus() == PurchaseOrderStatus.VOID) {
+            throw new CompletePurchaseOrderNotAllowedException("purchase order status already " + purchaseOrder.getStatus() + ", complete not allowed");
+        }
+        if (purchaseOrder.getStatus() == PurchaseOrderStatus.REFUSED) {
+            throw new CompletePurchaseOrderNotAllowedException("purchase order status already " + purchaseOrder.getStatus() + ", complete not allowed");
+        }
+
+        purchaseOrder.setStatus(PurchaseOrderStatus.COMPLETE);
+
+        purchaseOrderRepository.save(purchaseOrder);
+    }
+
+    @Override
+    public UpdatePurchaseOrderStatusResponse updatePurchaseOrderStatus(String purchaseOrderId, UpdatePurchaseOrderStatusRequest updatePurchaseOrderStatusRequest) {
+
+        PurchaseOrder purchaseOrder = findPurchaseOrderByIdOrThrowNotFound(purchaseOrderId);
+        PurchaseOrderStatus status = updatePurchaseOrderStatusRequest.getStatus();
+
+        if (status == PurchaseOrderStatus.APPROVED) {
+            switch (purchaseOrder.getStatus()) {
+                case VOID:
+                case COMPLETE:
+                    throw new UpdatePurchaseOrderStatusNotAllowedException("update purchase order status to "
+                            + status + " not allowed, purchase order status is " + purchaseOrder.getStatus());
+            }
+        } else if (status == PurchaseOrderStatus.AWAITING_APPROVAL) {
+            switch (purchaseOrder.getStatus()) {
+                case VOID:
+                case REFUSED:
+                case COMPLETE:
+                    throw new UpdatePurchaseOrderStatusNotAllowedException("update purchase order status to "
+                            + status + " not allowed, purchase order status is " + purchaseOrder.getStatus());
+            }
+        } else if (status == PurchaseOrderStatus.REFUSED) {
+            switch (purchaseOrder.getStatus()) {
+                case VOID:
+                case COMPLETE:
+                    throw new UpdatePurchaseOrderStatusNotAllowedException("update purchase order status to "
+                            + status + " not allowed, purchase order status is " + purchaseOrder.getStatus());
+            }
+        } else {
+            throw new UpdatePurchaseOrderStatusNotAllowedException("update purchase order status to " + status + " not allowed");
+        }
+
+        purchaseOrder.setStatus(status);
+
+        purchaseOrderRepository.save(purchaseOrder);
+
+        return purchaseOrderMapper.mapPurchaseOrderToUpdatePurchaseOrderStatusResponse(purchaseOrder);
+    }
 
 }
