@@ -9,5 +9,6 @@ public enum RunningNumberPrefix {
     PO, P, PR,
     DO,
     SP,
-    BP
+    BP,
+    SA
 }
