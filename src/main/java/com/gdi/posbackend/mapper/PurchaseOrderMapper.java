@@ -1,8 +1,7 @@
 package com.gdi.posbackend.mapper;
 
 import com.gdi.posbackend.entity.PurchaseOrder;
-import com.gdi.posbackend.model.response.DetailedPurchaseOrderResponse;
-import com.gdi.posbackend.model.response.PurchaseOrderResponse;
+import com.gdi.posbackend.model.response.*;
 
 /**
  * @author Feryadialoi
@@ -13,4 +12,5 @@ public interface PurchaseOrderMapper {
 
     PurchaseOrderResponse mapPurchaseOrderToPurchaseOrderResponse(PurchaseOrder purchaseOrder);
 
+    UpdatePurchaseOrderStatusResponse mapPurchaseOrderToUpdatePurchaseOrderStatusResponse(PurchaseOrder purchaseOrder);
 }
