@@ -59,7 +59,7 @@ public class PurchaseOrderDetail extends BaseEntity {
     @Column(name = "discount")
     private BigDecimal discount;
 
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(name = "total")
+    private BigDecimal total;
 
 }
