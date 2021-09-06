@@ -41,4 +41,24 @@ public class RunningNumberServiceTest {
         }
 
     }
+
+    @Test
+    void insertRunningNumberOfStockAdjustment() {
+        long count = runningNumberRepository.countByPrefixIn(List.of(RunningNumberPrefix.SA.name()));
+        if (count == 0) {
+            RunningNumber runningNumber = new RunningNumber();
+            runningNumber.setPrefix(RunningNumberPrefix.SA.name());
+            runningNumber.setNumber(0);
+            runningNumber.setDescription("Stock Adjustment");
+
+            runningNumber = runningNumberRepository.save(runningNumber);
+            log.info("running number id           : {} ", runningNumber.getId());
+            log.info("running number prefix       : {} ", runningNumber.getPrefix());
+            log.info("running number number       : {} ", runningNumber.getNumber());
+            log.info("running number description  : {} ", runningNumber.getDescription());
+
+            Assertions.assertNotNull(runningNumber.getId());
+        }
+
+    }
 }
