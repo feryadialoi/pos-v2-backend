@@ -1,6 +1,7 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
+import com.gdi.posbackend.exception.CreatePurchaseNotAllowedException;
 import com.gdi.posbackend.exception.PurchaseNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,4 +18,10 @@ public class PurchaseControllerAdvice extends BaseControllerAdvice {
     public Object purchaseNotFound(PurchaseNotFoundException purchaseNotFoundException) {
         return response("not found", purchaseNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CreatePurchaseNotAllowedException.class)
+    public Object createPurchaseNotAllowed(CreatePurchaseNotAllowedException createPurchaseNotAllowedException) {
+        return response("bad request", createPurchaseNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
