@@ -5,6 +5,10 @@ import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
 import com.gdi.posbackend.util.LocalDateUtil;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Expression;
+import java.util.List;
+
 /**
  * @author Feryadialoi
  * @date 8/23/2021 3:16 PM
@@ -23,13 +27,17 @@ public class PurchaseOrderSpecification {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("code"), "%" + code + "%");
     }
 
-    public static Specification<PurchaseOrder> startDateIs(String startDate) {
+    public static Specification<PurchaseOrder> startDateGreaterThanOrEqual(String startDate) {
         LocalDateUtil localDateUtil = new LocalDateUtil();
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("entryDate"), localDateUtil.fromString(startDate));
     }
 
-    public static Specification<PurchaseOrder> endDateIs(String endDate) {
+    public static Specification<PurchaseOrder> endDateLessThanOrEqual(String endDate) {
         LocalDateUtil localDateUtil = new LocalDateUtil();
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("entryDate"), localDateUtil.fromString(endDate));
+    }
+
+    public static Specification<PurchaseOrder> statusesIn(List<PurchaseOrderStatus> statuses) {
+        return (root, criteriaQuery, criteriaBuilder) -> root.get("status").in(statuses);
     }
 }
