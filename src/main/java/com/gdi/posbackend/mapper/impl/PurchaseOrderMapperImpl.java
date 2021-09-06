@@ -4,8 +4,7 @@ import com.gdi.posbackend.entity.PurchaseOrder;
 import com.gdi.posbackend.mapper.PurchaseOrderDetailMapper;
 import com.gdi.posbackend.mapper.PurchaseOrderMapper;
 import com.gdi.posbackend.mapper.SupplierMapper;
-import com.gdi.posbackend.model.response.DetailedPurchaseOrderResponse;
-import com.gdi.posbackend.model.response.PurchaseOrderResponse;
+import com.gdi.posbackend.model.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +29,7 @@ public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
                 .reference(purchaseOrder.getReference())
                 .entryDate(purchaseOrder.getEntryDate())
                 .dueDate(purchaseOrder.getDueDate())
+                .term(purchaseOrder.getTerm())
                 .supplier(supplierMapper.mapSupplierToSupplierResponse(purchaseOrder.getSupplier()))
                 .paymentType(purchaseOrder.getPaymentType())
                 .purchaseOrderDetails(purchaseOrder.getPurchaseOrderDetails().stream()
@@ -60,6 +60,7 @@ public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
                 .reference(purchaseOrder.getReference())
                 .entryDate(purchaseOrder.getEntryDate())
                 .dueDate(purchaseOrder.getDueDate())
+                .term(purchaseOrder.getTerm())
                 .supplier(supplierMapper.mapSupplierToSupplierResponse(purchaseOrder.getSupplier()))
                 .paymentType(purchaseOrder.getPaymentType())
                 .otherFee(purchaseOrder.getOtherFee())
@@ -72,6 +73,14 @@ public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
                 .tax(purchaseOrder.getTax())
                 .total(purchaseOrder.getTotal())
                 .grandTotal(purchaseOrder.getGrandTotal())
+                .status(purchaseOrder.getStatus())
+                .build();
+    }
+
+    @Override
+    public UpdatePurchaseOrderStatusResponse mapPurchaseOrderToUpdatePurchaseOrderStatusResponse(PurchaseOrder purchaseOrder) {
+        return UpdatePurchaseOrderStatusResponse.builder()
+                .purchaseOrderId(purchaseOrder.getId())
                 .status(purchaseOrder.getStatus())
                 .build();
     }
