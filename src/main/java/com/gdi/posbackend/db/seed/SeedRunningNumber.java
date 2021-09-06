@@ -25,7 +25,7 @@ public class SeedRunningNumber {
     private final RunningNumberRepository runningNumberRepository;
 
     public void seed() {
-        long count = runningNumberRepository.countByPrefixIn(List.of("SO", "PO", "S", "P", "DO", "SP", "BP"));
+        long count = runningNumberRepository.countByPrefixIn(List.of("SO", "PO", "S", "P", "DO", "SP", "BP", "SA"));
 
         if (count == 0) {
             RunningNumber runningNumber1 = new RunningNumber("SO", "Sale Order", 0);
@@ -35,6 +35,7 @@ public class SeedRunningNumber {
             RunningNumber runningNumber5 = new RunningNumber("DO", "Delivery Order", 0);
             RunningNumber runningNumber6 = new RunningNumber("SP", "Supplier", 0);
             RunningNumber runningNumber7 = new RunningNumber("BP", "Batch of Product", 0);
+            RunningNumber runningNumber8 = new RunningNumber("SA", "Stock Adjustment", 0);
 
             runningNumberRepository.saveAll(Arrays.asList(
                     runningNumber1,
@@ -42,7 +43,9 @@ public class SeedRunningNumber {
                     runningNumber3,
                     runningNumber4,
                     runningNumber5,
-                    runningNumber7
+                    runningNumber6,
+                    runningNumber7,
+                    runningNumber8
             ));
             log.info("running number seed success");
         } else {
