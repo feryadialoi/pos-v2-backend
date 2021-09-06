@@ -13,7 +13,9 @@ import java.util.Optional;
  * @date 8/30/2021 12:51 AM
  */
 public interface ProductStockDetailRepository extends JpaRepository<ProductStockDetail, String>, JpaSpecificationExecutor<ProductStockDetail> {
+
     Optional<ProductStockDetail> findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateDesc(ProductStock productStock, BigDecimal quantity);
 
     Optional<ProductStockDetail> findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateAsc(ProductStock productStock, BigDecimal quantity);
+
 }
