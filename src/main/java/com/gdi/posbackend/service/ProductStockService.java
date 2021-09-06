@@ -1,6 +1,7 @@
 package com.gdi.posbackend.service;
 
 import com.gdi.posbackend.entity.Purchase;
+import com.gdi.posbackend.entity.Sale;
 import com.gdi.posbackend.model.criteria.ProductStockCriteria;
 import com.gdi.posbackend.model.request.UpdateProductStockRequest;
 import org.springframework.data.domain.Page;
@@ -18,4 +19,6 @@ public interface ProductStockService {
     Object updateProductStock(String productStockId, UpdateProductStockRequest updateProductStockRequest);
 
     void updateProductStockByPurchase(Purchase purchase);
+
+    void updateProductStockBySale(Sale sale);
 }
