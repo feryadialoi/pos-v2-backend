@@ -2,11 +2,9 @@ package com.gdi.posbackend.controller.v1;
 
 import com.gdi.posbackend.controller.BaseController;
 import com.gdi.posbackend.model.criteria.PurchaseOrderCriteria;
-import com.gdi.posbackend.model.request.ApprovePurchaseOrderRequest;
 import com.gdi.posbackend.model.request.CreatePurchaseOrderRequest;
-import com.gdi.posbackend.model.response.ApiResponse;
-import com.gdi.posbackend.model.response.DetailedPurchaseOrderResponse;
-import com.gdi.posbackend.model.response.PurchaseOrderResponse;
+import com.gdi.posbackend.model.request.UpdatePurchaseOrderStatusRequest;
+import com.gdi.posbackend.model.response.*;
 import com.gdi.posbackend.service.PurchaseOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,8 +40,10 @@ public class PurchaseOrderController extends BaseController {
         return response("create purchase order success", purchaseOrderService.createPurchaseOrder(createPurchaseOrderRequest));
     }
 
-    @PostMapping("/approve")
-    public ResponseEntity<ApiResponse<Object>> approvePurchaseOrder(@Valid @RequestBody ApprovePurchaseOrderRequest approvePurchaseOrderRequest) {
-        return response("purchase order approval success", purchaseOrderService.approvePurchaseOrder(approvePurchaseOrderRequest));
+    @PutMapping("/{purchaseOrderId}/status")
+    public Object updatePurchaseOrderStatus(@PathVariable(name = "purchaseOrderId") String purchaseOrderId, @Valid @RequestBody UpdatePurchaseOrderStatusRequest updatePurchaseOrderStatusRequest) {
+        return response("update purchase order status success", purchaseOrderService.updatePurchaseOrderStatus(purchaseOrderId, updatePurchaseOrderStatusRequest));
     }
+
+
 }
