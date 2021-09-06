@@ -3,11 +3,8 @@ package com.gdi.posbackend.command.impl.purchaseorder;
 import com.gdi.posbackend.command.purchaseorder.CreatePurchaseOrderCommand;
 import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.PaymentType;
+import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
-import com.gdi.posbackend.exception.ProductNotFoundException;
-import com.gdi.posbackend.exception.SupplierNotFoundException;
-import com.gdi.posbackend.exception.UnitNotFoundException;
-import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import com.gdi.posbackend.mapper.PurchaseOrderMapper;
 import com.gdi.posbackend.model.PurchaseOrderCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreatePurchaseOrderCommandParam;
@@ -55,6 +52,7 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
     private final ProductService productService;
     private final WarehouseService warehouseService;
     private final UnitService unitService;
+    private final StorageService storageService;
 
 
     @Override
@@ -66,6 +64,7 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
 
     }
 
+    @SuppressWarnings("Duplicates")
     private PurchaseOrder doCreatePurchaseOrder(CreatePurchaseOrderCommandParam createPurchaseOrderCommandParam) {
         CreatePurchaseOrderRequest createPurchaseOrderRequest = createPurchaseOrderCommandParam.getCreatePurchaseOrderRequest();
 
@@ -73,14 +72,17 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
         purchaseOrder.setCode(runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.PO)));
         purchaseOrder.setReference(createPurchaseOrderRequest.getReference());
         purchaseOrder.setSupplier(supplierService.findSupplierByIdOrThrowNotFound(createPurchaseOrderRequest.getSupplierId()));
-        purchaseOrder.setStatus(createPurchaseOrderRequest.getStatus());
+        purchaseOrder.setStatus(getPurchaseOrderStatus(createPurchaseOrderRequest.getStatus()));
         purchaseOrder.setPaymentType(createPurchaseOrderRequest.getPaymentType());
+
         purchaseOrder.setEntryDate(localDateUtil.fromString(createPurchaseOrderRequest.getEntryDate()));
         if (createPurchaseOrderRequest.getPaymentType() == PaymentType.CREDIT) {
             purchaseOrder.setDueDate(localDateUtil.fromString(createPurchaseOrderRequest.getDueDate()));
+            purchaseOrder.setTerm(createPurchaseOrderRequest.getTerm());
         }
 
         PurchaseOrderCalculatedResult purchaseOrderCalculatedResult = calculatePurchaseOrder(createPurchaseOrderRequest, purchaseOrder);
+
         purchaseOrder.setIsDiscounted(discountUtil.getIsDiscounted(purchaseOrderCalculatedResult.getTotalDiscount()));
         purchaseOrder.setIsTaxed(taxUtil.getIsTaxed(purchaseOrderCalculatedResult.getTotalTax()));
         purchaseOrder.setDiscount(purchaseOrderCalculatedResult.getTotalDiscount());
@@ -88,17 +90,26 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
         purchaseOrder.setTotal(purchaseOrderCalculatedResult.getTotal());
         purchaseOrder.setGrandTotal(purchaseOrderCalculatedResult.getGrandTotal());
         purchaseOrder.setPurchaseOrderDetails(purchaseOrderCalculatedResult.getPurchaseOrderDetails());
+
         purchaseOrder.setShippingFee(createPurchaseOrderRequest.getShippingFee());
         purchaseOrder.setShippingFeeDescription(createPurchaseOrderRequest.getShippingFeeDescription());
         purchaseOrder.setOtherFee(createPurchaseOrderRequest.getOtherFee());
         purchaseOrder.setOtherFeeDescription(createPurchaseOrderRequest.getOtherFeeDescription());
+
         purchaseOrder.setNote(createPurchaseOrderRequest.getNote());
-        purchaseOrder.setAttachment(getAttachment());
+        purchaseOrder.setAttachment(storageService.uploadImageFile(null));
 
         purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+
         return purchaseOrder;
     }
 
+    private PurchaseOrderStatus getPurchaseOrderStatus(PurchaseOrderStatus status) {
+        if (status == null) return PurchaseOrderStatus.DRAFT;
+        return status;
+    }
+
+    @SuppressWarnings("Duplicates")
     private PurchaseOrderCalculatedResult calculatePurchaseOrder(CreatePurchaseOrderRequest createPurchaseOrderRequest, PurchaseOrder purchaseOrder) {
         List<PurchaseOrderDetail> purchaseOrderDetails = new ArrayList<>();
         BigDecimal totalTax = BigDecimal.ZERO;
@@ -113,11 +124,12 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
             purchaseOrderDetail.setUnit(unitService.findUnitByIdOrThrowNotFound(product.getUnitId()));
             purchaseOrderDetail.setPrice(product.getPrice());
             purchaseOrderDetail.setQuantity(product.getQuantity());
+
             purchaseOrderDetail.setTax(product.getTax());
             purchaseOrderDetail.setTaxFormat(product.getTaxFormat());
             purchaseOrderDetail.setDiscount(product.getDiscount());
             purchaseOrderDetail.setDiscountFormat(product.getDiscountFormat());
-            purchaseOrderDetail.setAmount(calculateAmount(product));
+            purchaseOrderDetail.setTotal(calculatePurchaseOrderDetailTotal(product));
 
             purchaseOrderDetails.add(purchaseOrderDetail);
 
@@ -139,11 +151,7 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
         return new PurchaseOrderCalculatedResult(purchaseOrderDetails, totalDiscount, totalTax, total, grandTotal);
     }
 
-    private BigDecimal calculateAmount(ProductOfCreatePurchaseOrderRequest product) {
+    private BigDecimal calculatePurchaseOrderDetailTotal(ProductOfCreatePurchaseOrderRequest product) {
         return product.getPrice().multiply(product.getQuantity());
-    }
-
-    private String getAttachment() {
-        return null;
     }
 }

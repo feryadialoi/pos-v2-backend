@@ -3,7 +3,10 @@ package com.gdi.posbackend.command.impl.purchase;
 import com.gdi.posbackend.command.purchase.CreatePurchaseCommand;
 import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.PaymentType;
+import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
+import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
+import com.gdi.posbackend.exception.CreatePurchaseNotAllowedException;
 import com.gdi.posbackend.mapper.PurchaseMapper;
 import com.gdi.posbackend.model.PurchaseCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreatePurchaseCommandParam;
@@ -17,6 +20,7 @@ import com.gdi.posbackend.util.LocalDateUtil;
 import com.gdi.posbackend.util.RunningNumberCodeUtil;
 import com.gdi.posbackend.util.TaxUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,7 @@ import java.util.List;
  * @author Feryadialoi
  * @date 8/29/2021 4:07 AM
  */
+@Slf4j
 @Component
 @Transactional
 @AllArgsConstructor
@@ -59,23 +64,50 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
     @Override
     public DetailedPurchaseResponse execute(CreatePurchaseCommandParam createPurchaseCommandParam) {
 
-        // TODO create purchase
-        Purchase purchase = doCreatePurchase(createPurchaseCommandParam.getCreatePurchaseRequest());
+        CreatePurchaseRequest createPurchaseRequest = createPurchaseCommandParam.getCreatePurchaseRequest();
 
-        // TODO posting journal
-        journalService.postJournalOfPurchase(purchase);
+        checkPurchaseOrderStatusIfExists(createPurchaseRequest);
 
-        // TODO mutate stock
+        Purchase purchase = doCreatePurchase(createPurchaseRequest);
+
+//        journalService.postJournalOfPurchase(purchase);
+
         productStockService.updateProductStockByPurchase(purchase);
 
         return purchaseMapper.mapPurchaseToDetailedPurchaseResponse(purchase);
     }
 
+    private void checkPurchaseOrderStatusIfExists(CreatePurchaseRequest createPurchaseRequest) throws CreatePurchaseNotAllowedException {
+        if (createPurchaseRequest.getPurchaseOrderId() != null) {
+            PurchaseOrder purchaseOrder = purchaseOrderService.findPurchaseOrderByIdOrThrowNotFound(createPurchaseRequest.getPurchaseOrderId());
+            if (purchaseOrder.getStatus() == PurchaseOrderStatus.DRAFT) {
+                throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
+            }
+            if (purchaseOrder.getStatus() == PurchaseOrderStatus.AWAITING_APPROVAL) {
+                throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
+            }
+            if (purchaseOrder.getStatus() == PurchaseOrderStatus.REFUSED) {
+                throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
+            }
+            if (purchaseOrder.getStatus() == PurchaseOrderStatus.VOID) {
+                throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
+            }
+            if (purchaseOrder.getStatus() == PurchaseOrderStatus.COMPLETE) {
+                throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
+            }
+        }
+
+    }
+
+    @SuppressWarnings("Duplicates")
     private Purchase doCreatePurchase(CreatePurchaseRequest createPurchaseRequest) {
         Purchase purchase = new Purchase();
 
         if (createPurchaseRequest.getPurchaseOrderId() != null) {
             purchase.setPurchaseOrder(purchaseOrderService.findPurchaseOrderByIdOrThrowNotFound(createPurchaseRequest.getPurchaseOrderId()));
+
+            setPurchaseOrderStatusToComplete(purchase.getPurchaseOrder());
+
         }
         purchase.setCode(runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.P)));
         purchase.setReference(createPurchaseRequest.getReference());
@@ -83,9 +115,12 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
         purchase.setStatus(createPurchaseRequest.getStatus());
         purchase.setPaymentType(createPurchaseRequest.getPaymentType());
         purchase.setEntryDate(localDateUtil.fromString(createPurchaseRequest.getEntryDate()));
+
         if (createPurchaseRequest.getPaymentType() == PaymentType.CREDIT) {
             purchase.setDueDate(localDateUtil.fromString(createPurchaseRequest.getDueDate()));
+            purchase.setTerm(createPurchaseRequest.getTerm());
         }
+
         PurchaseCalculatedResult purchaseCalculatedResult = calculatePurchase(createPurchaseRequest, purchase);
         purchase.setIsDiscounted(discountUtil.getIsDiscounted(purchaseCalculatedResult.getTotalDiscount()));
         purchase.setIsTaxed(taxUtil.getIsTaxed(purchaseCalculatedResult.getTotalTax()));
@@ -106,6 +141,12 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
         return purchase;
     }
 
+    @SuppressWarnings("Duplicates")
+
+    private void setPurchaseOrderStatusToComplete(PurchaseOrder purchaseOrder) {
+        purchaseOrderService.completePurchaseOrderStatus(purchaseOrder.getId());
+    }
+
     private PurchaseCalculatedResult calculatePurchase(CreatePurchaseRequest createPurchaseRequest, Purchase purchase) {
         List<PurchaseDetail> purchaseDetails = new ArrayList<>();
         BigDecimal totalTax = BigDecimal.ZERO;
@@ -122,7 +163,7 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
             purchaseDetail.setQuantity(product.getQuantity());
             purchaseDetail.setTax(product.getTax());
             purchaseDetail.setDiscount(product.getDiscount());
-            purchaseDetail.setAmount(calculateAmount(product));
+            purchaseDetail.setTotal(calculateAmount(product));
 
             purchaseDetails.add(purchaseDetail);
 
