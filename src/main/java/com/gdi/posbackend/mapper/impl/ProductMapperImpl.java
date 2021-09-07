@@ -5,10 +5,7 @@ import com.gdi.posbackend.mapper.BrandMapper;
 import com.gdi.posbackend.mapper.CategoryMapper;
 import com.gdi.posbackend.mapper.ProductMapper;
 import com.gdi.posbackend.mapper.UnitMapper;
-import com.gdi.posbackend.model.response.DetailedProductResponse;
-import com.gdi.posbackend.model.response.ProductResponse;
-import com.gdi.posbackend.model.response.ProductUnitConversionResponse;
-import com.gdi.posbackend.model.response.UnitResponse;
+import com.gdi.posbackend.model.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -58,6 +55,16 @@ public class ProductMapperImpl implements ProductMapper {
         return DetailedProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
+                .build();
+    }
+
+    @Override
+    public SimplifiedProductResponse mapProductToSimplifiedProductResponse(Product product) {
+        return SimplifiedProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(categoryMapper.mapCategoryToCategoryResponse(product.getCategory()))
+                .code(product.getCode())
                 .build();
     }
 }
