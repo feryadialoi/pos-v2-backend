@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductStockResponse {
-    private ProductOfProductStockResponse product;
+    private SimplifiedProductResponse product;
     private WarehouseResponse warehouse;
     private BigDecimal stock;
     private UnitResponse unit;

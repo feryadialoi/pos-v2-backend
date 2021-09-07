@@ -16,5 +16,6 @@ import lombok.NoArgsConstructor;
 public class ProductOfProductStockResponse {
     private String id;
     private String name;
+    private String code;
     private CategoryResponse category;
 }
