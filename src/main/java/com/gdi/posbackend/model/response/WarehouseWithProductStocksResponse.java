@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 /**
  * @author Feryadialoi
  * @date 9/7/2021 3:44 AM
@@ -18,5 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 public class WarehouseWithProductStocksResponse {
     private WarehouseResponse warehouse;
-    private Page<ProductStockOfWarehouseResponse> pageOfProductStock;
+    private Page<ProductStockOfWarehouseWithProductStocksResponse> pageOfProductStock;
 }

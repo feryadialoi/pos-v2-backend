@@ -45,20 +45,20 @@ public class WarehouseMapperImpl implements WarehouseMapper {
     public WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> productStocks) {
         return WarehouseWithProductStocksResponse.builder()
                 .warehouse(mapWarehouseToWarehouseResponse(warehouse))
-                .pageOfProductStock(productStocks.map(this::mapProductStockToProductStockOfWarehouseResponse))
+                .pageOfProductStock(productStocks.map(this::mapProductStockToProductStockOfWarehouseWithProductStocksResponse))
                 .build();
     }
 
-    private ProductStockOfWarehouseResponse mapProductStockToProductStockOfWarehouseResponse(ProductStock productStock) {
-        return ProductStockOfWarehouseResponse.builder()
-                .product(mapProductToProductOfProductStockOfWarehouseResponse(productStock.getProduct()))
+    private ProductStockOfWarehouseWithProductStocksResponse mapProductStockToProductStockOfWarehouseWithProductStocksResponse(ProductStock productStock) {
+        return ProductStockOfWarehouseWithProductStocksResponse.builder()
+                .product(mapProductToProductOfProductStockOfWarehouseWithProductStocksResponse(productStock.getProduct()))
                 .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
                 .stock(productStock.getStock())
                 .build();
     }
 
-    private ProductOfProductStockOfWarehouseResponse mapProductToProductOfProductStockOfWarehouseResponse(Product product) {
-        return ProductOfProductStockOfWarehouseResponse.builder()
+    private ProductOfProductStockOfWarehouseWithProductStocksResponse mapProductToProductOfProductStockOfWarehouseWithProductStocksResponse(Product product) {
+        return ProductOfProductStockOfWarehouseWithProductStocksResponse.builder()
                 .name(product.getName())
                 .code(product.getCode())
                 .category(categoryMapper.mapCategoryToCategoryResponse(product.getCategory()))

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductOfProductStockOfWarehouseResponse {
+public class ProductOfProductStockOfWarehouseWithProductStocksResponse {
     private String name;
     private String code;
     private CategoryResponse category;
