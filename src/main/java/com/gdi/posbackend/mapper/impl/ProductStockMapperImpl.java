@@ -18,24 +18,17 @@ import org.springframework.stereotype.Component;
 public class ProductStockMapperImpl implements ProductStockMapper {
 
     private final WarehouseMapper warehouseMapper;
-    private final CategoryMapper categoryMapper;
     private final UnitMapper unitMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public ProductStockResponse mapProductStockToProductStockResponse(ProductStock productStock) {
         return ProductStockResponse.builder()
-                .product(mapProductToProductOfProductStockResponse(productStock.getProduct()))
+                .id(productStock.getId())
+                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
                 .warehouse(warehouseMapper.mapWarehouseToWarehouseResponse(productStock.getWarehouse()))
                 .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
                 .stock(productStock.getStock())
-                .build();
-    }
-
-    private ProductOfProductStockResponse mapProductToProductOfProductStockResponse(Product product) {
-        return ProductOfProductStockResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .category(categoryMapper.mapCategoryToCategoryResponse(product.getCategory()))
                 .build();
     }
 
