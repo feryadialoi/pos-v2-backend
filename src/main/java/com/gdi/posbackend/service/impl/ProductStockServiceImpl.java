@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
+import static com.gdi.posbackend.specification.ProductStockSpecification.*;
+
 /**
  * @author Feryadialoi
  * @date 8/6/2021 2:03 AM
@@ -52,29 +54,19 @@ public class ProductStockServiceImpl implements ProductStockService {
     public Page<Object> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
         Specification<ProductStock> specification = Specification.where(null);
 
-        if (productStockCriteria.getProductCode() != null) {
-            specification = specification.and(
-                    ProductStockSpecification.productCodeIsLike(productStockCriteria.getProductCode())
-            );
-        }
+        String productCode = productStockCriteria.getProductCode();
+        String productName = productStockCriteria.getProductName();
+        String productCategoryName = productStockCriteria.getProductCategoryName();
+        String warehouseId = productStockCriteria.getWarehouseId();
 
-        if (productStockCriteria.getProductName() != null) {
-            specification = specification.and(
-                    ProductStockSpecification.productNameIsLike(productStockCriteria.getProductName())
-            );
-        }
+        if (productCode != null) specification = specification.and(productCodeIsLike(productCode));
 
-        if (productStockCriteria.getProductCategoryName() != null) {
-            specification = specification.and(
-                    ProductStockSpecification.productCategoryNameIsLike(productStockCriteria.getProductCategoryName())
-            );
-        }
+        if (productName != null) specification = specification.and(productNameIsLike(productName));
 
-        if (productStockCriteria.getWarehouseId() != null) {
-            specification = specification.and(
-                    ProductStockSpecification.warehouse(productStockCriteria.getWarehouseId())
-            );
-        }
+        if (productCategoryName != null)
+            specification = specification.and(productCategoryNameIsLike(productCategoryName));
+
+        if (warehouseId != null) specification = specification.and(warehouse(warehouseId));
 
         Page<ProductStock> page = productStockRepository.findAll(specification, pageable);
 
@@ -101,6 +93,15 @@ public class ProductStockServiceImpl implements ProductStockService {
         serviceExecutor.execute(UpdateProductStockBySaleCommand.class, new UpdateProductStockBySaleCommandParam(sale));
     }
 
+    @Override
+    public Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable) {
+        Specification<ProductStock> specification = Specification
+                .<ProductStock>where(null)
+                .and(warehouse(warehouseId));
+
+        return productStockRepository.findAll(specification, pageable);
+    }
+
     private ProductStockDetail findProductStockDetail(ProductStock productStock) {
 
         CogsMethod cogsMethod = cogsService.getCogsMethod();
@@ -111,16 +112,13 @@ public class ProductStockServiceImpl implements ProductStockService {
 
         switch (cogsMethod) {
             case FIFO:
+            case WEIGHTED_AVERAGE:
                 return productStockDetailRepository
                         .findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateAsc(productStock, BigDecimal.ZERO)
                         .orElseThrow(() -> new ProductStockDetailNotFoundException(notFoundMessage));
             case LIFO:
                 return productStockDetailRepository
                         .findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateDesc(productStock, BigDecimal.ZERO)
-                        .orElseThrow(() -> new ProductStockDetailNotFoundException(notFoundMessage));
-            case WEIGHTED_AVERAGE:
-                return productStockDetailRepository
-                        .findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateAsc(productStock, BigDecimal.ZERO)
                         .orElseThrow(() -> new ProductStockDetailNotFoundException(notFoundMessage));
             default:
                 throw new RuntimeException("not supported type");

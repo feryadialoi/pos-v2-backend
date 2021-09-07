@@ -1,6 +1,8 @@
 package com.gdi.posbackend.mapper;
 
+import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.entity.ProductStock;
+import com.gdi.posbackend.model.response.ProductOfProductStockResponse;
 import com.gdi.posbackend.model.response.ProductStockResponse;
 
 /**

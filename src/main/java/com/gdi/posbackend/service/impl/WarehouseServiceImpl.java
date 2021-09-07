@@ -1,6 +1,7 @@
 package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.command.warehouse.*;
+import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import com.gdi.posbackend.mapper.WarehouseMapper;
@@ -10,7 +11,9 @@ import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
 import com.gdi.posbackend.repository.WarehouseRepository;
+import com.gdi.posbackend.service.ProductStockService;
 import com.gdi.posbackend.service.ServiceExecutor;
 import com.gdi.posbackend.service.WarehouseService;
 import lombok.AllArgsConstructor;
@@ -29,9 +32,16 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class WarehouseServiceImpl implements WarehouseService {
 
-    private final ServiceExecutor serviceExecutor;
+    // ** repository
     private final WarehouseRepository warehouseRepository;
+
+    // ** mapper
     private final WarehouseMapper warehouseMapper;
+
+    // ** service
+    private final ServiceExecutor serviceExecutor;
+    private final ProductStockService productStockService;
+
 
     @Override
     public Page<WarehouseResponse> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable) {
@@ -81,6 +91,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     public Warehouse findWarehouseByIdOrThrowNotFound(String warehouseId) {
         return warehouseRepository.findById(warehouseId)
                 .orElseThrow(() -> new WarehouseNotFoundException("warehouse with id " + warehouseId + " not found"));
+    }
+
+    @Override
+    public WarehouseWithProductStocksResponse getWarehouseWithProductStocks(String warehouseId, Pageable pageable) {
+        Warehouse warehouse = findWarehouseByIdOrThrowNotFound(warehouseId);
+
+        Page<ProductStock> page = productStockService.getProductStocksByWarehouseId(warehouseId, pageable);
+
+        return warehouseMapper.mapWarehouseToWarehouseWithProductStocksResponse(warehouse, page);
     }
 
 }

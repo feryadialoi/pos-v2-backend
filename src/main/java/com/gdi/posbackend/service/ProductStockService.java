@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Purchase;
 import com.gdi.posbackend.entity.Sale;
 import com.gdi.posbackend.model.criteria.ProductStockCriteria;
@@ -21,4 +22,6 @@ public interface ProductStockService {
     void updateProductStockByPurchase(Purchase purchase);
 
     void updateProductStockBySale(Sale sale);
+
+    Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable);
 }

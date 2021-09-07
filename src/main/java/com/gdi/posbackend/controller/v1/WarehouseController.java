@@ -7,6 +7,7 @@ import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
 import com.gdi.posbackend.service.WarehouseService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -57,6 +58,11 @@ public class WarehouseController extends BaseController {
     @DeleteMapping("/{warehouseId}")
     public ResponseEntity<ApiResponse<Object>> deleteWarehouse(@PathVariable(name = "warehouseId") String warehouseId) {
         return response("delete warehouse success", warehouseService.deleteWarehouse(warehouseId));
+    }
+
+    @GetMapping("/{warehouseId}/product-stocks")
+    public ResponseEntity<ApiResponse<WarehouseWithProductStocksResponse>> getWarehouseWithProductStocks(@PathVariable(name = "warehouseId") String warehouseId, Pageable pageable) {
+        return response("get warehouse with product stocks success", warehouseService.getWarehouseWithProductStocks(warehouseId, pageable));
     }
 
 }
