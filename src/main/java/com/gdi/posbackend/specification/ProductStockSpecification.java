@@ -36,4 +36,8 @@ public class ProductStockSpecification {
                 "%" + productCategoryName + "%"
         );
     }
+
+    public static Specification<ProductStock> idIs(String id) {
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
+    }
 }
