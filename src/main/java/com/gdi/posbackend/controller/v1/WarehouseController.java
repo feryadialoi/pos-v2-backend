@@ -65,4 +65,9 @@ public class WarehouseController extends BaseController {
         return response("get warehouse with product stocks success", warehouseService.getWarehouseWithProductStocks(warehouseId, pageable));
     }
 
+    @GetMapping("/{warehouseId}/product-stocks/{productStockId}")
+    public Object getWarehouseWithProductStock(@PathVariable(name = "warehouseId") String warehouseId, @PathVariable(name = "productStockId") String productStockId) {
+        return response("get warehouse with product stock success", warehouseService.getWarehouseWithProductStock(warehouseId, productStockId));
+    }
+
 }

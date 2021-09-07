@@ -4,6 +4,7 @@ import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithDetailedProductStockResponse;
 import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
 import org.springframework.data.domain.Page;
 
@@ -16,5 +17,7 @@ public interface WarehouseMapper {
 
     WarehouseResponse mapWarehouseToWarehouseResponse(Warehouse warehouse);
 
-    WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> productStocks);
+    WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> pageOfProductStock);
+
+    WarehouseWithDetailedProductStockResponse mapWarehouseToWarehouseWithProductStockResponse(Warehouse warehouse, ProductStock productStock);
 }

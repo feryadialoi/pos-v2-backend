@@ -3,6 +3,7 @@ package com.gdi.posbackend.mapper;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.model.response.DetailedProductResponse;
 import com.gdi.posbackend.model.response.ProductResponse;
+import com.gdi.posbackend.model.response.SimplifiedProductResponse;
 
 /**
  * @author Feryadialoi
@@ -12,4 +13,6 @@ public interface ProductMapper {
     ProductResponse mapProductToProductResponse(Product product);
 
     DetailedProductResponse mapProductToDetailedProductResponse(Product product);
+
+    SimplifiedProductResponse mapProductToSimplifiedProductResponse(Product product);
 }
