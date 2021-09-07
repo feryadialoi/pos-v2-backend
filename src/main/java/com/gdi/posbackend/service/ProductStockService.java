@@ -24,4 +24,6 @@ public interface ProductStockService {
     void updateProductStockBySale(Sale sale);
 
     Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable);
+
+    ProductStock getProductStockByWarehouseIdAndId(String warehouseId, String productStockId);
 }

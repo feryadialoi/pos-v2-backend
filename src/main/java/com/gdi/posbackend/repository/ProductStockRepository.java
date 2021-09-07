@@ -15,4 +15,6 @@ import java.util.Optional;
  */
 public interface ProductStockRepository extends JpaRepository<ProductStock, String>, JpaSpecificationExecutor<ProductStock> {
     Optional<ProductStock> findProductStockByProductAndWarehouseAndUnit(Product product, Warehouse warehouse, Unit unit);
+
+    Optional<ProductStock> findProductStockByWarehouseAndId(Warehouse warehouse, String id);
 }

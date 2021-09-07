@@ -5,6 +5,7 @@ import com.gdi.posbackend.command.productstock.UpdateProductStockBySaleCommand;
 import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.CogsMethod;
 import com.gdi.posbackend.exception.ProductStockDetailNotFoundException;
+import com.gdi.posbackend.exception.ProductStockNotFoundException;
 import com.gdi.posbackend.mapper.ProductStockMapper;
 import com.gdi.posbackend.model.commandparam.UpdateProductStockByPurchaseCommandParam;
 import com.gdi.posbackend.model.commandparam.UpdateProductStockBySaleCommandParam;
@@ -100,6 +101,13 @@ public class ProductStockServiceImpl implements ProductStockService {
                 .and(warehouse(warehouseId));
 
         return productStockRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public ProductStock getProductStockByWarehouseIdAndId(String warehouseId, String productStockId) {
+        return productStockRepository.findOne(warehouse(warehouseId).and(idIs(productStockId)))
+                .orElseThrow(() -> new ProductStockNotFoundException("product stock not found with warehouse id "
+                        + warehouseId + " and product stock id " + productStockId));
     }
 
     private ProductStockDetail findProductStockDetail(ProductStock productStock) {

@@ -11,6 +11,7 @@ import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithDetailedProductStockResponse;
 import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
 import com.gdi.posbackend.repository.WarehouseRepository;
 import com.gdi.posbackend.service.ProductStockService;
@@ -97,9 +98,19 @@ public class WarehouseServiceImpl implements WarehouseService {
     public WarehouseWithProductStocksResponse getWarehouseWithProductStocks(String warehouseId, Pageable pageable) {
         Warehouse warehouse = findWarehouseByIdOrThrowNotFound(warehouseId);
 
-        Page<ProductStock> page = productStockService.getProductStocksByWarehouseId(warehouseId, pageable);
+        Page<ProductStock> pageOfProductStock = productStockService.getProductStocksByWarehouseId(warehouseId, pageable);
 
-        return warehouseMapper.mapWarehouseToWarehouseWithProductStocksResponse(warehouse, page);
+        return warehouseMapper.mapWarehouseToWarehouseWithProductStocksResponse(warehouse, pageOfProductStock);
     }
+
+    @Override
+    public WarehouseWithDetailedProductStockResponse getWarehouseWithProductStock(String warehouseId, String productStockId) {
+        Warehouse warehouse = findWarehouseByIdOrThrowNotFound(warehouseId);
+
+        ProductStock productStock = productStockService.getProductStockByWarehouseIdAndId(warehouseId, productStockId);
+
+        return warehouseMapper.mapWarehouseToWarehouseWithProductStockResponse(warehouse, productStock);
+    }
+
 
 }

@@ -4,6 +4,7 @@ import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.mapper.CategoryMapper;
+import com.gdi.posbackend.mapper.ProductMapper;
 import com.gdi.posbackend.mapper.UnitMapper;
 import com.gdi.posbackend.mapper.WarehouseMapper;
 import com.gdi.posbackend.model.response.*;
@@ -19,8 +20,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class WarehouseMapperImpl implements WarehouseMapper {
 
-    private final CategoryMapper categoryMapper;
+
     private final UnitMapper unitMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public DetailedWarehouseResponse mapWarehouseToDetailedWarehouseResponse(Warehouse warehouse) {
@@ -42,26 +44,36 @@ public class WarehouseMapperImpl implements WarehouseMapper {
     }
 
     @Override
-    public WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> productStocks) {
+    public WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> pageOfProductStock) {
         return WarehouseWithProductStocksResponse.builder()
                 .warehouse(mapWarehouseToWarehouseResponse(warehouse))
-                .pageOfProductStock(productStocks.map(this::mapProductStockToProductStockOfWarehouseWithProductStocksResponse))
+                .pageOfProductStock(pageOfProductStock.map(this::mapProductStockToProductStockOfWarehouseWithProductStocksResponse))
+                .build();
+    }
+
+    @Override
+    public WarehouseWithDetailedProductStockResponse mapWarehouseToWarehouseWithProductStockResponse(Warehouse warehouse, ProductStock productStock) {
+        return WarehouseWithDetailedProductStockResponse.builder()
+                .warehouse(mapWarehouseToWarehouseResponse(warehouse))
+                .productStock(mapProductStockToDetailedProductStockOfWarehouseWithDetailedProductStockResponse(productStock))
+                .build();
+    }
+
+    private DetailedProductStockOfWarehouseWithDetailedProductStockResponse mapProductStockToDetailedProductStockOfWarehouseWithDetailedProductStockResponse(ProductStock productStock) {
+        return DetailedProductStockOfWarehouseWithDetailedProductStockResponse.builder()
+                .id(productStock.getId())
+                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
+                .stock(productStock.getStock())
+                .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
                 .build();
     }
 
     private ProductStockOfWarehouseWithProductStocksResponse mapProductStockToProductStockOfWarehouseWithProductStocksResponse(ProductStock productStock) {
         return ProductStockOfWarehouseWithProductStocksResponse.builder()
-                .product(mapProductToProductOfProductStockOfWarehouseWithProductStocksResponse(productStock.getProduct()))
+                .id(productStock.getId())
+                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
                 .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
                 .stock(productStock.getStock())
-                .build();
-    }
-
-    private ProductOfProductStockOfWarehouseWithProductStocksResponse mapProductToProductOfProductStockOfWarehouseWithProductStocksResponse(Product product) {
-        return ProductOfProductStockOfWarehouseWithProductStocksResponse.builder()
-                .name(product.getName())
-                .code(product.getCode())
-                .category(categoryMapper.mapCategoryToCategoryResponse(product.getCategory()))
                 .build();
     }
 }

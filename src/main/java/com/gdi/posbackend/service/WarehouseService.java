@@ -6,6 +6,7 @@ import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
 import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
 import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithDetailedProductStockResponse;
 import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +33,6 @@ public interface WarehouseService {
     Warehouse findWarehouseByIdOrThrowNotFound(String warehouseId);
 
     WarehouseWithProductStocksResponse getWarehouseWithProductStocks(String warehouseId, Pageable pageable);
+
+    WarehouseWithDetailedProductStockResponse getWarehouseWithProductStock(String warehouseId, String productStockId);
 }
