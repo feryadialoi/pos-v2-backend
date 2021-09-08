@@ -96,11 +96,7 @@ public class ProductStockServiceImpl implements ProductStockService {
 
     @Override
     public Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable) {
-        Specification<ProductStock> specification = Specification
-                .<ProductStock>where(null)
-                .and(warehouse(warehouseId));
-
-        return productStockRepository.findAll(specification, pageable);
+        return productStockRepository.findAll(warehouse(warehouseId), pageable);
     }
 
     @Override
