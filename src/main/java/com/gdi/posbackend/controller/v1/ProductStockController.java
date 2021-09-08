@@ -4,6 +4,7 @@ import com.gdi.posbackend.controller.BaseController;
 import com.gdi.posbackend.model.criteria.ProductStockCriteria;
 import com.gdi.posbackend.model.request.UpdateProductStockRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
+import com.gdi.posbackend.model.response.ProductStockResponse;
 import com.gdi.posbackend.service.ProductStockService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,7 @@ public class ProductStockController extends BaseController {
      * name, code, category name, stock(all), price, stock(stok minimum)
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<Object>>> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<ProductStockResponse>>> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
         return response("get product stocks success", productStockService.getProductStocks(productStockCriteria, pageable));
     }
 
