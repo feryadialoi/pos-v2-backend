@@ -1,13 +1,11 @@
 package com.gdi.posbackend.controller.v1;
 
 import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.exception.AdjustmentJournalNotFoundException;
 import com.gdi.posbackend.model.request.CreateAdjustmentJournalRequest;
 import com.gdi.posbackend.service.AdjustmentJournalService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,6 +20,10 @@ public class AdjustmentJournalController extends BaseController {
 
     private final AdjustmentJournalService adjustmentJournalService;
 
+    @GetMapping
+    public Object getAdjustmentJournals() {
+        throw new AdjustmentJournalNotFoundException("random throw error");
+    }
 
     @PostMapping
     public Object createAdjustmentJournal(@Valid @RequestBody CreateAdjustmentJournalRequest createAdjustmentJournalRequest) {
