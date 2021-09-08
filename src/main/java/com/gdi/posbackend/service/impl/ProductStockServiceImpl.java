@@ -106,27 +106,10 @@ public class ProductStockServiceImpl implements ProductStockService {
                         + warehouseId + " and product stock id " + productStockId));
     }
 
-    private ProductStockDetail findProductStockDetail(ProductStock productStock) {
-
-        CogsMethod cogsMethod = cogsService.getCogsMethod();
-
-        String notFoundMessage = "product stock detail with product stock of id "
-                + productStock.getId()
-                + " not found";
-
-        switch (cogsMethod) {
-            case FIFO:
-            case WEIGHTED_AVERAGE:
-                return productStockDetailRepository
-                        .findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateAsc(productStock, BigDecimal.ZERO)
-                        .orElseThrow(() -> new ProductStockDetailNotFoundException(notFoundMessage));
-            case LIFO:
-                return productStockDetailRepository
-                        .findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateDesc(productStock, BigDecimal.ZERO)
-                        .orElseThrow(() -> new ProductStockDetailNotFoundException(notFoundMessage));
-            default:
-                throw new RuntimeException("not supported type");
-        }
+    private ProductStock findProductStockByIdOrThrowNotFound(String productStockId) {
+        return productStockRepository.findById(productStockId)
+                .orElseThrow(() -> new ProductStockNotFoundException("product stock with id "
+                        + productStockId + " not found"));
     }
 
 }
