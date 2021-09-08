@@ -5,6 +5,7 @@ import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.ProductStockMutationEvent;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
 import com.gdi.posbackend.model.commandparam.UpdateProductStockByPurchaseCommandParam;
+import com.gdi.posbackend.repository.ProductStockDetailRepository;
 import com.gdi.posbackend.repository.ProductStockMutationRepository;
 import com.gdi.posbackend.repository.ProductStockRepository;
 import com.gdi.posbackend.service.RunningNumberService;
@@ -28,6 +29,7 @@ public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductSto
 
     // ** repository
     private final ProductStockRepository productStockRepository;
+    private final ProductStockDetailRepository productStockDetailRepository;
     private final ProductStockMutationRepository productStockMutationRepository;
 
     // ** util
@@ -55,19 +57,17 @@ public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductSto
                 purchaseDetail.getUnit()
         );
 
+        productStock.setStock(productStock.getStock().add(purchaseDetail.getQuantity()));
+
+        productStockRepository.save(productStock);
+
         ProductStockDetail productStockDetail = new ProductStockDetail(
                 productStock,
                 purchaseDetail.getQuantity(),
                 runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.BP))
         );
 
-        productStock.setProductStockDetails(List.of(productStockDetail));
-
-        productStock.setStock(
-                productStock.getStock().add(purchaseDetail.getQuantity())
-        );
-
-        productStockRepository.save(productStock);
+        productStockDetailRepository.save(productStockDetail);
 
         createProductStockMutationOfPurchase(purchase, purchaseDetail, productStock, productStockDetail);
     }
