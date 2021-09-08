@@ -13,9 +13,9 @@ import org.springframework.data.domain.Pageable;
  * @date 8/6/2021 1:48 AM
  */
 public interface ProductStockService {
-    Page<Object> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable);
+    Page<ProductStockResponse> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable);
 
-    Object getProductStock(String productStockId);
+    DetailedProductStockResponse getProductStock(String productStockId);
 
     Object updateProductStock(String productStockId, UpdateProductStockRequest updateProductStockRequest);
 
