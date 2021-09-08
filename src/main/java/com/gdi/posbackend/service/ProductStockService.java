@@ -5,6 +5,8 @@ import com.gdi.posbackend.entity.Purchase;
 import com.gdi.posbackend.entity.Sale;
 import com.gdi.posbackend.model.criteria.ProductStockCriteria;
 import com.gdi.posbackend.model.request.UpdateProductStockRequest;
+import com.gdi.posbackend.model.response.DetailedProductStockResponse;
+import com.gdi.posbackend.model.response.ProductStockResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
