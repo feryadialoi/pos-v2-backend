@@ -75,8 +75,8 @@ public class ProductStockServiceImpl implements ProductStockService {
     }
 
     @Override
-    public Object getProductStock(String productStockId) {
-        return null;
+    public DetailedProductStockResponse getProductStock(String productStockId) {
+        return productStockMapper.mapProductStockToDetailedProductStockResponse(findProductStockByIdOrThrowNotFound(productStockId));
     }
 
     @Override
