@@ -4,6 +4,7 @@ import com.gdi.posbackend.command.product.CreateProductCommand;
 import com.gdi.posbackend.command.product.GetProductsCommand;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.exception.ProductNotFoundException;
+import com.gdi.posbackend.mapper.ProductMapper;
 import com.gdi.posbackend.model.commandparam.CreateProductCommandParam;
 import com.gdi.posbackend.model.commandparam.GetProductsCommandParam;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
@@ -29,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ServiceExecutor serviceExecutor;
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @Override
     public Page<ProductResponse> getProducts(ProductCriteria productCriteria, Pageable pageable) {
@@ -37,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DetailedProductResponse getProduct(String productId) {
-        return null;
+        return productMapper.mapProductToDetailedProductResponse(findProductByIdOrThrowNotFound(productId));
     }
 
     @Override
