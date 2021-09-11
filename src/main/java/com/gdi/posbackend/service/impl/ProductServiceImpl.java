@@ -1,12 +1,16 @@
 package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.command.product.CreateProductCommand;
+import com.gdi.posbackend.command.product.DeleteProductCommand;
 import com.gdi.posbackend.command.product.GetProductsCommand;
+import com.gdi.posbackend.command.product.UpdateProductCommand;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.exception.ProductNotFoundException;
 import com.gdi.posbackend.mapper.ProductMapper;
 import com.gdi.posbackend.model.commandparam.CreateProductCommandParam;
+import com.gdi.posbackend.model.commandparam.DeleteProductCommandParam;
 import com.gdi.posbackend.model.commandparam.GetProductsCommandParam;
+import com.gdi.posbackend.model.commandparam.UpdateProductCommandParam;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.request.CreateProductRequest;
 import com.gdi.posbackend.model.request.UpdateProductRequest;
@@ -49,17 +53,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DetailedProductResponse updateProduct(String productId, UpdateProductRequest updateProductRequest) {
-        return null;
+        return serviceExecutor.execute(UpdateProductCommand.class, new UpdateProductCommandParam(productId, updateProductRequest));
     }
 
     @Override
     public Object deleteProduct(String productId) {
-        return null;
+        return serviceExecutor.execute(DeleteProductCommand.class, new DeleteProductCommandParam(productId));
     }
 
     @Override
     public Product findProductByIdOrThrowNotFound(String productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("product with id " + productId + " not found"));
+        return productRepository.findByIdOrThrowNotFound(productId);
     }
 }
