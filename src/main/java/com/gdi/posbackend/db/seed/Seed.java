@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @date 8/25/2021 2:47 PM
  */
 @Slf4j
-@Component
+//@Component
 @AllArgsConstructor
 public class Seed implements ApplicationListener<ApplicationReadyEvent> {
 
