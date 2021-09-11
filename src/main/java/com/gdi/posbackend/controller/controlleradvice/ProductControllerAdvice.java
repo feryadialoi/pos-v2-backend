@@ -2,6 +2,7 @@ package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
 import com.gdi.posbackend.exception.ProductAlreadyExistsException;
+import com.gdi.posbackend.exception.ProductHasStockDeleteNotAllowedException;
 import com.gdi.posbackend.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,16 +17,17 @@ public class ProductControllerAdvice extends BaseControllerAdvice {
 
     @ExceptionHandler(ProductAlreadyExistsException.class)
     public Object productAlreadyExists(ProductAlreadyExistsException productAlreadyExistsException) {
-        return response(
-                "conflict",
-                productAlreadyExistsException.getMessage(),
-                HttpStatus.CONFLICT
-        );
+        return response("conflict", productAlreadyExistsException.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public Object productNotFound(ProductNotFoundException productNotFoundException) {
         return response("not found", productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductHasStockDeleteNotAllowedException.class)
+    public Object productHasStockDeleteNotAllowed(ProductHasStockDeleteNotAllowedException productHasStockDeleteNotAllowedException) {
+        return response("bad request", productHasStockDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -9,6 +9,7 @@ import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,6 +45,18 @@ public class ErrorControllerAdvice extends BaseControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object methodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException) {
         List<NotValidDetail> notValidDetails = methodArgumentNotValidException
+                .getBindingResult().getAllErrors().stream()
+                .map(this::mapObjectErrorToNotValidDetail)
+                .collect(Collectors.toList());
+
+        return response("Unprocessable entity",
+                notValidDetails, HttpStatus.UNPROCESSABLE_ENTITY
+        );
+    }
+
+    @ExceptionHandler(BindException.class)
+    public Object bind(BindException bindException) {
+        List<NotValidDetail> notValidDetails = bindException
                 .getBindingResult().getAllErrors().stream()
                 .map(this::mapObjectErrorToNotValidDetail)
                 .collect(Collectors.toList());
