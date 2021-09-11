@@ -4,6 +4,7 @@ import com.gdi.posbackend.command.warehouse.DeleteWarehouseCommand;
 import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.exception.WarehouseNotFoundException;
+import com.gdi.posbackend.exception.WarehouseUsedDeleteNotAllowed;
 import com.gdi.posbackend.model.commandparam.warehouse.DeleteWarehouseCommandParam;
 import com.gdi.posbackend.repository.WarehouseRepository;
 import lombok.AllArgsConstructor;
@@ -28,17 +29,17 @@ public class DeleteWarehouseCommandImpl implements DeleteWarehouseCommand {
 
     @Override
     public String execute(DeleteWarehouseCommandParam request) {
-        Optional<Warehouse> optional = warehouseRepository.findById(request.getWarehouseId());
-        if (optional.isEmpty()) {
-            throw new WarehouseNotFoundException("warehouse with id " + request.getWarehouseId() + " not found");
-        } else {
-            Warehouse warehouse = optional.get();
 
-            List<ProductStock> productStocks = warehouse.getProductStocks();
-
-            log.info(String.valueOf(productStocks));
-
-            return request.getWarehouseId();
+        if (warehouseRepository.productStockCountByWarehouseId(request.getWarehouseId()) > 0) {
+            throw new WarehouseUsedDeleteNotAllowed("warehouse with id " + request.getWarehouseId()
+                    + " has relationship and already used in another table");
         }
+
+        Warehouse warehouse = warehouseRepository.findByIdOrThrowNotFound(request.getWarehouseId());
+
+        warehouseRepository.delete(warehouse);
+
+        return request.getWarehouseId();
+
     }
 }
