@@ -64,4 +64,8 @@ public class Product extends BaseEntity {
     @ToString.Exclude
     private List<UnitConversion> unitConversions;
 
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ToString.Exclude
+    private List<ProductStock> productStocks;
+
 }
