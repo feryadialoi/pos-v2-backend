@@ -2,6 +2,7 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.entity.Brand;
 import com.gdi.posbackend.exception.BrandNotFoundException;
+import com.gdi.posbackend.exception.BrandUsedDeleteNotAllowed;
 import com.gdi.posbackend.mapper.BrandMapper;
 import com.gdi.posbackend.model.criteria.BrandCriteria;
 import com.gdi.posbackend.model.request.CreateBrandRequest;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.gdi.posbackend.specification.BrandSpecification.nameIsLike;
+
 /**
  * @author Feryadialoi
  * @date 8/13/2021 2:12 PM
@@ -34,12 +37,12 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Page<BrandResponse> getBrands(BrandCriteria brandCriteria, Pageable pageable) {
         Specification<Brand> specification = Specification.where(null);
-        if (brandCriteria.getName() != null) {
-            specification = specification.and(BrandSpecification.nameIsLike(brandCriteria.getName()));
-        }
 
-        Page<Brand> page = brandRepository.findAll(specification, pageable);
-        return page.map(brandMapper::mapBrandToBrandResponse);
+        String name = brandCriteria.getName();
+
+        if (name != null) specification = specification.and(nameIsLike(name));
+
+        return brandRepository.findAll(specification, pageable).map(brandMapper::mapBrandToBrandResponse);
     }
 
     @Override
@@ -53,50 +56,36 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandResponse getBrand(String brandId) {
-        Optional<Brand> optionalBrand = brandRepository.findById(brandId);
-        if (optionalBrand.isPresent()) {
-            Brand brand = optionalBrand.get();
-            return brandMapper.mapBrandToBrandResponse(brand);
-        } else {
-            throw new BrandNotFoundException("Brand with id " + brandId + " not found");
-        }
+        return brandMapper.mapBrandToBrandResponse(findBrandByIdOrThrowNotFound(brandId));
     }
 
     @Override
     public BrandResponse updateBrand(String brandId, UpdateBrandRequest updateBrandRequest) {
-        Optional<Brand> optionalBrand = brandRepository.findById(brandId);
-        if (optionalBrand.isPresent()) {
-            Brand brand = optionalBrand.get();
+        Brand brand = findBrandByIdOrThrowNotFound(brandId);
 
-            if (updateBrandRequest.getName() != null) {
-                brand.setName(updateBrandRequest.getName());
-            }
+        if (updateBrandRequest.getName() != null) brand.setName(updateBrandRequest.getName());
 
-            brand = brandRepository.save(brand);
+        brandRepository.save(brand);
 
-            return brandMapper.mapBrandToBrandResponse(brand);
-        } else {
-            throw new BrandNotFoundException("Brand with id " + brandId + " not found");
-        }
+        return brandMapper.mapBrandToBrandResponse(brand);
+
     }
 
     @Override
     public String deleteBrand(String brandId) {
-        Optional<Brand> optionalBrand = brandRepository.findById(brandId);
-        if (optionalBrand.isPresent()) {
-            Brand brand = optionalBrand.get();
+        Brand brand = findBrandByIdOrThrowNotFound(brandId);
 
-            brandRepository.delete(brand);
-
-            return brandId;
-        } else {
-            throw new BrandNotFoundException("Brand with id " + brandId + " not found");
+        if (brandRepository.productCountByBrandId(brandId) > 0 ) {
+            throw new BrandUsedDeleteNotAllowed("brand with id " + brandId + " has relasionship and already used in another table");
         }
+
+        brandRepository.delete(brand);
+
+        return brandId;
     }
 
     @Override
     public Brand findBrandByIdOrThrowNotFound(String brandId) {
-        return brandRepository.findById(brandId)
-                .orElseThrow(() -> new BrandNotFoundException("brand with id " + brandId + " not found"));
+        return brandRepository.findByIdOrThrowNotFound(brandId);
     }
 }
