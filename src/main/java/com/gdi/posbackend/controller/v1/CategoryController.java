@@ -47,7 +47,7 @@ public class CategoryController extends BaseController {
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<Object>> deleteCategory(@PathVariable("categoryId") String categoryId) {
+    public ResponseEntity<ApiResponse<String>> deleteCategory(@PathVariable("categoryId") String categoryId) {
         return response("delete category success", categoryService.deleteCategory(categoryId));
     }
 
