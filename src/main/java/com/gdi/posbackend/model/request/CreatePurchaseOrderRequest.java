@@ -4,11 +4,13 @@ import com.gdi.posbackend.entity.enums.DiscountFormat;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
 import com.gdi.posbackend.entity.enums.TaxFormat;
+import com.gdi.posbackend.validation.RegexValidationRule;
 import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseOrderRequestConstraint;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,12 +25,12 @@ public class CreatePurchaseOrderRequest {
     @NotBlank
     private String supplierId;
 
+    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
     @NotNull
     @NotBlank
     private String entryDate;
 
-    @NotNull
-    @NotBlank
+    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
     private String dueDate;
 
     private Integer term;
