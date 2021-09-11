@@ -46,37 +46,27 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public Page<WarehouseResponse> getWarehouses(WarehouseCriteria warehouseCriteria, Pageable pageable) {
-        return serviceExecutor.execute(GetWarehousesCommand.class,
-                new GetWarehousesCommandParam(warehouseCriteria, pageable)
-        );
+        return serviceExecutor.execute(GetWarehousesCommand.class, new GetWarehousesCommandParam(warehouseCriteria, pageable));
     }
 
     @Override
     public DetailedWarehouseResponse getWarehouse(String warehouseId) {
-        return serviceExecutor.execute(GetWarehouseCommand.class,
-                new GetWarehouseCommandParam(warehouseId)
-        );
+        return serviceExecutor.execute(GetWarehouseCommand.class, new GetWarehouseCommandParam(warehouseId));
     }
 
     @Override
     public DetailedWarehouseResponse createWarehouse(CreateWarehouseRequest createWarehouseRequest) {
-        return serviceExecutor.execute(CreateWarehouseCommand.class,
-                new CreateWarehouseCommandParam(createWarehouseRequest)
-        );
+        return serviceExecutor.execute(CreateWarehouseCommand.class, new CreateWarehouseCommandParam(createWarehouseRequest));
     }
 
     @Override
     public DetailedWarehouseResponse updateWarehouse(String warehouseId, UpdateWarehouseRequest updateWarehouseRequest) {
-        return serviceExecutor.execute(UpdateWarehouseCommand.class,
-                new UpdateWarehouseCommandParam(warehouseId, updateWarehouseRequest)
-        );
+        return serviceExecutor.execute(UpdateWarehouseCommand.class, new UpdateWarehouseCommandParam(warehouseId, updateWarehouseRequest));
     }
 
     @Override
     public Object deleteWarehouse(String warehouseId) {
-        return serviceExecutor.execute(DeleteWarehouseCommand.class,
-                new DeleteWarehouseCommandParam(warehouseId)
-        );
+        return serviceExecutor.execute(DeleteWarehouseCommand.class, new DeleteWarehouseCommandParam(warehouseId));
     }
 
     @Override
@@ -90,8 +80,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public Warehouse findWarehouseByIdOrThrowNotFound(String warehouseId) {
-        return warehouseRepository.findById(warehouseId)
-                .orElseThrow(() -> new WarehouseNotFoundException("warehouse with id " + warehouseId + " not found"));
+        return warehouseRepository.findByIdOrThrowNotFound(warehouseId);
     }
 
     @Override
