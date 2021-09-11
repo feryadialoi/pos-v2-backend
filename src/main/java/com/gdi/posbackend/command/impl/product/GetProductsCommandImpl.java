@@ -26,27 +26,29 @@ import static com.gdi.posbackend.specification.ProductSpecification.*;
 @AllArgsConstructor
 public class
 GetProductsCommandImpl implements GetProductsCommand {
+
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
     @Override
     public Page<ProductResponse> execute(GetProductsCommandParam request) {
         ProductCriteria productCriteria = request.getProductCriteria();
-        Pageable pageable = request.getPageable();
+        Pageable        pageable        = request.getPageable();
 
-        String code = productCriteria.getCode();
-        String name = productCriteria.getName();
+        String code         = productCriteria.getCode();
+        String name         = productCriteria.getName();
         String categoryName = productCriteria.getCategoryName();
+        String brandName    = productCriteria.getBrandName();
 
         Specification<Product> specification = Specification.where(null);
 
-        if (code != null) specification = specification.and(codeIsLike(code));
-
-        if (name != null) specification = specification.and(nameIsLike(name));
-
-        if (categoryName != null) specification = specification.and(categoryNameIsLike(categoryName));
+        if (code != null) specification = specification.or(codeIsLike(code));
+        if (name != null) specification = specification.or(nameIsLike(name));
+        if (categoryName != null) specification = specification.or(categoryNameIsLike(categoryName));
+        if (brandName != null) specification = specification.or(brandNameIsLike(brandName));
 
         Page<Product> page = productRepository.findAll(specification, pageable);
+
         return page.map(productMapper::mapProductToProductResponse);
     }
 }
