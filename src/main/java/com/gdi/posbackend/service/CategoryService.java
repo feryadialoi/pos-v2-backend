@@ -21,7 +21,7 @@ public interface CategoryService {
 
     CategoryResponse updateCategory(String categoryId, UpdateCategoryRequest updateCategoryRequest);
 
-    Object deleteCategory(String categoryId);
+    String deleteCategory(String categoryId);
 
     Category findCategoryByIdOrThrowNotFound(String categoryId);
 }

@@ -23,7 +23,7 @@ public interface UnitService {
 
     UnitResponse updateUnit(String unitId, UpdateUnitRequest updateUnitRequest);
 
-    Object deleteUnit(String unitId);
+    String deleteUnit(String unitId);
 
     Unit findUnitByIdOrThrowNotFound(String unitId);
 
