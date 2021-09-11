@@ -2,11 +2,13 @@ package com.gdi.posbackend.model.request;
 
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.PaymentType;
+import com.gdi.posbackend.validation.RegexValidationRule;
 import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseRequestConstraint;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,10 +25,12 @@ public class CreatePurchaseRequest {
 
     private String purchaseOrderId;
 
+    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
     @NotNull
     @NotBlank
     private String entryDate;
 
+    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
     @NotNull
     @NotBlank
     private String dueDate;
