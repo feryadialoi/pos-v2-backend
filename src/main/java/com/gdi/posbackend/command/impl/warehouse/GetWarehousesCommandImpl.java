@@ -14,6 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import static com.gdi.posbackend.specification.WarehouseSpecification.addressIsLike;
+import static com.gdi.posbackend.specification.WarehouseSpecification.nameIsLike;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 /**
  * @author Feryadialoi
  * @date 8/5/2021 3:35 AM
@@ -28,18 +32,16 @@ public class GetWarehousesCommandImpl implements GetWarehousesCommand {
     @Override
     public Page<WarehouseResponse> execute(GetWarehousesCommandParam request) {
         WarehouseCriteria warehouseCriteria = request.getWarehouseCriteria();
-        Pageable pageable = request.getPageable();
+        Pageable          pageable          = request.getPageable();
 
-        Specification<Warehouse> specification = Specification.where(null);
-        if (warehouseCriteria.getName() != null)
-            specification = specification.and(WarehouseSpecification.nameIsLike(warehouseCriteria.getName()));
+        String name    = warehouseCriteria.getName();
+        String address = warehouseCriteria.getAddress();
 
-        if (warehouseCriteria.getAddress() != null)
-            specification = specification.and(WarehouseSpecification.addressIsLike(warehouseCriteria.getAddress()));
+        Specification<Warehouse> specification = where(null);
+        if (name != null) specification = specification.or(nameIsLike(name));
+        if (address != null) specification = specification.or(addressIsLike(address));
 
-        Page<Warehouse> page = warehouseRepository.findAll(specification, pageable);
+        return warehouseRepository.findAll(specification, pageable).map(warehouseMapper::mapWarehouseToWarehouseResponse);
 
-
-        return page.map(warehouseMapper::mapWarehouseToWarehouseResponse);
     }
 }
