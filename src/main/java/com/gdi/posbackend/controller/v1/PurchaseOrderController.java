@@ -26,7 +26,7 @@ public class PurchaseOrderController extends BaseController {
     private final PurchaseOrderService purchaseOrderService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<PurchaseOrderResponse>>> getPurchaseOrders(PurchaseOrderCriteria purchaseOrderCriteria, Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<PurchaseOrderResponse>>> getPurchaseOrders(@Valid PurchaseOrderCriteria purchaseOrderCriteria, Pageable pageable) {
         return response("get purchase orders success", purchaseOrderService.getPurchaseOrders(purchaseOrderCriteria, pageable));
     }
 
