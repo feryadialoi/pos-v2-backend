@@ -25,13 +25,6 @@ public class GetWarehouseCommandImpl implements GetWarehouseCommand {
 
     @Override
     public DetailedWarehouseResponse execute(GetWarehouseCommandParam request) {
-        String warehouseId = request.getWarehouseId();
-        Optional<Warehouse> optional = warehouseRepository.findById(warehouseId);
-
-        if (optional.isEmpty()) throw new WarehouseNotFoundException("warehouse with id " + warehouseId + " not found");
-
-        Warehouse warehouse = optional.get();
-
-        return warehouseMapper.mapWarehouseToDetailedWarehouseResponse(warehouse);
+        return warehouseMapper.mapWarehouseToDetailedWarehouseResponse(warehouseRepository.findByIdOrThrowNotFound(request.getWarehouseId()));
     }
 }
