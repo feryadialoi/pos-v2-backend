@@ -1,16 +1,18 @@
 package com.gdi.posbackend.model.criteria;
 
 import lombok.Data;
+import lombok.Value;
 
 /**
  * @author Feryadialoi
  * @date 8/5/2021 5:04 AM
  */
-@Data
+@Value
 public class ProductCriteria {
-    private String name;
-    private String code;
-    private String categoryName;
+    String name;
+    String code;
+    String categoryName;
+    String brandName;
 //    private Long categoryId;
 //    private ProductDefaultUnit defaultUnit;
 //    private Long unitLargeId;
