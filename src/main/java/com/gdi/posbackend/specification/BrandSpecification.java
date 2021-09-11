@@ -9,6 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
  */
 public class BrandSpecification {
     public static Specification<Brand> nameIsLike(String name) {
-        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + name + "%");
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + name.toUpperCase() + "%");
     }
 }
