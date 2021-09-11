@@ -48,7 +48,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/{unitId}")
-    public ResponseEntity<ApiResponse<Object>> deleteUnit(@PathVariable("unitId") String unitId) {
+    public ResponseEntity<ApiResponse<String>> deleteUnit(@PathVariable("unitId") String unitId) {
         return response("delete unit success", unitService.deleteUnit(unitId));
     }
 
