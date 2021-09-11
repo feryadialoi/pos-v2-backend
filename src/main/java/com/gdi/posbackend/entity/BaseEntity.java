@@ -1,5 +1,6 @@
 package com.gdi.posbackend.entity;
 
+import com.gdi.posbackend.audit.DeleteAuditTrailListener;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +28,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString(callSuper = true)
 @MappedSuperclass
-@EntityListeners(value = {AuditingEntityListener.class})
+@EntityListeners(value = {AuditingEntityListener.class, DeleteAuditTrailListener.class})
 //@FilterDef(name = "deletedFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
 //@Filter(name = "deletedFilter", condition = "deleted = :isDeleted")
 public abstract class BaseEntity {
