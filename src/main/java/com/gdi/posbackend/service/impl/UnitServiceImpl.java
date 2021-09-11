@@ -3,6 +3,7 @@ package com.gdi.posbackend.service.impl;
 import com.gdi.posbackend.entity.BaseEntity;
 import com.gdi.posbackend.entity.Unit;
 import com.gdi.posbackend.exception.UnitNotFoundException;
+import com.gdi.posbackend.exception.UnitUsedDeleteNotAllowed;
 import com.gdi.posbackend.mapper.UnitMapper;
 import com.gdi.posbackend.model.criteria.UnitCriteria;
 import com.gdi.posbackend.model.request.CreateUnitRequest;
@@ -23,6 +24,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.gdi.posbackend.specification.UnitSpecification.nameIsLike;
+
 /**
  * @author Feryadialoi
  * @date 8/5/2021 10:14 AM
@@ -37,36 +40,35 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public Page<UnitResponse> getUnits(UnitCriteria unitCriteria, Pageable pageable) {
         Specification<Unit> specification = Specification.where(null);
-        if (unitCriteria.getName() != null)
-            specification = specification.and(UnitSpecification.nameIsLike(unitCriteria.getName()));
 
-        Page<Unit> page = unitRepository.findAll(specification, pageable);
+        String name = unitCriteria.getName();
 
-        return page.map(unitMapper::mapUnitToUnitResponse);
+        if (name != null) specification = specification.and(nameIsLike(name));
+
+        return unitRepository.findAll(specification, pageable).map(unitMapper::mapUnitToUnitResponse);
+
     }
 
     @Override
     public UnitResponse getUnit(String unitId) {
-        Optional<Unit> optional = unitRepository.findById(unitId);
-        if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
-        Unit unit = optional.get();
-        return unitMapper.mapUnitToUnitResponse(unit);
+        return unitMapper.mapUnitToUnitResponse(findUnitByIdOrThrowNotFound(unitId));
     }
 
     @Override
     public UnitResponse createUnit(CreateUnitRequest createUnitRequest) {
         Unit unit = new Unit();
         unit.setName(createUnitRequest.getName());
+
         unit = unitRepository.save(unit);
 
         return unitMapper.mapUnitToUnitResponse(unit);
+
     }
 
     @Override
     public UnitResponse updateUnit(String unitId, UpdateUnitRequest updateUnitRequest) {
-        Optional<Unit> optional = unitRepository.findById(unitId);
-        if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
-        Unit unit = optional.get();
+
+        Unit unit = findUnitByIdOrThrowNotFound(unitId);
 
         if (updateUnitRequest.getName() != null) unit.setName(updateUnitRequest.getName());
 
@@ -76,26 +78,29 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Object deleteUnit(String unitId) {
-        Optional<Unit> optional = unitRepository.findById(unitId);
-        if (optional.isEmpty()) throw new UnitNotFoundException("unit with id " + unitId + " not found");
+    public String deleteUnit(String unitId) {
 
-        unitRepository.deleteById(unitId);
+        Unit unit = findUnitByIdOrThrowNotFound(unitId);
+
+        if (unitRepository.productCountByBrandId(unitId) > 0) {
+            throw new UnitUsedDeleteNotAllowed("unit with id " + unitId + " has relationship and already used in another table");
+        }
+
+        unitRepository.delete(unit);
 
         return unitId;
     }
 
     @Override
     public Unit findUnitByIdOrThrowNotFound(String unitId) {
-        return unitRepository.findById(unitId)
-                .orElseThrow(() -> new UnitNotFoundException("unit with id " + unitId + " not found"));
+        return unitRepository.findByIdOrThrowNotFound(unitId);
     }
 
     @Override
     public List<Unit> findUnitsByIdsOrThrowNotFound(List<String> unitIds) {
         List<Unit> units = unitRepository.findAllById(unitIds);
         if (units.size() != unitIds.size()) {
-            List<String> existingIds = units.stream().map(BaseEntity::getId).collect(Collectors.toList());
+            List<String> existingIds    = units.stream().map(BaseEntity::getId).collect(Collectors.toList());
             List<String> notExistingIds = unitIds.stream().filter(id -> !existingIds.contains(id)).collect(Collectors.toList());
             throw new UnitNotFoundException("units with id (" + notExistingIds + ") not found");
         }
