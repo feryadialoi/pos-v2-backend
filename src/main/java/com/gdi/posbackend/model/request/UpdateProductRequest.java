@@ -14,5 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateProductRequest {
+    private String code;
     private String name;
+    private String brandId;
+    private String categoryId;
 }
