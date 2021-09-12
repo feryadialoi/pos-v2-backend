@@ -3,7 +3,7 @@ package com.gdi.posbackend.service.impl;
 import com.gdi.posbackend.entity.BaseEntity;
 import com.gdi.posbackend.entity.Unit;
 import com.gdi.posbackend.exception.UnitNotFoundException;
-import com.gdi.posbackend.exception.UnitUsedDeleteNotAllowed;
+import com.gdi.posbackend.exception.UnitDeleteNotAllowedException;
 import com.gdi.posbackend.mapper.UnitMapper;
 import com.gdi.posbackend.model.criteria.UnitCriteria;
 import com.gdi.posbackend.model.request.CreateUnitRequest;
@@ -11,17 +11,13 @@ import com.gdi.posbackend.model.request.UpdateUnitRequest;
 import com.gdi.posbackend.model.response.UnitResponse;
 import com.gdi.posbackend.repository.UnitRepository;
 import com.gdi.posbackend.service.UnitService;
-import com.gdi.posbackend.specification.UnitSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gdi.posbackend.specification.UnitSpecification.nameIsLike;
@@ -83,7 +79,7 @@ public class UnitServiceImpl implements UnitService {
         Unit unit = findUnitByIdOrThrowNotFound(unitId);
 
         if (unitRepository.productCountByBrandId(unitId) > 0) {
-            throw new UnitUsedDeleteNotAllowed("unit with id " + unitId + " has relationship and already used in another table");
+            throw new UnitDeleteNotAllowedException("unit with id " + unitId + " has relationship and already used in another table");
         }
 
         unitRepository.delete(unit);

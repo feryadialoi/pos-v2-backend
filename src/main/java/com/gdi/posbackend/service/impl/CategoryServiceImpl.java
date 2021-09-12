@@ -2,7 +2,7 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.entity.Category;
 import com.gdi.posbackend.exception.CategoryNotFoundException;
-import com.gdi.posbackend.exception.CategoryUsedDeleteNotAllowedException;
+import com.gdi.posbackend.exception.CategoryDeleteNotAllowedException;
 import com.gdi.posbackend.mapper.CategoryMapper;
 import com.gdi.posbackend.model.criteria.CategoryCriteria;
 import com.gdi.posbackend.model.request.CreateCategoryRequest;
@@ -10,14 +10,11 @@ import com.gdi.posbackend.model.request.UpdateCategoryRequest;
 import com.gdi.posbackend.model.response.CategoryResponse;
 import com.gdi.posbackend.repository.CategoryRepository;
 import com.gdi.posbackend.service.CategoryService;
-import com.gdi.posbackend.specification.CategorySpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.gdi.posbackend.specification.CategorySpecification.nameIsLike;
 
@@ -76,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = findCategoryByIdOrThrowNotFound(categoryId);
 
         if (categoryRepository.productCountByCategoryId(categoryId) > 0) {
-            throw new CategoryUsedDeleteNotAllowedException("category with id " + categoryId + " has relationship and already used in another table");
+            throw new CategoryDeleteNotAllowedException("category with id " + categoryId + " has relationship and already used in another table");
         }
 
         categoryRepository.delete(category);
