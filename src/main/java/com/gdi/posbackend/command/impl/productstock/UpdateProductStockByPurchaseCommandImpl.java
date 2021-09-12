@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Feryadialoi
@@ -28,8 +27,8 @@ import java.util.List;
 public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductStockByPurchaseCommand {
 
     // ** repository
-    private final ProductStockRepository productStockRepository;
-    private final ProductStockDetailRepository productStockDetailRepository;
+    private final ProductStockRepository         productStockRepository;
+    private final ProductStockDetailRepository   productStockDetailRepository;
     private final ProductStockMutationRepository productStockMutationRepository;
 
     // ** util

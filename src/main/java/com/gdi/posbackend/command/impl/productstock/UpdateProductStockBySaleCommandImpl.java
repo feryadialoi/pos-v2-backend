@@ -29,8 +29,8 @@ import java.util.Optional;
 public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBySaleCommand {
 
     // ** repository
-    private final ProductStockRepository productStockRepository;
-    private final ProductStockDetailRepository productStockDetailRepository;
+    private final ProductStockRepository         productStockRepository;
+    private final ProductStockDetailRepository   productStockDetailRepository;
     private final ProductStockMutationRepository productStockMutationRepository;
 
     // ** service
@@ -53,7 +53,7 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
                 saleDetail.getProduct(),
                 saleDetail.getWarehouse(),
                 saleDetail.getUnit()
-        ).orElseThrow(() -> new ProductNotFoundException("product "));
+        ).orElseThrow(() -> new ProductNotFoundException("product stock not found"));
     }
 
     private ProductStockDetail findProductStockDetailByProductStock(ProductStock productStock) {
@@ -70,9 +70,9 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
         }
 
         return optional.orElseThrow(() -> new ProductStockDetailNotFoundException("product stock detail of product stock with id "
-                + productStock.getId()
-                + " and name "
-                + productStock.getProduct().getName()
+                                                                                          + productStock.getId()
+                                                                                          + " and name "
+                                                                                          + productStock.getProduct().getName()
         ));
     }
 
@@ -90,11 +90,7 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
 
     private void checkProductStockIsSufficientOrNot(SaleDetail saleDetail, ProductStock productStock) throws ProductStockInsufficientException {
         if (productStock.getStock().compareTo(saleDetail.getQuantity()) < 0) {
-            throw new ProductStockInsufficientException("product stock insufficient for product with id "
-                    + saleDetail.getProduct().getId()
-                    + " and with name "
-                    + saleDetail.getProduct().getName()
-            );
+            throw new ProductStockInsufficientException("product stock insufficient for product with id " + saleDetail.getProduct().getId() + " and with name " + saleDetail.getProduct().getName());
         }
     }
 
@@ -104,6 +100,7 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
         ProductStockDetail productStockDetail = findProductStockDetailByProductStock(productStock);
 
         while (quantity.compareTo(BigDecimal.ZERO) > 0) {
+
             if (productStockDetail.getQuantity().compareTo(quantity) >= 0) {
                 createProductStockMutationOfSale(sale, saleDetail, productStock, quantity, productStockDetail);
 

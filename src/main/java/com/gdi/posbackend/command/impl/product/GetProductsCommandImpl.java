@@ -7,7 +7,6 @@ import com.gdi.posbackend.model.commandparam.GetProductsCommandParam;
 import com.gdi.posbackend.model.criteria.ProductCriteria;
 import com.gdi.posbackend.model.response.ProductResponse;
 import com.gdi.posbackend.repository.ProductRepository;
-import com.gdi.posbackend.specification.ProductSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,7 @@ public class
 GetProductsCommandImpl implements GetProductsCommand {
 
     private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
+    private final ProductMapper     productMapper;
 
     @Override
     public Page<ProductResponse> execute(GetProductsCommandParam request) {
