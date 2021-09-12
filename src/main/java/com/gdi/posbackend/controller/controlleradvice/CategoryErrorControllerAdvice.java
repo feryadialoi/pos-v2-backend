@@ -2,7 +2,7 @@ package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
 import com.gdi.posbackend.exception.CategoryNotFoundException;
-import com.gdi.posbackend.exception.CategoryUsedDeleteNotAllowedException;
+import com.gdi.posbackend.exception.CategoryDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,9 +19,9 @@ public class CategoryErrorControllerAdvice extends BaseControllerAdvice {
         return response("not found", categoryNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CategoryUsedDeleteNotAllowedException.class)
-    public Object categoryUsedDeletdNotAllowed(CategoryUsedDeleteNotAllowedException categoryUsedDeleteNotAllowedException) {
-        return response("bad request", categoryUsedDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(CategoryDeleteNotAllowedException.class)
+    public Object categoryUsedDeletdNotAllowed(CategoryDeleteNotAllowedException categoryDeleteNotAllowedException) {
+        return response("bad request", categoryDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

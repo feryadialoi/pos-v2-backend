@@ -2,7 +2,7 @@ package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
 import com.gdi.posbackend.exception.BrandNotFoundException;
-import com.gdi.posbackend.exception.BrandUsedDeleteNotAllowed;
+import com.gdi.posbackend.exception.BrandDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,9 +19,9 @@ public class BrandControllerAdvice extends BaseControllerAdvice {
         return response("not found", brandNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BrandUsedDeleteNotAllowed.class)
-    public Object brandUsedDeleteNotAllowed(BrandUsedDeleteNotAllowed brandUsedDeleteNotAllowed) {
-        return response("bad request", brandUsedDeleteNotAllowed.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(BrandDeleteNotAllowedException.class)
+    public Object brandUsedDeleteNotAllowed(BrandDeleteNotAllowedException brandDeleteNotAllowedException) {
+        return response("bad request", brandDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 

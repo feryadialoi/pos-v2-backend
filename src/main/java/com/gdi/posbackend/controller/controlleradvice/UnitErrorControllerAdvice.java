@@ -1,9 +1,8 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
-import com.gdi.posbackend.exception.CategoryNotFoundException;
 import com.gdi.posbackend.exception.UnitNotFoundException;
-import com.gdi.posbackend.exception.UnitUsedDeleteNotAllowed;
+import com.gdi.posbackend.exception.UnitDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,9 +19,9 @@ public class UnitErrorControllerAdvice extends BaseControllerAdvice {
         return response("not found", unitNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UnitUsedDeleteNotAllowed.class)
-    public Object unitUsedDeleteNotAllowed(UnitUsedDeleteNotAllowed unitUsedDeleteNotAllowed) {
-        return response("bad request", unitUsedDeleteNotAllowed.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(UnitDeleteNotAllowedException.class)
+    public Object unitUsedDeleteNotAllowed(UnitDeleteNotAllowedException unitDeleteNotAllowedException) {
+        return response("bad request", unitDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 

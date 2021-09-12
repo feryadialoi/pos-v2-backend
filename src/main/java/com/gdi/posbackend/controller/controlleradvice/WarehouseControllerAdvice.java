@@ -2,7 +2,7 @@ package com.gdi.posbackend.controller.controlleradvice;
 
 import com.gdi.posbackend.controller.BaseControllerAdvice;
 import com.gdi.posbackend.exception.WarehouseNotFoundException;
-import com.gdi.posbackend.exception.WarehouseUsedDeleteNotAllowed;
+import com.gdi.posbackend.exception.WarehouseDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,9 +19,9 @@ public class WarehouseControllerAdvice extends BaseControllerAdvice {
         return response("not found", warehouseNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(WarehouseUsedDeleteNotAllowed.class)
-    public Object warehouseUsedDeleteNotAllowed(WarehouseUsedDeleteNotAllowed warehouseUsedDeleteNotAllowed) {
-        return response("bad request", warehouseUsedDeleteNotAllowed.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(WarehouseDeleteNotAllowedException.class)
+    public Object warehouseUsedDeleteNotAllowed(WarehouseDeleteNotAllowedException warehouseDeleteNotAllowedException) {
+        return response("bad request", warehouseDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 

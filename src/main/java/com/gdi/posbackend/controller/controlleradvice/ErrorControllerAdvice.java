@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.gdi.posbackend.controller.BaseControllerAdvice;
 import com.gdi.posbackend.controller.controlleradvice.model.NotValidDetail;
-import com.gdi.posbackend.exception.WarehouseDeleteNotAllowedException;
-import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -28,20 +26,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ErrorControllerAdvice extends BaseControllerAdvice {
 
-    @ExceptionHandler(WarehouseNotFoundException.class)
-    public Object warehouseNotFound(WarehouseNotFoundException warehouseNotFoundException) {
-        return response("warehouse delete not allowed",
-                warehouseNotFoundException.getMessage(), HttpStatus.NOT_FOUND
-        );
-    }
-
-    @ExceptionHandler(WarehouseDeleteNotAllowedException.class)
-    public Object warehouseDeleteNotAllowed(WarehouseDeleteNotAllowedException warehouseDeleteNotAllowedException) {
-        return response("warehouse delete not allowed",
-                warehouseDeleteNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST
-        );
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object methodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException) {
         List<NotValidDetail> notValidDetails = methodArgumentNotValidException
@@ -54,6 +38,7 @@ public class ErrorControllerAdvice extends BaseControllerAdvice {
         );
     }
 
+    //
     @ExceptionHandler(BindException.class)
     public Object bind(BindException bindException) {
         List<NotValidDetail> notValidDetails = bindException
@@ -68,8 +53,8 @@ public class ErrorControllerAdvice extends BaseControllerAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadable(HttpMessageNotReadableException httpMessageNotReadableException) {
-        Throwable cause = httpMessageNotReadableException.getRootCause();
-        String message = cause != null ? cause.getMessage() : "Required request body is missing";
+        Throwable cause   = httpMessageNotReadableException.getRootCause();
+        String    message = cause != null ? cause.getMessage() : "Required request body is missing";
 
         if (cause instanceof InvalidFormatException) message = invalidFormat((InvalidFormatException) cause);
         else if (cause instanceof MismatchedInputException) message = mismatchedInput((MismatchedInputException) cause);
@@ -80,25 +65,23 @@ public class ErrorControllerAdvice extends BaseControllerAdvice {
     }
 
     private NotValidDetail mapObjectErrorToNotValidDetail(ObjectError objectError) {
-        NotValidDetail notValidDetail = new NotValidDetail();
-        notValidDetail.setProperty(objectError.getObjectName());
-        if (objectError instanceof FieldError)
-            notValidDetail.setProperty(((FieldError) objectError).getField());
-        notValidDetail.setErrorMessage(objectError.getDefaultMessage());
-        return notValidDetail;
+        return new NotValidDetail(
+                objectError instanceof FieldError ? ((FieldError) objectError).getField() : objectError.getObjectName(),
+                objectError.getDefaultMessage()
+        );
     }
 
     private String mismatchedInput(MismatchedInputException mismatchedInputException) {
-        int index = mismatchedInputException.getPath().size() - 1;
+        int    index     = mismatchedInputException.getPath().size() - 1;
         String fieldName = mismatchedInputException.getPath().get(index).getFieldName();
         return "invalid value for " + fieldName;
     }
 
     private String invalidFormat(InvalidFormatException invalidFormatException) {
-        int index = invalidFormatException.getPath().size() - 1;
+        int    index      = invalidFormatException.getPath().size() - 1;
         String targetType = invalidFormatException.getTargetType().getName();
-        String fieldName = invalidFormatException.getPath().get(index).getFieldName();
-        Object value = invalidFormatException.getValue();
+        String fieldName  = invalidFormatException.getPath().get(index).getFieldName();
+        Object value      = invalidFormatException.getValue();
 
         String message = String.format("value %s for %s is not valid %s", value, fieldName, targetType);
 
