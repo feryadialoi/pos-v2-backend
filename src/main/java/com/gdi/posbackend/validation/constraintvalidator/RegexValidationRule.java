@@ -1,4 +1,4 @@
-package com.gdi.posbackend.validation;
+package com.gdi.posbackend.validation.constraintvalidator;
 
 /**
  * @author Feryadialoi
