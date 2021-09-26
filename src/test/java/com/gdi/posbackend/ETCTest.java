@@ -5,10 +5,7 @@ import com.gdi.posbackend.entity.Category;
 import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.entity.Warehouse;
 import com.gdi.posbackend.entity.enums.BalanceSheetFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -16,10 +13,7 @@ import org.junit.jupiter.api.function.Executable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -66,6 +60,7 @@ public class ETCTest {
     void testLocale() {
         System.out.println(new Locale("in", "ID").equals(LocaleOptions.indonesia));
     }
+
 
     enum OrderStatus {
         PARTIALLY_SHIPPED;
@@ -116,4 +111,62 @@ public class ETCTest {
     }
 
 
+    @Test
+    void testMap() {
+        List<String> data = List.of("name", "email", "name");
+
+        Map<String, String> map = new HashMap<>();
+
+        for (int i = 0; i < data.size(); i++) {
+            if (map.get(data.get(i)) != null) {
+                System.out.println("found " + map.get(data.get(i)));
+                String value = map.get(data.get(i));
+                map.put(data.get(i), "'" + value + ", " + i + "'");
+            } else {
+                map.put(data.get(i), "'" + i + "'");
+            }
+        }
+
+        System.out.println(map);
+
+    }
+
+
+    @Test
+    void testRestParam() {
+        restParam("Hello", "World", "!");
+        restParam2(new Person("Diana"), new Person("Mario"), new Person("Mikaela"));
+    }
+
+    void restParam(String... value) {
+        for (String s : value) {
+            System.out.println(s);
+        }
+    }
+
+    void restParam2(Person... people) {
+        for (Person person : people) {
+            System.out.println(person);
+        }
+    }
+
+    @Value
+    static class Person {
+        String name;
+
+    }
+
+    void testParam3(String value, Person... people) {
+        System.out.println(value);
+        StringBuilder name = new StringBuilder();
+        for (Person person : people) {
+            name.append(person.getName()).append(", ");
+        }
+        System.out.println(name);
+    }
+
+    @Test
+    void testParam3() {
+        testParam3("Hello", new Person("Diana"), new Person("Mario"));
+    }
 }

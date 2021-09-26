@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -41,7 +43,9 @@ class CompanyRepositoryTest {
                 "8779846484165646",
                 "Suyanto",
                 "Jl. Sari Lumbung No 50",
-                "79794894891"
+                "79794894891",
+                Collections.emptyList(),
+                Collections.emptyList()
         );
 
         company = companyRepository.save(company);

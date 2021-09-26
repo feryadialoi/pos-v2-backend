@@ -56,9 +56,13 @@ class WarehouseServiceTest {
     void updateWarehouse() {
     }
 
+    int parent;
     @Test
     void deleteWarehouse() {
         Object result = warehouseService.deleteWarehouse(warehouseId);
+
+
         Assertions.assertNotNull(result);
     }
+
 }

@@ -131,11 +131,12 @@ public class ProductRepositoryTest {
             );
             product.setMinimumStock(BigDecimal.ZERO);
             product.setUnits(List.of(unitPcs));
-            product.setIdempotentKey(UUID.randomUUID().toString());
 
             productRepository.save(product);
         }
         log.info("product insert success");
 
     }
+
+
 }
