@@ -4,9 +4,9 @@ import com.gdi.posbackend.command.purchase.CreatePurchaseCommand;
 import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
-import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
 import com.gdi.posbackend.exception.CreatePurchaseNotAllowedException;
+import com.gdi.posbackend.exception.PurchaseOrderAlreadyCreateToPurchaseException;
 import com.gdi.posbackend.mapper.PurchaseMapper;
 import com.gdi.posbackend.model.PurchaseCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreatePurchaseCommandParam;
@@ -16,7 +16,6 @@ import com.gdi.posbackend.model.response.DetailedPurchaseResponse;
 import com.gdi.posbackend.repository.*;
 import com.gdi.posbackend.service.*;
 import com.gdi.posbackend.util.DiscountUtil;
-import com.gdi.posbackend.util.LocalDateUtil;
 import com.gdi.posbackend.util.RunningNumberCodeUtil;
 import com.gdi.posbackend.util.TaxUtil;
 import lombok.AllArgsConstructor;
@@ -46,7 +45,6 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
 
     // ** util
     private final RunningNumberCodeUtil runningNumberCodeUtil;
-    private final LocalDateUtil localDateUtil;
     private final DiscountUtil discountUtil;
     private final TaxUtil taxUtil;
 
@@ -66,20 +64,32 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
 
         CreatePurchaseRequest createPurchaseRequest = createPurchaseCommandParam.getCreatePurchaseRequest();
 
-        checkPurchaseOrderStatusIfExists(createPurchaseRequest);
+        checkPurchaseOrderAlreadyCreateToPurchase(createPurchaseRequest);
+
+        checkPurchaseOrderStatusIfPresent(createPurchaseRequest);
 
         Purchase purchase = doCreatePurchase(createPurchaseRequest);
 
-//        journalService.postJournalOfPurchase(purchase);
+        // journalService.postJournalOfPurchase(purchase);
 
         productStockService.updateProductStockByPurchase(purchase);
 
         return purchaseMapper.mapPurchaseToDetailedPurchaseResponse(purchase);
     }
 
-    private void checkPurchaseOrderStatusIfExists(CreatePurchaseRequest createPurchaseRequest) throws CreatePurchaseNotAllowedException {
+    private void checkPurchaseOrderAlreadyCreateToPurchase(CreatePurchaseRequest createPurchaseRequest) {
         if (createPurchaseRequest.getPurchaseOrderId() != null) {
             PurchaseOrder purchaseOrder = purchaseOrderService.findPurchaseOrderByIdOrThrowNotFound(createPurchaseRequest.getPurchaseOrderId());
+            if (purchaseRepository.existsByPurchaseOrder(purchaseOrder)) {
+                throw new PurchaseOrderAlreadyCreateToPurchaseException("purchase order already create to purchase");
+            }
+        }
+    }
+
+    private void checkPurchaseOrderStatusIfPresent(CreatePurchaseRequest createPurchaseRequest) throws CreatePurchaseNotAllowedException {
+        if (createPurchaseRequest.getPurchaseOrderId() != null) {
+            PurchaseOrder purchaseOrder = purchaseOrderService.findPurchaseOrderByIdOrThrowNotFound(createPurchaseRequest.getPurchaseOrderId());
+
             if (purchaseOrder.getStatus() == PurchaseOrderStatus.DRAFT) {
                 throw new CreatePurchaseNotAllowedException("not allowed to create purchase from purchase order with status " + purchaseOrder.getStatus());
             }
@@ -114,10 +124,10 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
         purchase.setSupplier(supplierService.findSupplierByIdOrThrowNotFound(createPurchaseRequest.getSupplierId()));
         purchase.setStatus(createPurchaseRequest.getStatus());
         purchase.setPaymentType(createPurchaseRequest.getPaymentType());
-        purchase.setEntryDate(localDateUtil.fromString(createPurchaseRequest.getEntryDate()));
+        purchase.setEntryDate(createPurchaseRequest.getEntryDate());
 
         if (createPurchaseRequest.getPaymentType() == PaymentType.CREDIT) {
-            purchase.setDueDate(localDateUtil.fromString(createPurchaseRequest.getDueDate()));
+            purchase.setDueDate(createPurchaseRequest.getDueDate());
             purchase.setTerm(createPurchaseRequest.getTerm());
         }
 
@@ -142,7 +152,6 @@ public class CreatePurchaseCommandImpl implements CreatePurchaseCommand {
     }
 
     @SuppressWarnings("Duplicates")
-
     private void setPurchaseOrderStatusToComplete(PurchaseOrder purchaseOrder) {
         purchaseOrderService.completePurchaseOrderStatus(purchaseOrder.getId());
     }
