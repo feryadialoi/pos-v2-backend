@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface ProductRepository extends JpaRepository<Product, String>, JpaSpecificationExecutor<Product> {
 
-    boolean existsByIdempotentKey(String idempotentKey);
-
     default Product findByIdOrThrowNotFound(String productId) {
         return findById(productId).orElseThrow(() -> new ProductNotFoundException("product with id " + productId + " not found"));
     }
+
+    boolean existsByCode(String code);
 
 }
