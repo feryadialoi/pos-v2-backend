@@ -4,6 +4,7 @@ import com.gdi.posbackend.command.productstock.UpdateProductStockBySaleCommand;
 import com.gdi.posbackend.entity.*;
 import com.gdi.posbackend.entity.enums.CogsMethod;
 import com.gdi.posbackend.entity.enums.ProductStockMutationEvent;
+import com.gdi.posbackend.exception.NoCogsMethodProvidedException;
 import com.gdi.posbackend.exception.ProductNotFoundException;
 import com.gdi.posbackend.exception.ProductStockDetailNotFoundException;
 import com.gdi.posbackend.exception.ProductStockInsufficientException;
@@ -13,11 +14,17 @@ import com.gdi.posbackend.repository.ProductStockMutationRepository;
 import com.gdi.posbackend.repository.ProductStockRepository;
 import com.gdi.posbackend.service.CogsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+
+import static com.gdi.posbackend.specification.ProductStockDetailSpecification.productStockIdIs;
+import static com.gdi.posbackend.specification.ProductStockDetailSpecification.quantityGreaterThan;
 
 /**
  * @author Feryadialoi
@@ -29,8 +36,8 @@ import java.util.Optional;
 public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBySaleCommand {
 
     // ** repository
-    private final ProductStockRepository         productStockRepository;
-    private final ProductStockDetailRepository   productStockDetailRepository;
+    private final ProductStockRepository productStockRepository;
+    private final ProductStockDetailRepository productStockDetailRepository;
     private final ProductStockMutationRepository productStockMutationRepository;
 
     // ** service
@@ -56,24 +63,32 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
         ).orElseThrow(() -> new ProductNotFoundException("product stock not found"));
     }
 
-    private ProductStockDetail findProductStockDetailByProductStock(ProductStock productStock) {
+    private ProductStockDetail findProductStockDetailByCogsMethod(ProductStock productStock) {
         CogsMethod cogsMethod = cogsService.getCogsMethod();
 
-        Optional<ProductStockDetail> optional = Optional.empty();
+        if (cogsMethod == CogsMethod.FIFO) return findProductStockDetail(productStock, Sort.Direction.ASC);
+        if (cogsMethod == CogsMethod.LIFO) return findProductStockDetail(productStock, Sort.Direction.DESC);
+        if (cogsMethod == CogsMethod.WEIGHTED_AVERAGE) return findProductStockDetail(productStock, Sort.Direction.ASC);
+        else throw new NoCogsMethodProvidedException("no cogs method provided");
+    }
 
-        if (cogsMethod == CogsMethod.FIFO) {
-            optional = productStockDetailRepository.findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateAsc(productStock, BigDecimal.ZERO);
-        } else if (cogsMethod == CogsMethod.LIFO) {
-            optional = productStockDetailRepository.findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateDesc(productStock, BigDecimal.ZERO);
-        } else if (cogsMethod == CogsMethod.WEIGHTED_AVERAGE) {
-            optional = productStockDetailRepository.findProductStockDetailByProductStockAndQuantityGreaterThanOrderByCreatedDateDesc(productStock, BigDecimal.ZERO);
-        }
+    private ProductStockDetail findProductStockDetail(ProductStock productStock, Sort.Direction sortDirection) {
+        Specification<ProductStockDetail> specification = Specification
+                .where(productStockIdIs(productStock.getId()))
+                .and(quantityGreaterThan(BigDecimal.ZERO));
 
-        return optional.orElseThrow(() -> new ProductStockDetailNotFoundException("product stock detail of product stock with id "
-                                                                                          + productStock.getId()
-                                                                                          + " and name "
-                                                                                          + productStock.getProduct().getName()
-        ));
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(sortDirection, ProductStockDetail_.CREATED_DATE));
+
+        return productStockDetailRepository
+                .findAll(specification, pageable)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ProductStockDetailNotFoundException(
+                        String.format("product stock detail of product stock with id %s and name %s",
+                                      productStock.getId(),
+                                      productStock.getProduct().getName()))
+                );
+
     }
 
     private void updateProductStock(Sale sale, SaleDetail saleDetail) {
@@ -90,14 +105,14 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
 
     private void checkProductStockIsSufficientOrNot(SaleDetail saleDetail, ProductStock productStock) throws ProductStockInsufficientException {
         if (productStock.getStock().compareTo(saleDetail.getQuantity()) < 0) {
-            throw new ProductStockInsufficientException("product stock insufficient for product with id " + saleDetail.getProduct().getId() + " and with name " + saleDetail.getProduct().getName());
+            throw new ProductStockInsufficientException(String.format("product stock insufficient for product with id %s and with name %s", saleDetail.getProduct().getId(), saleDetail.getProduct().getName()));
         }
     }
 
     private void updateProductStockDetail(Sale sale, SaleDetail saleDetail, ProductStock productStock) {
         BigDecimal quantity = saleDetail.getQuantity();
 
-        ProductStockDetail productStockDetail = findProductStockDetailByProductStock(productStock);
+        ProductStockDetail productStockDetail = findProductStockDetailByCogsMethod(productStock);
 
         while (quantity.compareTo(BigDecimal.ZERO) > 0) {
 
@@ -115,7 +130,7 @@ public class UpdateProductStockBySaleCommandImpl implements UpdateProductStockBy
                 productStockDetail.setQuantity(BigDecimal.ZERO);
                 productStockDetailRepository.save(productStockDetail);
 
-                productStockDetail = findProductStockDetailByProductStock(productStock);
+                productStockDetail = findProductStockDetailByCogsMethod(productStock);
             }
         }
     }
