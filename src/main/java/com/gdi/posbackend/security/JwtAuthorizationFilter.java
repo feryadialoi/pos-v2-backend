@@ -36,7 +36,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
         try {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            log.info(HttpHeaders.AUTHORIZATION + "=" + authorizationHeader);
+//            log.info(HttpHeaders.AUTHORIZATION + "=" + authorizationHeader);
             boolean hasAuthorization = authorizationHeader != null && authorizationHeader.startsWith("Bearer ");
 
             if (hasAuthorization) {
@@ -46,6 +46,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             chain.doFilter(request, response);
         } catch (Exception e) {
+            log.info(e.getClass().getSimpleName());
+            log.info(e.getMessage());
+            e.printStackTrace();
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }

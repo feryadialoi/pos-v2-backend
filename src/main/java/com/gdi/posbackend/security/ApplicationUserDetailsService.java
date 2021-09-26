@@ -5,7 +5,6 @@ import com.gdi.posbackend.entity.auth.User;
 import com.gdi.posbackend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,28 +32,26 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        return userRepository
+                .findByUsername(username)
+                .map(this::mapUserToUserDetails)
+                .orElseThrow(() -> new UsernameNotFoundException("user with username " + username + " not found"));
+    }
 
-            return ApplicationUserDetails.builder()
-                    .id(user.getId())
-                    .username(user.getUsername())
-                    .password(user.getPassword())
-                    .authorities(getAuthorities(user))
-                    .accountNonExpired(true)
-                    .accountNonLocked(true)
-                    .credentialsNonExpired(true)
-                    .enabled(true)
-                    .build();
-        }
-        throw new UsernameNotFoundException("user with username " + username + " not found");
+    private UserDetails mapUserToUserDetails(User user) {
+        return ApplicationUserDetails.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(getAuthorities(user))
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
+                .build();
     }
 
     private Collection<GrantedAuthority> getAuthorities(User user) {
-
-//        Hibernate.initialize(user.getRoles());
-
         List<GrantedAuthority> grantedAuthorityRoles = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
