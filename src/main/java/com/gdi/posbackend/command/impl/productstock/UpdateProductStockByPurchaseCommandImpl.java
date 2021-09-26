@@ -27,8 +27,8 @@ import java.util.Collections;
 public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductStockByPurchaseCommand {
 
     // ** repository
-    private final ProductStockRepository         productStockRepository;
-    private final ProductStockDetailRepository   productStockDetailRepository;
+    private final ProductStockRepository productStockRepository;
+    private final ProductStockDetailRepository productStockDetailRepository;
     private final ProductStockMutationRepository productStockMutationRepository;
 
     // ** util
@@ -60,15 +60,20 @@ public class UpdateProductStockByPurchaseCommandImpl implements UpdateProductSto
 
         productStockRepository.save(productStock);
 
-        ProductStockDetail productStockDetail = new ProductStockDetail(
-                productStock,
-                purchaseDetail.getQuantity(),
-                runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.BP))
-        );
+        ProductStockDetail productStockDetail = createProductStockDetail(purchaseDetail, productStock);
+
+        createProductStockMutationOfPurchase(purchase, purchaseDetail, productStock, productStockDetail);
+    }
+
+    private ProductStockDetail createProductStockDetail(PurchaseDetail purchaseDetail, ProductStock productStock) {
+        ProductStockDetail productStockDetail = new ProductStockDetail();
+        productStockDetail.setProductStock(productStock);
+        productStockDetail.setQuantity(purchaseDetail.getQuantity());
+        productStockDetail.setBatch(runningNumberCodeUtil.getFormattedCode(runningNumberService.getRunningNumber(RunningNumberPrefix.BP)));
 
         productStockDetailRepository.save(productStockDetail);
 
-        createProductStockMutationOfPurchase(purchase, purchaseDetail, productStock, productStockDetail);
+        return productStockDetail;
     }
 
     private void createProductStockMutationOfPurchase(Purchase purchase, PurchaseDetail purchaseDetail, ProductStock productStock, ProductStockDetail productStockDetail) {
