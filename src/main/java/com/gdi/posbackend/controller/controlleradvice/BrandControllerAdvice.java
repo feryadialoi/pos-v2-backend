@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
-import com.gdi.posbackend.controller.BaseControllerAdvice;
+import com.gdi.posbackend.controller.core.BaseControllerAdvice;
 import com.gdi.posbackend.exception.BrandNotFoundException;
 import com.gdi.posbackend.exception.BrandDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;

@@ -2,8 +2,7 @@ package com.gdi.posbackend.controller.controlleradvice;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.gdi.posbackend.controller.BaseControllerAdvice;
-import com.gdi.posbackend.controller.controlleradvice.model.NotValidDetail;
+import com.gdi.posbackend.controller.core.BaseControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,9 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.*;
 
 /**
  * @author Feryadialoi
@@ -28,60 +26,67 @@ public class ErrorControllerAdvice extends BaseControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object methodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException) {
-        List<NotValidDetail> notValidDetails = methodArgumentNotValidException
-                .getBindingResult().getAllErrors().stream()
-                .map(this::mapObjectErrorToNotValidDetail)
-                .collect(Collectors.toList());
-
         return response("Unprocessable entity",
-                notValidDetails, HttpStatus.UNPROCESSABLE_ENTITY
+                        getNotValidDetails(methodArgumentNotValidException.getBindingResult().getAllErrors()),
+                        HttpStatus.UNPROCESSABLE_ENTITY
         );
     }
 
-    //
     @ExceptionHandler(BindException.class)
     public Object bind(BindException bindException) {
-        List<NotValidDetail> notValidDetails = bindException
-                .getBindingResult().getAllErrors().stream()
-                .map(this::mapObjectErrorToNotValidDetail)
-                .collect(Collectors.toList());
-
         return response("Unprocessable entity",
-                notValidDetails, HttpStatus.UNPROCESSABLE_ENTITY
+                        getNotValidDetails(bindException.getBindingResult().getAllErrors()),
+                        HttpStatus.UNPROCESSABLE_ENTITY
         );
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object httpMessageNotReadable(HttpMessageNotReadableException httpMessageNotReadableException) {
-        Throwable cause   = httpMessageNotReadableException.getRootCause();
-        String    message = cause != null ? cause.getMessage() : "Required request body is missing";
+        return response("Bad request",
+                        getHttpMessageNotReadable(httpMessageNotReadableException),
+                        HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public Object sqlIntegrityConstraintViolation(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
+        return response("bad request",
+                        sqlIntegrityConstraintViolationException.getMessage(),
+                        HttpStatus.BAD_REQUEST
+        );
+    }
+
+
+    private String getHttpMessageNotReadable(HttpMessageNotReadableException httpMessageNotReadableException) {
+        Throwable cause = httpMessageNotReadableException.getRootCause();
+        String message = cause != null ? cause.getMessage() : "Required request body is missing";
 
         if (cause instanceof InvalidFormatException) message = invalidFormat((InvalidFormatException) cause);
         else if (cause instanceof MismatchedInputException) message = mismatchedInput((MismatchedInputException) cause);
-
-        return response("Bad request",
-                message, HttpStatus.BAD_REQUEST
-        );
+        return message;
     }
 
-    private NotValidDetail mapObjectErrorToNotValidDetail(ObjectError objectError) {
-        return new NotValidDetail(
-                objectError instanceof FieldError ? ((FieldError) objectError).getField() : objectError.getObjectName(),
-                objectError.getDefaultMessage()
-        );
+    private Map<String, String> getNotValidDetails(List<ObjectError> objectErrors) {
+        Map<String, String> errors = new HashMap<>();
+        for (ObjectError objectError : objectErrors) {
+            String propertyName = objectError instanceof FieldError ? ((FieldError) objectError).getField() : objectError.getObjectName();
+            String errorMessage = objectError.getDefaultMessage();
+            errors.merge(propertyName, errorMessage, (a, b) -> a + ", " + b);
+        }
+        return errors;
     }
 
     private String mismatchedInput(MismatchedInputException mismatchedInputException) {
-        int    index     = mismatchedInputException.getPath().size() - 1;
+        int index = mismatchedInputException.getPath().size() - 1;
         String fieldName = mismatchedInputException.getPath().get(index).getFieldName();
         return "invalid value for " + fieldName;
     }
 
     private String invalidFormat(InvalidFormatException invalidFormatException) {
-        int    index      = invalidFormatException.getPath().size() - 1;
+        int index = invalidFormatException.getPath().size() - 1;
         String targetType = invalidFormatException.getTargetType().getName();
-        String fieldName  = invalidFormatException.getPath().get(index).getFieldName();
-        Object value      = invalidFormatException.getValue();
+        String fieldName = invalidFormatException.getPath().get(index).getFieldName();
+        Object value = invalidFormatException.getValue();
 
         String message = String.format("value %s for %s is not valid %s", value, fieldName, targetType);
 

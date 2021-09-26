@@ -1,8 +1,9 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
-import com.gdi.posbackend.controller.BaseControllerAdvice;
+import com.gdi.posbackend.controller.core.BaseControllerAdvice;
 import com.gdi.posbackend.exception.CreatePurchaseNotAllowedException;
 import com.gdi.posbackend.exception.PurchaseNotFoundException;
+import com.gdi.posbackend.exception.PurchaseOrderAlreadyCreateToPurchaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,6 +23,11 @@ public class PurchaseControllerAdvice extends BaseControllerAdvice {
     @ExceptionHandler(CreatePurchaseNotAllowedException.class)
     public Object createPurchaseNotAllowed(CreatePurchaseNotAllowedException createPurchaseNotAllowedException) {
         return response("bad request", createPurchaseNotAllowedException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PurchaseOrderAlreadyCreateToPurchaseException.class)
+    public Object purchaseOrderAlreadyCreateToPurchase(PurchaseOrderAlreadyCreateToPurchaseException purchaseOrderAlreadyCreateToPurchaseException) {
+        return response("conflict", purchaseOrderAlreadyCreateToPurchaseException.getMessage(), HttpStatus.CONFLICT);
     }
 
 }

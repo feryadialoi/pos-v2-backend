@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
-import com.gdi.posbackend.controller.BaseControllerAdvice;
+import com.gdi.posbackend.controller.core.BaseControllerAdvice;
 import com.gdi.posbackend.exception.UnitNotFoundException;
 import com.gdi.posbackend.exception.UnitDeleteNotAllowedException;
 import org.springframework.http.HttpStatus;

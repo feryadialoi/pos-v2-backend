@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.controlleradvice;
 
-import com.gdi.posbackend.controller.BaseControllerAdvice;
+import com.gdi.posbackend.controller.core.BaseControllerAdvice;
 import com.gdi.posbackend.exception.ProductAlreadyExistsException;
 import com.gdi.posbackend.exception.ProductDeleteNotAllowedException;
 import com.gdi.posbackend.exception.ProductNotFoundException;
