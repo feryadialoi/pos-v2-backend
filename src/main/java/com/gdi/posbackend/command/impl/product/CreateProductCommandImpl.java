@@ -48,8 +48,6 @@ public class CreateProductCommandImpl implements CreateProductCommand {
 
         CreateProductRequest createProductRequest = request.getCreateProductRequest();
 
-        checkForIdempotent(createProductRequest.getIdempotentKey());
-
         Product product = new Product();
         product.setName(createProductRequest.getName());
         product.setCode(createProductRequest.getCode());
@@ -59,7 +57,6 @@ public class CreateProductCommandImpl implements CreateProductCommand {
         product.setUnitConversions(getUnitConversions(createProductRequest, product));
         product.setStock(BigDecimal.ZERO);
         product.setMinimumStock(BigDecimal.ZERO);
-        product.setIdempotentKey(createProductRequest.getIdempotentKey());
 
         product = productRepository.save(product);
 
@@ -82,9 +79,5 @@ public class CreateProductCommandImpl implements CreateProductCommand {
         return unitConversions;
     }
 
-    private void checkForIdempotent(String idempotentKey) {
-        boolean exists = productRepository.existsByIdempotentKey(idempotentKey);
-        if (exists) throw new ProductAlreadyExistsException("product already exists with idempotent key " + idempotentKey);
-    }
 
 }
