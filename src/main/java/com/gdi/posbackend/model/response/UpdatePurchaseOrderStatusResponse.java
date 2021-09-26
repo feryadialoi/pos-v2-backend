@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdatePurchaseOrderStatusResponse {
-    private String purchaseOrderId;
+    private String id;
     private PurchaseOrderStatus status;
 }

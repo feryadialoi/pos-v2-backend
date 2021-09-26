@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.PurchaseOrderCriteria;
 import com.gdi.posbackend.model.request.CreatePurchaseOrderRequest;
 import com.gdi.posbackend.model.request.UpdatePurchaseOrderStatusRequest;
@@ -26,7 +26,7 @@ public class PurchaseOrderController extends BaseController {
     private final PurchaseOrderService purchaseOrderService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<PurchaseOrderResponse>>> getPurchaseOrders(@Valid PurchaseOrderCriteria purchaseOrderCriteria, Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<PurchaseOrderResponse>>> getPurchaseOrders(PurchaseOrderCriteria purchaseOrderCriteria, Pageable pageable) {
         return response("get purchase orders success", purchaseOrderService.getPurchaseOrders(purchaseOrderCriteria, pageable));
     }
 
@@ -41,7 +41,7 @@ public class PurchaseOrderController extends BaseController {
     }
 
     @PutMapping("/{purchaseOrderId}/status")
-    public Object updatePurchaseOrderStatus(@PathVariable(name = "purchaseOrderId") String purchaseOrderId, @Valid @RequestBody UpdatePurchaseOrderStatusRequest updatePurchaseOrderStatusRequest) {
+    public ResponseEntity<ApiResponse<UpdatePurchaseOrderStatusResponse>> updatePurchaseOrderStatus(@PathVariable(name = "purchaseOrderId") String purchaseOrderId, @Valid @RequestBody UpdatePurchaseOrderStatusRequest updatePurchaseOrderStatusRequest) {
         return response("update purchase order status success", purchaseOrderService.updatePurchaseOrderStatus(purchaseOrderId, updatePurchaseOrderStatusRequest));
     }
 

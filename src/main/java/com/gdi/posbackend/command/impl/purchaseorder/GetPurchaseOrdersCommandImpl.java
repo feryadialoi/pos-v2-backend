@@ -16,6 +16,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.gdi.posbackend.specification.PurchaseOrderSpecification.*;
@@ -37,30 +39,27 @@ public class GetPurchaseOrdersCommandImpl implements GetPurchaseOrdersCommand {
     @Override
     public Page<PurchaseOrderResponse> execute(GetPurchaseOrdersCommandParam getPurchaseOrdersCommandParam) {
         PurchaseOrderCriteria purchaseOrderCriteria = getPurchaseOrdersCommandParam.getPurchaseOrderCriteria();
-        Pageable              pageable              = getPurchaseOrdersCommandParam.getPageable();
-
-        PurchaseOrderStatus       status       = purchaseOrderCriteria.getStatus();
-        String                    supplierName = purchaseOrderCriteria.getSupplierName();
-        String                    code         = purchaseOrderCriteria.getCode();
-        String                    startDate    = purchaseOrderCriteria.getStartDate();
-        String                    endDate      = purchaseOrderCriteria.getEndDate();
-        List<PurchaseOrderStatus> statuses     = purchaseOrderCriteria.getStatuses();
-
-        log.info(purchaseOrderCriteria.toString());
+        Pageable pageable = getPurchaseOrdersCommandParam.getPageable();
 
         Specification<PurchaseOrder> specification = Specification.where(null);
 
-        if (status != null) specification = specification.and(statusIs(status));
+        if (purchaseOrderCriteria.getStatus() != null)
+            specification = specification.and(statusIs(purchaseOrderCriteria.getStatus()));
 
-        if (statuses != null) specification = specification.and(statusesIn(statuses));
+        if (purchaseOrderCriteria.getStatuses() != null)
+            specification = specification.and(statusesIn(purchaseOrderCriteria.getStatuses()));
 
-        if (supplierName != null) specification = specification.and(supplierNameIsLike(supplierName));
+        if (purchaseOrderCriteria.getSupplierName() != null)
+            specification = specification.and(supplierNameIsLike(purchaseOrderCriteria.getSupplierName()));
 
-        if (code != null) specification = specification.and(codeIsLike(code));
+        if (purchaseOrderCriteria.getCode() != null)
+            specification = specification.and(codeIsLike(purchaseOrderCriteria.getCode()));
 
-        if (startDate != null) specification = specification.and(startDateGreaterThanOrEqual(startDate));
+        if (purchaseOrderCriteria.getStartDate() != null)
+            specification = specification.and(startDateGreaterThanOrEqual(purchaseOrderCriteria.getStartDate()));
 
-        if (endDate != null) specification = specification.and(endDateLessThanOrEqual(endDate));
+        if (purchaseOrderCriteria.getEndDate() != null)
+            specification = specification.and(endDateLessThanOrEqual(purchaseOrderCriteria.getEndDate()));
 
         return purchaseOrderRepository.findAll(specification, pageable).map(purchaseOrderMapper::mapPurchaseOrderToPurchaseOrderResponse);
 

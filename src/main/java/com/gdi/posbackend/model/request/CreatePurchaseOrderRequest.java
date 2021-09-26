@@ -1,17 +1,18 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.entity.enums.DiscountFormat;
+import com.gdi.posbackend.config.DateConfig;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.PurchaseOrderStatus;
-import com.gdi.posbackend.entity.enums.TaxFormat;
-import com.gdi.posbackend.validation.RegexValidationRule;
-import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseOrderRequestConstraint;
+import com.gdi.posbackend.validation.constraint.SupplierExists;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -21,17 +22,16 @@ import java.util.List;
 @Data
 public class CreatePurchaseOrderRequest {
 
-    @NotNull
     @NotBlank
+    @SupplierExists
     private String supplierId;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
+    @DateTimeFormat(pattern = DateConfig.dateTimeFormat)
     @NotNull
-    @NotBlank
-    private String entryDate;
+    private LocalDate entryDate;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
-    private String dueDate;
+    @DateTimeFormat(pattern = DateConfig.dateTimeFormat)
+    private LocalDate dueDate;
 
     private Integer term;
 
@@ -50,8 +50,9 @@ public class CreatePurchaseOrderRequest {
 
     private String otherFeeDescription;
 
+    @Valid
     @NotNull
-    @ProductOfCreatePurchaseOrderRequestConstraint
+    @Size(min = 1)
     private List<ProductOfCreatePurchaseOrderRequest> products;
 
     private PurchaseOrderStatus status;

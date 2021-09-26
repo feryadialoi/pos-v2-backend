@@ -42,7 +42,6 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
 
     // ** utility
     private final RunningNumberCodeUtil runningNumberCodeUtil;
-    private final LocalDateUtil localDateUtil;
     private final DiscountUtil discountUtil;
     private final TaxUtil taxUtil;
 
@@ -75,9 +74,9 @@ public class CreatePurchaseOrderCommandImpl implements CreatePurchaseOrderComman
         purchaseOrder.setStatus(getPurchaseOrderStatus(createPurchaseOrderRequest.getStatus()));
         purchaseOrder.setPaymentType(createPurchaseOrderRequest.getPaymentType());
 
-        purchaseOrder.setEntryDate(localDateUtil.fromString(createPurchaseOrderRequest.getEntryDate()));
+        purchaseOrder.setEntryDate(createPurchaseOrderRequest.getEntryDate());
         if (createPurchaseOrderRequest.getPaymentType() == PaymentType.CREDIT) {
-            purchaseOrder.setDueDate(localDateUtil.fromString(createPurchaseOrderRequest.getDueDate()));
+            purchaseOrder.setDueDate(createPurchaseOrderRequest.getDueDate());
             purchaseOrder.setTerm(createPurchaseOrderRequest.getTerm());
         }
 
