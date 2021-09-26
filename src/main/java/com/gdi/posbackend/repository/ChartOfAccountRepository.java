@@ -17,16 +17,21 @@ import java.util.Optional;
 public interface ChartOfAccountRepository extends JpaRepository<ChartOfAccount, String>, JpaSpecificationExecutor<ChartOfAccount> {
 
     @Query(
-            value = "SELECT c.level, COUNT(c.level) as levelCount " +
-                    "FROM chart_of_accounts as c GROUP BY level ORDER BY level",
+            value = """
+                    SELECT c.level, COUNT(c.level) as levelCount
+                    FROM chart_of_accounts as c GROUP BY level ORDER BY level
+                    """,
             nativeQuery = true
     )
     List<ChartOfAccountCountByLevel> findAllCoaLevelGroupByLevel();
 
     @Query(
-            value = "SELECT level, levelCount FROM (" +
-                    "SELECT c.level, COUNT(c.level) as levelCount FROM chart_of_accounts as c GROUP BY level ORDER BY level" +
-                    ") as coasGroupByLevel WHERE level = :level",
+            value = """
+                    SELECT level, levelCount FROM (
+                        SELECT c.level, COUNT(c.level) as levelCount
+                        FROM chart_of_accounts as c GROUP BY level
+                    ) as coasGroupByLevel WHERE level = :level
+                    """,
             nativeQuery = true
     )
     ChartOfAccountCountByLevel findOneCoaLevelGroupByLevelByLevel(@Param("level") Integer level);
@@ -36,7 +41,13 @@ public interface ChartOfAccountRepository extends JpaRepository<ChartOfAccount, 
     Optional<ChartOfAccount> findByAccountCode(Integer accountCode);
 
     @Query(
-            value = "SELECT coa FROM ChartOfAccount coa WHERE coa.id = (SELECT cs.settingValue FROM CompanySetting cs WHERE cs.settingName = :settingNameOfCompanySetting)"
+            value = """
+                    SELECT coa FROM ChartOfAccount coa
+                    WHERE coa.id = (
+                        SELECT cs.settingValue FROM CompanySetting cs
+                        WHERE cs.settingName = :settingNameOfCompanySetting
+                    )
+                    """
     )
     Optional<ChartOfAccount> findByCompanySetting(String settingNameOfCompanySetting);
 }
