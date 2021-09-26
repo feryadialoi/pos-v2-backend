@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -32,7 +33,7 @@ public class JournalDetail extends BaseEntity {
     private ChartOfAccount chartOfAccount;
 
     @Column(name = "entry_date")
-    private LocalDateTime entryDate;
+    private LocalDate entryDate;
 
     @Column(name = "debit")
     private BigDecimal debit;

@@ -1,16 +1,19 @@
 package com.gdi.posbackend.model.request;
 
+import com.gdi.posbackend.config.DateConfig;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.SaleOrderStatus;
-import com.gdi.posbackend.validation.RegexValidationRule;
-import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseOrderRequestConstraint;
-import com.gdi.posbackend.validation.constraint.ProductOfCreateSaleOrderRequestConstraint;
+import com.gdi.posbackend.validation.constraint.CustomerExists;
+import com.gdi.posbackend.validation.constraint.SalesmanExists;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -19,21 +22,21 @@ import java.util.List;
  */
 @Data
 public class CreateSaleOrderRequest {
-    @NotNull
+
     @NotBlank
+    @CustomerExists
     private String customerId;
 
-    @NotNull
     @NotBlank
+    @SalesmanExists
     private String salesmanId;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
     @NotNull
-    @NotBlank
-    private String entryDate;
+    private LocalDate entryDate;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
-    private String dueDate;
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    private LocalDate dueDate;
 
     private Integer term;
 
@@ -52,8 +55,9 @@ public class CreateSaleOrderRequest {
 
     private String otherFeeDescription;
 
+    @Valid
     @NotNull
-    @ProductOfCreateSaleOrderRequestConstraint
+    @Size(min = 1)
     private List<ProductOfCreateSaleOrderRequest> products;
 
     private SaleOrderStatus status;

@@ -2,6 +2,7 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.entity.Supplier;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
+import com.gdi.posbackend.exception.SupplierDeleteNotAllowed;
 import com.gdi.posbackend.exception.SupplierNotFoundException;
 import com.gdi.posbackend.mapper.SupplierMapper;
 import com.gdi.posbackend.model.criteria.SupplierCriteria;
@@ -9,6 +10,8 @@ import com.gdi.posbackend.model.request.CreateSupplierRequest;
 import com.gdi.posbackend.model.request.UpdateSupplierRequest;
 import com.gdi.posbackend.model.response.SupplierResponse;
 import com.gdi.posbackend.repository.SupplierRepository;
+import com.gdi.posbackend.service.PurchaseOrderService;
+import com.gdi.posbackend.service.PurchaseService;
 import com.gdi.posbackend.service.RunningNumberService;
 import com.gdi.posbackend.service.SupplierService;
 import com.gdi.posbackend.specification.SupplierSpecification;
@@ -36,6 +39,8 @@ public class SupplierServiceImpl implements SupplierService {
     private final SupplierMapper supplierMapper;
     private final RunningNumberCodeUtil runningNumberCodeUtil;
     private final RunningNumberService runningNumberService;
+    private final PurchaseOrderService purchaseOrderService;
+    private final PurchaseService purchaseService;
 
 
     @Override
@@ -166,6 +171,25 @@ public class SupplierServiceImpl implements SupplierService {
     public Supplier findSupplierByIdOrThrowNotFound(String supplierId) {
         return supplierRepository.findById(supplierId)
                 .orElseThrow(() -> new SupplierNotFoundException("supplier with id " + supplierId + " not found"));
+    }
+
+    @Override
+    public String deleteSupplier(String supplierId) {
+        Supplier supplier = findSupplierByIdOrThrowNotFound(supplierId);
+
+        if (purchaseOrderService.purchaseOrderCountBySupplier(supplier) +
+                purchaseService.puchaseCountBySupplier(supplier) > 0) {
+            throw new SupplierDeleteNotAllowed("supplier delete not allowed");
+        }
+
+        supplierRepository.delete(supplier);
+
+        return supplierId;
+    }
+
+    @Override
+    public SupplierResponse getSupplier(String supplierId) {
+        return supplierMapper.mapSupplierToSupplierResponse(findSupplierByIdOrThrowNotFound(supplierId));
     }
 
 }

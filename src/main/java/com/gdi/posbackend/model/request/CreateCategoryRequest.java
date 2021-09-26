@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class CreateCategoryRequest {
-    @NotNull
     @NotBlank
     private String name;
 }

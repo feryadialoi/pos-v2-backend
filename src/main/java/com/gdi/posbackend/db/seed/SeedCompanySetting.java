@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -53,7 +54,9 @@ public class SeedCompanySetting {
                 "1234567890",
                 "Rudiantara",
                 "Jl. Perniagaan No 88",
-                "0987654321"
+                "0987654321",
+                Collections.emptyList(),
+                Collections.emptyList()
         );
 
         CompanySetting companySetting01 = createCompanySetting(company, "Kode Akun Pembelian",          SettingNameOfCompanySetting.COA_PURCHASE,           "");

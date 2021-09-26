@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.UnitCriteria;
 import com.gdi.posbackend.model.request.CreateUnitRequest;
 import com.gdi.posbackend.model.request.UpdateUnitRequest;

@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,18 +54,20 @@ public class SaleOrder extends BaseEntity {
     private BigDecimal discount;
 
     @Column(name = "entry_date")
-    private LocalDateTime entryDate;
+    private LocalDate entryDate;
 
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     @Column(name = "term")
     private Integer term;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_type", columnDefinition = "enum('CASH', 'CREDIT')")
     private PaymentType paymentType;
 
-    @Column(name = "status", columnDefinition = "enum('DRAFT','SENT', 'DECLINED', 'ACCEPTED')")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "enum('DRAFT','SENT', 'DECLINED', 'ACCEPTED', 'VOID')")
     private SaleOrderStatus status;
 
     @Column(name = "total")

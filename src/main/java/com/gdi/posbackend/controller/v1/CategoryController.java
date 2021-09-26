@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.CategoryCriteria;
 import com.gdi.posbackend.model.request.CreateCategoryRequest;
 import com.gdi.posbackend.model.request.UpdateCategoryRequest;
@@ -32,7 +32,7 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<CategoryResponse>> getCategory(@PathVariable("categoryId") String categoryId) {
+    public ResponseEntity<ApiResponse<CategoryResponse>> getCategory(@PathVariable(name = "categoryId") String categoryId) {
         return response("get category success", categoryService.getCategory(categoryId));
     }
 
@@ -42,12 +42,12 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(@PathVariable("categoryId") String categoryId, @Valid @RequestBody UpdateCategoryRequest updateCategoryRequest) {
+    public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(@PathVariable(name = "categoryId") String categoryId, @Valid @RequestBody UpdateCategoryRequest updateCategoryRequest) {
         return response("update category success", categoryService.updateCategory(categoryId, updateCategoryRequest));
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<ApiResponse<String>> deleteCategory(@PathVariable("categoryId") String categoryId) {
+    public ResponseEntity<ApiResponse<String>> deleteCategory(@PathVariable(name = "categoryId") String categoryId) {
         return response("delete category success", categoryService.deleteCategory(categoryId));
     }
 

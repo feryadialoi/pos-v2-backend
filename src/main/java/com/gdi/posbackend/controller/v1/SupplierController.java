@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.SupplierCriteria;
 import com.gdi.posbackend.model.request.CreateSupplierRequest;
 import com.gdi.posbackend.model.request.UpdateSupplierRequest;
@@ -37,6 +37,11 @@ public class SupplierController extends BaseController {
         return response("get suppliers success", supplierService.getSuppliers(supplierCriteria, pageable));
     }
 
+    @GetMapping("/{supplierId}")
+    public ResponseEntity<ApiResponse<SupplierResponse>> getSupplier(@PathVariable(name = "supplierId") String supplierId) {
+        return response("get supplier success", supplierService.getSupplier(supplierId));
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<SupplierResponse>> createSupplier(@Valid @RequestBody CreateSupplierRequest createSupplierRequest) {
         return response("create supplier success", supplierService.createSupplier(createSupplierRequest));
@@ -47,4 +52,8 @@ public class SupplierController extends BaseController {
         return response("update supplier success", supplierService.updateSupplier(supplierId, updateSupplierRequest));
     }
 
+    @DeleteMapping("/{supplierId}")
+    public ResponseEntity<ApiResponse<String>> deleteSupplier(@PathVariable(name = "supplierId") String supplierId) {
+        return response("delete supplier success", supplierService.deleteSupplier(supplierId));
+    }
 }

@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 @Where(clause = "deleted_date is null")
 public class SaleDetail extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "sale_id", referencedColumnName = "id")
     private Sale sale;
 
@@ -50,12 +50,14 @@ public class SaleDetail extends BaseEntity {
     @Column(name = "tax")
     private BigDecimal tax;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tax_format", columnDefinition = "enum('PERCENT','AMOUNT')")
     private TaxFormat taxFormat;
 
     @Column(name = "discount")
     private BigDecimal discount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "discount_format", columnDefinition = "enum('PERCENT','AMOUNT')")
     private DiscountFormat discountFormat;
 

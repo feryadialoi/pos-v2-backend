@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.WarehouseCriteria;
 import com.gdi.posbackend.model.request.CreateWarehouseRequest;
 import com.gdi.posbackend.model.request.UpdateWarehouseRequest;
@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

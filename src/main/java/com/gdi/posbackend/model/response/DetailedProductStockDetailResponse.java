@@ -6,18 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Feryadialoi
- * @date 9/7/2021 10:08 AM
+ * @date 9/17/2021 2:25 PM
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductStockOfWarehouseWithProductStocksResponse {
+public class DetailedProductStockDetailResponse {
     private String id;
-    private SimplifiedProductResponse product;
-    private BigDecimal stock;
-    private UnitResponse unit;
+    private BigDecimal quantity;
+    private String batch;
+    private List<ProductStockMutationResponse> productStockMutations;
+    private ProductStockResponse productStock;
+
 }

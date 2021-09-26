@@ -6,9 +6,8 @@ import com.gdi.posbackend.mapper.PurchaseMapper;
 import com.gdi.posbackend.mapper.PurchaseOrderMapper;
 import com.gdi.posbackend.mapper.SupplierMapper;
 import com.gdi.posbackend.model.response.DetailedPurchaseResponse;
-import com.gdi.posbackend.model.response.PurchaseOrderResponse;
 import com.gdi.posbackend.model.response.PurchaseResponse;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -19,12 +18,16 @@ import java.util.stream.Collectors;
  * @date 8/25/2021 4:10 AM
  */
 @Component
-@AllArgsConstructor
 public class PurchaseMapperImpl implements PurchaseMapper {
 
-    private final PurchaseOrderMapper purchaseOrderMapper;
-    private final PurchaseDetailMapper purchaseDetailMapper;
-    private final SupplierMapper supplierMapper;
+    @Autowired
+    private PurchaseOrderMapper purchaseOrderMapper;
+
+    @Autowired
+    private PurchaseDetailMapper purchaseDetailMapper;
+
+    @Autowired
+    private SupplierMapper supplierMapper;
 
     @Override
     public PurchaseResponse mapPurchaseToPurchaseResponse(Purchase purchase) {

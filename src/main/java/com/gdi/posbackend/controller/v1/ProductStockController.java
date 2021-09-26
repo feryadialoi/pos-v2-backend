@@ -1,9 +1,10 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.ProductStockCriteria;
 import com.gdi.posbackend.model.request.UpdateProductStockRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
+import com.gdi.posbackend.model.response.DetailedProductStockResponse;
 import com.gdi.posbackend.model.response.ProductStockResponse;
 import com.gdi.posbackend.service.ProductStockService;
 import lombok.AllArgsConstructor;
@@ -25,40 +26,19 @@ public class ProductStockController extends BaseController {
 
     private final ProductStockService productStockService;
 
-    /**
-     * Persediaan barang / stok barang
-     * menampilkan semua stok barang
-     * filter berdasarkan gudang / warehouse (default semua gudang)
-     * pencarian berdasarkan nama / kode / nama kategori (atau nama saja?)
-     * filter berdasarkan status stok -> stok kritis x stok tidak kritis
-     */
-
-
-    /**
-     * only listing:
-     * name, code, category name, stock(all), price, stock(stok minimum)
-     */
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProductStockResponse>>> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
         return response("get product stocks success", productStockService.getProductStocks(productStockCriteria, pageable));
     }
 
-    /**
-     * listing product stock with detailed stock
-     * name, code, category name, stock(all), price
-     * stock/quantity per batch
-     * product unit
-     */
     @GetMapping("/{productStockId}")
-    public ResponseEntity<ApiResponse<Object>> getProductStock(@PathVariable("productStockId") String productStockId) {
+    public ResponseEntity<ApiResponse<DetailedProductStockResponse>> getProductStock(@PathVariable(name = "productStockId") String productStockId) {
         return response("get product stock success", productStockService.getProductStock(productStockId));
     }
 
     @PutMapping("/{productStockId}")
-    public ResponseEntity<ApiResponse<Object>> updateProductStock(@PathVariable("productStockId") String productStockId, @Valid @RequestBody UpdateProductStockRequest updateProductStockRequest) {
+    public ResponseEntity<ApiResponse<Object>> updateProductStock(@PathVariable(name = "productStockId") String productStockId, @Valid @RequestBody UpdateProductStockRequest updateProductStockRequest) {
         return response("update product stock success", productStockService.updateProductStock(productStockId, updateProductStockRequest));
     }
-
-    // ========================== CRUD Action =============================
 
 }

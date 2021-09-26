@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.BrandCriteria;
 import com.gdi.posbackend.model.request.CreateBrandRequest;
 import com.gdi.posbackend.model.request.UpdateBrandRequest;
@@ -41,8 +41,7 @@ public class BrandController extends BaseController {
     }
 
     @PutMapping("/{brandId}")
-    public ResponseEntity<ApiResponse<BrandResponse>> updateBrand(@PathVariable(name = "brandId") String brandId,
-                                                                  @Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
+    public ResponseEntity<ApiResponse<BrandResponse>> updateBrand(@PathVariable(name = "brandId") String brandId, @Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return response("update brand success", brandService.updateBrand(brandId, updateBrandRequest));
     }
 

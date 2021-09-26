@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class Journal extends BaseEntity {
     private String name;
 
     @Column(name = "entry_date")
-    private LocalDateTime entryDate;
+    private LocalDate entryDate;
 
     @Column(name = "debit")
     private BigDecimal debit;
@@ -43,5 +44,6 @@ public class Journal extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "journal", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ToString.Exclude
     private List<JournalDetail> journalDetails;
 }

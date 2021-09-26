@@ -9,5 +9,5 @@ import java.util.Locale;
  * @date 7/28/2021 11:09 PM
  */
 public enum EmployeeStatus {
-    ACTIVE, INACTIVE
+    PERMANENT, CONTRACT, INTERN
 }

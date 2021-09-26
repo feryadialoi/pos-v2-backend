@@ -18,8 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class DetailedProductStockResponse {
     private String id;
-    private ProductResponse product;
+    private SimplifiedProductResponse product;
     private UnitResponse unit;
     private BigDecimal stock;
-    private List<ProductStockDetailResponse> productStockDetails;
+    private List<SimplifiedProductStockDetailResponse> productStockDetails;
 }

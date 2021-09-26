@@ -1,5 +1,6 @@
 package com.gdi.posbackend.service;
 
+import com.gdi.posbackend.entity.Supplier;
 import com.gdi.posbackend.model.criteria.PurchaseCriteria;
 import com.gdi.posbackend.model.request.CreatePurchaseRequest;
 import com.gdi.posbackend.model.response.DetailedPurchaseResponse;
@@ -18,4 +19,6 @@ public interface PurchaseService {
     DetailedPurchaseResponse createPurchase(CreatePurchaseRequest createPurchaseRequest);
 
     DetailedPurchaseResponse getPurchase(String purchaseId);
+
+    Long puchaseCountBySupplier(Supplier supplier);
 }

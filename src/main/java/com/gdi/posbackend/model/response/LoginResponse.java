@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class LoginResponse {
     private String userId;
     private UserResponse user;
+    private CompanyResponse company;
     private String accessToken;
     private String refreshToken;
 }

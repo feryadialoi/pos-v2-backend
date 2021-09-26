@@ -123,7 +123,6 @@ public class SeedCategoryBrandProduct {
         product.setUnitConversions(getUnitConversions(productDummyData.getType(), product, dus, bungkus, cup));
         product.setStock(BigDecimal.ZERO);
         product.setMinimumStock(BigDecimal.ZERO);
-        product.setIdempotentKey(UUID.randomUUID().toString());
 
         productRepository.save(product);
     }

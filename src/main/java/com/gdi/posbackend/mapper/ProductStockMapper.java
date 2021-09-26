@@ -5,6 +5,7 @@ import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.model.response.DetailedProductStockResponse;
 import com.gdi.posbackend.model.response.ProductOfProductStockResponse;
 import com.gdi.posbackend.model.response.ProductStockResponse;
+import com.gdi.posbackend.model.response.SimplifiedProductStockResponse;
 
 /**
  * @author Feryadialoi
@@ -14,4 +15,6 @@ public interface ProductStockMapper {
     ProductStockResponse mapProductStockToProductStockResponse(ProductStock productStock);
 
     DetailedProductStockResponse mapProductStockToDetailedProductStockResponse(ProductStock productStock);
+
+    SimplifiedProductStockResponse mapProductStockToSimplifiedProductStockResponse(ProductStock productStock);
 }

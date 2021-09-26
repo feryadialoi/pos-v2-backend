@@ -6,8 +6,7 @@ import com.gdi.posbackend.mapper.CategoryMapper;
 import com.gdi.posbackend.mapper.ProductMapper;
 import com.gdi.posbackend.mapper.UnitMapper;
 import com.gdi.posbackend.model.response.*;
-import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -17,12 +16,14 @@ import java.util.stream.Collectors;
  * @date 8/5/2021 10:46 AM
  */
 @Component
-@AllArgsConstructor
 public class ProductMapperImpl implements ProductMapper {
 
-    private final CategoryMapper categoryMapper;
-    private final UnitMapper unitMapper;
-    private final BrandMapper brandMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
+    @Autowired
+    private UnitMapper unitMapper;
+    @Autowired
+    private BrandMapper brandMapper;
 
     @Override
     public ProductResponse mapProductToProductResponse(Product product) {
@@ -52,6 +53,7 @@ public class ProductMapperImpl implements ProductMapper {
     @Override
     public DetailedProductResponse mapProductToDetailedProductResponse(Product product) {
         if (product == null) return null;
+        System.out.println(product);
         return DetailedProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -60,6 +62,7 @@ public class ProductMapperImpl implements ProductMapper {
 
     @Override
     public SimplifiedProductResponse mapProductToSimplifiedProductResponse(Product product) {
+        if (product == null) return null;
         return SimplifiedProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())

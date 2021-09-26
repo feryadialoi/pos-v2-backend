@@ -8,5 +8,5 @@ import lombok.Data;
  */
 @Data
 public class JournalCriteria {
-    public String accountCode;
+    private String accountCode;
 }

@@ -1,6 +1,7 @@
 package com.gdi.posbackend.service;
 
 import com.gdi.posbackend.entity.PurchaseOrder;
+import com.gdi.posbackend.entity.Supplier;
 import com.gdi.posbackend.model.criteria.PurchaseOrderCriteria;
 import com.gdi.posbackend.model.request.CreatePurchaseOrderRequest;
 import com.gdi.posbackend.model.request.UpdatePurchaseOrderStatusRequest;
@@ -24,4 +25,6 @@ public interface PurchaseOrderService {
     void completePurchaseOrderStatus(String purchaseOrderId);
 
     UpdatePurchaseOrderStatusResponse updatePurchaseOrderStatus(String purchaseOrderId, UpdatePurchaseOrderStatusRequest updatePurchaseOrderStatusRequest);
+
+    Long purchaseOrderCountBySupplier(Supplier supplier);
 }

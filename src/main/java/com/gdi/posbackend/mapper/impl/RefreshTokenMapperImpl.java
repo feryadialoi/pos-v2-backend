@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RefreshTokenMapperImpl implements RefreshTokenMapper {
+
     @Override
     public RefreshTokenResponse mapTokenToRefreshTokenResponse(String token) {
         return RefreshTokenResponse.builder()
                 .accessToken(token)
                 .build();
     }
+
 }

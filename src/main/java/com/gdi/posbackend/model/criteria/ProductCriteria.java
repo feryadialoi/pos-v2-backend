@@ -7,19 +7,10 @@ import lombok.Value;
  * @author Feryadialoi
  * @date 8/5/2021 5:04 AM
  */
-@Value
+@Data
 public class ProductCriteria {
-    String name;
-    String code;
-    String categoryName;
-    String brandName;
-//    private Long categoryId;
-//    private ProductDefaultUnit defaultUnit;
-//    private Long unitLargeId;
-//    private Long unitMediumId;
-//    private Long unitSmallId;
-//    private BigDecimal unitLargePrice;
-//    private BigDecimal unitMediumPrice;
-//    private BigDecimal unitSmallPrice;
-//    private BigDecimal minimumStock;
+    private String name;
+    private String code;
+    private String categoryName;
+    private String brandName;
 }

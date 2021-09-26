@@ -16,5 +16,5 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 public class WarehouseWithProductStocksResponse {
     private WarehouseResponse warehouse;
-    private Page<ProductStockOfWarehouseWithProductStocksResponse> pageOfProductStock;
+    private Page<SimplifiedProductStockResponse> pageOfProductStock;
 }

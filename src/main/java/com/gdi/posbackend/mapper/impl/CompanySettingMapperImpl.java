@@ -6,7 +6,6 @@ import com.gdi.posbackend.mapper.CompanySettingMapper;
 import com.gdi.posbackend.model.response.ChartOfAccountOfCompanySettingWithChartOfAccountResponse;
 import com.gdi.posbackend.model.response.CompanySettingResponse;
 import com.gdi.posbackend.model.response.CompanySettingWithChartOfAccountResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
  * @date 8/25/2021 10:08 AM
  */
 @Component
-@AllArgsConstructor
 public class CompanySettingMapperImpl implements CompanySettingMapper {
 
 

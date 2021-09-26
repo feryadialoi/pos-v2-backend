@@ -1,10 +1,11 @@
 package com.gdi.posbackend.command.impl.saleorder;
 
 import com.gdi.posbackend.command.saleorder.CreateSaleOrderCommand;
+import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.SaleOrder;
 import com.gdi.posbackend.entity.SaleOrderDetail;
-import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
+import com.gdi.posbackend.exception.ProductStockInsufficientException;
 import com.gdi.posbackend.mapper.SaleOrderMapper;
 import com.gdi.posbackend.model.SaleOrderCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreateSaleOrderCommandParam;
@@ -14,22 +15,22 @@ import com.gdi.posbackend.model.response.DetailedSaleOrderResponse;
 import com.gdi.posbackend.repository.SaleOrderRepository;
 import com.gdi.posbackend.service.*;
 import com.gdi.posbackend.util.DiscountUtil;
-import com.gdi.posbackend.util.LocalDateUtil;
 import com.gdi.posbackend.util.RunningNumberCodeUtil;
 import com.gdi.posbackend.util.TaxUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Feryadialoi
  * @date 9/2/2021 1:35 PM
  */
+@Slf4j
 @Component
 @Transactional
 @AllArgsConstructor
@@ -37,16 +38,12 @@ public class CreateSaleOrderCommandImpl implements CreateSaleOrderCommand {
 
     // ** repository
     private final SaleOrderRepository saleOrderRepository;
-
     // ** mapper
     private final SaleOrderMapper saleOrderMapper;
-
     // ** util
     private final RunningNumberCodeUtil runningNumberCodeUtil;
-    private final LocalDateUtil localDateUtil;
     private final DiscountUtil discountUtil;
     private final TaxUtil taxUtil;
-
     // ** service
     private final RunningNumberService runningNumberService;
     private final CustomerService customerService;
@@ -55,7 +52,7 @@ public class CreateSaleOrderCommandImpl implements CreateSaleOrderCommand {
     private final UnitService unitService;
     private final ProductService productService;
     private final WarehouseService warehouseService;
-
+    private final ProductStockService productStockService;
 
     @Override
     public DetailedSaleOrderResponse execute(CreateSaleOrderCommandParam createSaleOrderCommandParam) {
@@ -73,8 +70,8 @@ public class CreateSaleOrderCommandImpl implements CreateSaleOrderCommand {
         saleOrder.setSalesman(salesmanService.findSalesmanByIdOrThrowNotFound(createSaleOrderRequest.getSalesmanId()));
         saleOrder.setStatus(createSaleOrderRequest.getStatus());
         saleOrder.setPaymentType(createSaleOrderRequest.getPaymentType());
-        saleOrder.setEntryDate(localDateUtil.fromString(createSaleOrderRequest.getEntryDate()));
-        saleOrder.setDueDate(Optional.ofNullable(createSaleOrderRequest.getDueDate()).map(localDateUtil::fromString).orElse(null));
+        saleOrder.setEntryDate(createSaleOrderRequest.getEntryDate());
+        saleOrder.setDueDate(createSaleOrderRequest.getDueDate());
         saleOrder.setTerm(createSaleOrderRequest.getTerm());
 
         SaleOrderCalculatedResult saleOrderCalculatedResult = calculateSaleOrder(createSaleOrderRequest, saleOrder);
@@ -104,6 +101,16 @@ public class CreateSaleOrderCommandImpl implements CreateSaleOrderCommand {
         BigDecimal total = BigDecimal.ZERO;
 
         for (ProductOfCreateSaleOrderRequest product : createSaleOrderRequest.getProducts()) {
+            ProductStock productStock = productStockService.getProductStockByProductIdAndWarehouseId(product.getProductId(), product.getWarehouseId());
+
+
+            log.info("Product Stock Available           = {}", productStock.getStock());
+            log.info("Product Quantity of Sale Order    = {}", product.getQuantity());
+
+            if (productStock.getStock().compareTo(product.getQuantity()) < 0) {
+                throw new ProductStockInsufficientException("product stock of product with id " + product.getProductId() + " is insufficient to create sale order");
+            }
+
             SaleOrderDetail saleOrderDetail = new SaleOrderDetail();
             saleOrderDetail.setSaleOrder(saleOrder);
             saleOrderDetail.setProduct(productService.findProductByIdOrThrowNotFound(product.getProductId()));

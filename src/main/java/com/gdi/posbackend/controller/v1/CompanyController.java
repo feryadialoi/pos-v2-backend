@@ -1,11 +1,13 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.CompanyCriteria;
 import com.gdi.posbackend.model.request.CreateCompanyRequest;
 import com.gdi.posbackend.model.request.UpdateCompanyRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
 import com.gdi.posbackend.model.response.CompanyResponse;
+import com.gdi.posbackend.model.response.CompanyWithEmployeesResponse;
+import com.gdi.posbackend.model.response.CompanyWithUsersResponse;
 import com.gdi.posbackend.service.CompanyService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,6 +51,18 @@ public class CompanyController extends BaseController {
     @PutMapping("/{companyId}")
     public ResponseEntity<ApiResponse<Object>> updateCompany(@PathVariable(name = "companyId") String companyId, @Valid @RequestBody UpdateCompanyRequest updateCompanyRequest) {
         return response("update company success", null);
+    }
+
+    // TODO update company restrict to related company only
+    @GetMapping("/{companyId}/users")
+    public ResponseEntity<ApiResponse<CompanyWithUsersResponse>> getCompanyWithUsers(@PathVariable(name = "companyId") String companyId) {
+        return response("get company with users success", companyService.getCompanyWithUsers(companyId));
+    }
+
+    // TODO update company restrict to related company only
+    @GetMapping("/{companyId}/employees")
+    public ResponseEntity<ApiResponse<CompanyWithEmployeesResponse>> getCompanyWithEmployees(@PathVariable(name = "companyId") String companyId) {
+        return response("get company with employees success", companyService.getCompanyWithEmployees(companyId));
     }
 
 }

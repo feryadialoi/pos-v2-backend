@@ -6,6 +6,8 @@ import com.gdi.posbackend.mapper.CompanyMapper;
 import com.gdi.posbackend.model.criteria.CompanyCriteria;
 import com.gdi.posbackend.model.request.CreateCompanyRequest;
 import com.gdi.posbackend.model.response.CompanyResponse;
+import com.gdi.posbackend.model.response.CompanyWithEmployeesResponse;
+import com.gdi.posbackend.model.response.CompanyWithUsersResponse;
 import com.gdi.posbackend.repository.CompanyRepository;
 import com.gdi.posbackend.service.CompanyService;
 import com.gdi.posbackend.specification.CompanySpecification;
@@ -76,5 +78,15 @@ public class CompanyServiceImpl implements CompanyService {
     public Company findCompanyByIdOrThrowNotFound(String companyId) {
         return companyRepository.findById(companyId)
                 .orElseThrow(() -> new CompanyNotFoundException("company with id " + companyId + " not found"));
+    }
+
+    @Override
+    public CompanyWithUsersResponse getCompanyWithUsers(String companyId) {
+        return companyMapper.mapCompanyToCompanyWithUsersResponse(findCompanyByIdOrThrowNotFound(companyId));
+    }
+
+    @Override
+    public CompanyWithEmployeesResponse getCompanyWithEmployees(String companyId) {
+        return companyMapper.mapCompanyToCompanyWithEmployeesResponse(findCompanyByIdOrThrowNotFound(companyId));
     }
 }

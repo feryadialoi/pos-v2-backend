@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class LoginRequest {
-    @NotNull
+
     @NotBlank
     private String username;
 
-    @NotNull
     @NotBlank
     private String password;
+
 }

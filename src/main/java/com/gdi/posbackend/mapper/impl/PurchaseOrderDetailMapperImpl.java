@@ -6,7 +6,7 @@ import com.gdi.posbackend.mapper.PurchaseOrderDetailMapper;
 import com.gdi.posbackend.mapper.UnitMapper;
 import com.gdi.posbackend.mapper.WarehouseMapper;
 import com.gdi.posbackend.model.response.PurchaseOrderDetailResponse;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,12 +14,17 @@ import org.springframework.stereotype.Component;
  * @date 8/23/2021 2:28 PM
  */
 @Component
-@AllArgsConstructor
 public class PurchaseOrderDetailMapperImpl implements PurchaseOrderDetailMapper {
 
-    private final ProductMapper productMapper;
-    private final UnitMapper unitMapper;
-    private final WarehouseMapper warehouseMapper;
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private UnitMapper unitMapper;
+
+    @Autowired
+    private WarehouseMapper warehouseMapper;
+
 
     @Override
     public PurchaseOrderDetailResponse mapPurchaseOrderDetailToPurchaseOrderDetailResponse(PurchaseOrderDetail purchaseOrderDetail) {

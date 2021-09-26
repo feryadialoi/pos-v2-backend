@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.exception.AdjustmentJournalNotFoundException;
 import com.gdi.posbackend.model.request.CreateAdjustmentJournalRequest;
 import com.gdi.posbackend.service.AdjustmentJournalService;

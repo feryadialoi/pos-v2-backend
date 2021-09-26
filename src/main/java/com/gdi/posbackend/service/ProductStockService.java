@@ -27,5 +27,7 @@ public interface ProductStockService {
 
     Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable);
 
-    ProductStock getProductStockByWarehouseIdAndId(String warehouseId, String productStockId);
+    ProductStock getProductStockByIdAndWarehouseId(String productStockId, String warehouseId);
+
+    ProductStock getProductStockByProductIdAndWarehouseId(String productId, String warehouseId);
 }

@@ -1,14 +1,14 @@
 package com.gdi.posbackend.mapper.impl;
 
-import com.gdi.posbackend.entity.Product;
 import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
-import com.gdi.posbackend.mapper.CategoryMapper;
-import com.gdi.posbackend.mapper.ProductMapper;
-import com.gdi.posbackend.mapper.UnitMapper;
+import com.gdi.posbackend.mapper.ProductStockMapper;
 import com.gdi.posbackend.mapper.WarehouseMapper;
-import com.gdi.posbackend.model.response.*;
-import lombok.AllArgsConstructor;
+import com.gdi.posbackend.model.response.DetailedWarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseResponse;
+import com.gdi.posbackend.model.response.WarehouseWithDetailedProductStockResponse;
+import com.gdi.posbackend.model.response.WarehouseWithProductStocksResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -17,15 +17,14 @@ import org.springframework.stereotype.Component;
  * @date 8/5/2021 3:42 AM
  */
 @Component
-@AllArgsConstructor
 public class WarehouseMapperImpl implements WarehouseMapper {
 
-
-    private final UnitMapper unitMapper;
-    private final ProductMapper productMapper;
+    @Autowired
+    private ProductStockMapper productStockMapper;
 
     @Override
     public DetailedWarehouseResponse mapWarehouseToDetailedWarehouseResponse(Warehouse warehouse) {
+        if (warehouse == null) return null;
         return DetailedWarehouseResponse.builder()
                 .id(warehouse.getId())
                 .name(warehouse.getName())
@@ -45,35 +44,20 @@ public class WarehouseMapperImpl implements WarehouseMapper {
 
     @Override
     public WarehouseWithProductStocksResponse mapWarehouseToWarehouseWithProductStocksResponse(Warehouse warehouse, Page<ProductStock> pageOfProductStock) {
+        if (warehouse == null) return null;
         return WarehouseWithProductStocksResponse.builder()
                 .warehouse(mapWarehouseToWarehouseResponse(warehouse))
-                .pageOfProductStock(pageOfProductStock.map(this::mapProductStockToProductStockOfWarehouseWithProductStocksResponse))
+                .pageOfProductStock(pageOfProductStock.map(productStockMapper::mapProductStockToSimplifiedProductStockResponse))
                 .build();
     }
 
     @Override
     public WarehouseWithDetailedProductStockResponse mapWarehouseToWarehouseWithProductStockResponse(Warehouse warehouse, ProductStock productStock) {
+        if (warehouse == null) return null;
         return WarehouseWithDetailedProductStockResponse.builder()
                 .warehouse(mapWarehouseToWarehouseResponse(warehouse))
-                .productStock(mapProductStockToDetailedProductStockOfWarehouseWithDetailedProductStockResponse(productStock))
+                .productStock(productStockMapper.mapProductStockToProductStockResponse(productStock))
                 .build();
     }
 
-    private DetailedProductStockOfWarehouseWithDetailedProductStockResponse mapProductStockToDetailedProductStockOfWarehouseWithDetailedProductStockResponse(ProductStock productStock) {
-        return DetailedProductStockOfWarehouseWithDetailedProductStockResponse.builder()
-                .id(productStock.getId())
-                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
-                .stock(productStock.getStock())
-                .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
-                .build();
-    }
-
-    private ProductStockOfWarehouseWithProductStocksResponse mapProductStockToProductStockOfWarehouseWithProductStocksResponse(ProductStock productStock) {
-        return ProductStockOfWarehouseWithProductStocksResponse.builder()
-                .id(productStock.getId())
-                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
-                .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
-                .stock(productStock.getStock())
-                .build();
-    }
 }

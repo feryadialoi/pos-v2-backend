@@ -48,9 +48,6 @@ public class Product extends BaseEntity {
     @Column(name = "minimum_stock")
     private BigDecimal minimumStock;
 
-    @Column(name = "idempotent_key")
-    private String idempotentKey;
-
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "products_units",

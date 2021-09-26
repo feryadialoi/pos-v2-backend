@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 @Entity
 @Table(name = "permissions")
 @SQLDelete(sql = "UPDATE permissions SET deleted_date = NOW() WHERE id = ?")
@@ -32,11 +31,6 @@ public class Permission extends BaseEntity {
         this.description = description;
     }
 
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
-
     @Column(name = "name")
     private String name;
 
@@ -46,19 +40,11 @@ public class Permission extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH
-    })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "roles_permissions",
-            joinColumns = {
-                    @JoinColumn(name = "permission_id", referencedColumnName = "id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "role_id", referencedColumnName = "id")
-            }
+            joinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     @ToString.Exclude
     private List<Role> roles;

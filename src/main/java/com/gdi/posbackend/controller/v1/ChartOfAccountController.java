@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.ChartOfAccountCriteria;
 import com.gdi.posbackend.model.request.CreateChartOfAccountRequest;
 import com.gdi.posbackend.model.response.ApiResponse;

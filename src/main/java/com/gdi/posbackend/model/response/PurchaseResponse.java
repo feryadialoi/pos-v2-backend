@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -22,8 +23,8 @@ public class PurchaseResponse {
     private String id;
     private PurchaseOrderResponse purchaseOrder;
     private String code;
-    private LocalDateTime entryDate;
-    private LocalDateTime dueDate;
+    private LocalDate entryDate;
+    private LocalDate dueDate;
     private Integer term;
     private SupplierResponse supplier;
     private String reference;

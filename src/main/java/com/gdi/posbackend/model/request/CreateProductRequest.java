@@ -1,12 +1,14 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.validation.constraint.CategoryExistsConstraint;
-import com.gdi.posbackend.validation.constraint.BrandExistsConstraint;
+import com.gdi.posbackend.validation.constraint.CategoryExists;
+import com.gdi.posbackend.validation.constraint.BrandExists;
+import com.gdi.posbackend.validation.constraint.UnitExists;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -15,27 +17,28 @@ import java.util.List;
  */
 @Data
 public class CreateProductRequest {
-    @NotNull
+
     @NotBlank
     private String name;
 
+    @NotBlank
     private String code;
 
-    @NotNull
-    @CategoryExistsConstraint
+    @NotBlank
+    @CategoryExists
     private String categoryId;
 
-    @NotNull
-    @BrandExistsConstraint
+    @NotBlank
+    @BrandExists
     private String brandId;
 
     @NotNull
-    private List<String> unitIds;
+    @Size(min = 1)
+    private List<@UnitExists @NotBlank String> unitIds;
 
+    @Valid
     @NotNull
+    @Size(min = 1)
     private List<ProductUnitConversionRequest> unitConversions;
 
-    @NotNull
-    @NotBlank
-    private String idempotentKey;
 }

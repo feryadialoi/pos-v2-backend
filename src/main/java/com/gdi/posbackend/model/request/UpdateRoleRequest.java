@@ -2,6 +2,7 @@ package com.gdi.posbackend.model.request;
 
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,5 +13,5 @@ import java.util.List;
 public class UpdateRoleRequest {
     private String displayName;
     private String description;
-    private List<PermissionOfRoleRequest> permissions;
+    private List<PermissionOfRoleRequest> permissions = Collections.emptyList();
 }

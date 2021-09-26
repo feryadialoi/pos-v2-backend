@@ -54,23 +54,27 @@ public class ProductStockServiceImpl implements ProductStockService {
     public Page<ProductStockResponse> getProductStocks(ProductStockCriteria productStockCriteria, Pageable pageable) {
         Specification<ProductStock> specification = Specification.where(null);
 
-        String productCode = productStockCriteria.getProductCode();
-        String productName = productStockCriteria.getProductName();
-        String productCategoryName = productStockCriteria.getProductCategoryName();
-        String warehouseId = productStockCriteria.getWarehouseId();
+        if (productStockCriteria.getProductCode() != null)
+            specification = specification.and(productCodeIsLike(productStockCriteria.getProductCode()));
+        if (productStockCriteria.getProductName() != null)
+            specification = specification.and(productNameIsLike(productStockCriteria.getProductName()));
+        if (productStockCriteria.getProductCategoryName() != null)
+            specification = specification.and(productCategoryNameIsLike(productStockCriteria.getProductCategoryName()));
+        if (productStockCriteria.getWarehouseId() != null)
+            specification = specification.and(warehouseIdIs(productStockCriteria.getWarehouseId()));
+        if (productStockCriteria.getStock() != null)
+            specification = specification.and(stockIs(productStockCriteria.getStock()));
+        if (productStockCriteria.getStockGe() != null)
+            specification = specification.and(stockGe(productStockCriteria.getStockGe()));
+        if (productStockCriteria.getStockGt() != null)
+            specification = specification.and(stockGt(productStockCriteria.getStockGt()));
+        if (productStockCriteria.getStockLe() != null)
+            specification = specification.and(stockLe(productStockCriteria.getStockLe()));
+        if (productStockCriteria.getStockLt() != null)
+            specification = specification.and(stockLt(productStockCriteria.getStockLt()));
 
-        if (productCode != null) specification = specification.and(productCodeIsLike(productCode));
+        return productStockRepository.findAll(specification, pageable).map(productStockMapper::mapProductStockToProductStockResponse);
 
-        if (productName != null) specification = specification.and(productNameIsLike(productName));
-
-        if (productCategoryName != null)
-            specification = specification.and(productCategoryNameIsLike(productCategoryName));
-
-        if (warehouseId != null) specification = specification.and(warehouse(warehouseId));
-
-        Page<ProductStock> page = productStockRepository.findAll(specification, pageable);
-
-        return page.map(productStockMapper::mapProductStockToProductStockResponse);
     }
 
     @Override
@@ -95,20 +99,27 @@ public class ProductStockServiceImpl implements ProductStockService {
 
     @Override
     public Page<ProductStock> getProductStocksByWarehouseId(String warehouseId, Pageable pageable) {
-        return productStockRepository.findAll(warehouse(warehouseId), pageable);
+        return productStockRepository.findAll(warehouseIdIs(warehouseId), pageable);
     }
 
     @Override
-    public ProductStock getProductStockByWarehouseIdAndId(String warehouseId, String productStockId) {
-        return productStockRepository.findOne(warehouse(warehouseId).and(idIs(productStockId)))
-                .orElseThrow(() -> new ProductStockNotFoundException("product stock not found with warehouse id "
-                        + warehouseId + " and product stock id " + productStockId));
+    public ProductStock getProductStockByIdAndWarehouseId(String productStockId, String warehouseId) {
+        return productStockRepository
+                .findOne(warehouseIdIs(warehouseId).and(idIs(productStockId)))
+                .orElseThrow(() -> new ProductStockNotFoundException(String.format("product stock not found with warehouse id %s and product stock id %s", warehouseId, productStockId)));
+    }
+
+    @Override
+    public ProductStock getProductStockByProductIdAndWarehouseId(String productId, String warehouseId) {
+        return productStockRepository
+                .findOne(productIdIs(productId).and(warehouseIdIs(warehouseId)))
+                .orElseThrow(() -> new ProductStockNotFoundException(String.format("product stock with product id %s and warehouse id %s not found", productId, warehouseId)));
     }
 
     private ProductStock findProductStockByIdOrThrowNotFound(String productStockId) {
-        return productStockRepository.findById(productStockId)
-                .orElseThrow(() -> new ProductStockNotFoundException("product stock with id "
-                        + productStockId + " not found"));
+        return productStockRepository
+                .findById(productStockId)
+                .orElseThrow(() -> new ProductStockNotFoundException(String.format("product stock with id %s not found", productStockId)));
     }
 
 }

@@ -2,6 +2,7 @@ package com.gdi.posbackend.service.impl;
 
 import com.gdi.posbackend.command.purchase.CreatePurchaseCommand;
 import com.gdi.posbackend.entity.Purchase;
+import com.gdi.posbackend.entity.Supplier;
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.exception.PurchaseNotFoundException;
 import com.gdi.posbackend.mapper.PurchaseMapper;
@@ -20,6 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static com.gdi.posbackend.specification.PurchaseSpecification.*;
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -48,8 +52,8 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         String code = purchaseCriteria.getCode();
         String supplierName = purchaseCriteria.getSupplierName();
-        String startDate = purchaseCriteria.getStartDate();
-        String endDate = purchaseCriteria.getEndDate();
+        LocalDate startDate = purchaseCriteria.getStartDate();
+        LocalDate endDate = purchaseCriteria.getEndDate();
         PurchaseStatus status = purchaseCriteria.getStatus();
 
         log.info(purchaseCriteria.toString());
@@ -75,6 +79,11 @@ public class PurchaseServiceImpl implements PurchaseService {
         return purchaseRepository.findById(purchaseId)
                 .map(purchaseMapper::mapPurchaseToDetailedPurchaseResponse)
                 .orElseThrow(() -> new PurchaseNotFoundException("purchase with id " + purchaseId + " not found"));
+    }
+
+    @Override
+    public Long puchaseCountBySupplier(Supplier supplier) {
+        return purchaseRepository.countBySupplier(supplier);
     }
 
     @Override

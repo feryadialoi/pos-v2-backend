@@ -19,4 +19,5 @@ public class ProductStockDetailResponse {
     private String id;
     private BigDecimal quantity;
     private String batch;
+    private ProductStockResponse productStock;
 }

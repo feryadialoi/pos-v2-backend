@@ -3,7 +3,6 @@ package com.gdi.posbackend.mapper.impl;
 import com.gdi.posbackend.entity.Category;
 import com.gdi.posbackend.mapper.CategoryMapper;
 import com.gdi.posbackend.model.response.CategoryResponse;
-import org.hibernate.validator.constraints.CodePointLength;
 import org.springframework.stereotype.Component;
 
 /**

@@ -24,4 +24,8 @@ public interface SupplierService {
     SupplierResponse updateSupplier(String supplierId, UpdateSupplierRequest updateSupplierRequest);
 
     Supplier findSupplierByIdOrThrowNotFound(String supplierId);
+
+    String deleteSupplier(String supplierId);
+
+    SupplierResponse getSupplier(String supplierId);
 }

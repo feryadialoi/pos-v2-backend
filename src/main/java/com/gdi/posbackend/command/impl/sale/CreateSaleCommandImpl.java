@@ -6,6 +6,9 @@ import com.gdi.posbackend.entity.SaleDetail;
 import com.gdi.posbackend.entity.SaleOrder;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.RunningNumberPrefix;
+import com.gdi.posbackend.entity.enums.SaleOrderStatus;
+import com.gdi.posbackend.exception.CreateSaleNotAllowedException;
+import com.gdi.posbackend.exception.SaleOrderAlreadyCreateToSaleException;
 import com.gdi.posbackend.mapper.SaleMapper;
 import com.gdi.posbackend.model.SaleCalculatedResult;
 import com.gdi.posbackend.model.commandparam.CreateSaleCommandParam;
@@ -62,10 +65,38 @@ public class CreateSaleCommandImpl implements CreateSaleCommand {
     @Override
     public DetailedSaleResponse execute(CreateSaleCommandParam createSaleCommandParam) {
         CreateSaleRequest createSaleRequest = createSaleCommandParam.getCreateSaleRequest();
+
+        checkSaleOrderAlreadyCreateSale(createSaleRequest);
+
+        checkSaleOrderStatusIfPresent(createSaleRequest);
+
         Sale sale = doCreateSale(createSaleRequest);
+
         productStockService.updateProductStockBySale(sale);
-        journalService.postJournalOfSale(sale);
+
+        // journalService.postJournalOfSale(sale);
+
         return saleMapper.mapSaleToDetailedSaleResponse(sale);
+    }
+
+    private void checkSaleOrderAlreadyCreateSale(CreateSaleRequest createSaleRequest) {
+        if (createSaleRequest.getSaleOrderId() != null) {
+            SaleOrder saleOrder = saleOrderService.findSaleOrderByIdOrThrowNotFound(createSaleRequest.getSaleOrderId());
+            if (saleRepository.existsBySaleOrder(saleOrder)) {
+                throw new SaleOrderAlreadyCreateToSaleException("sale order already create to sale");
+            }
+        }
+    }
+
+    private void checkSaleOrderStatusIfPresent(CreateSaleRequest createSaleRequest) {
+        if (createSaleRequest.getSaleOrderId() != null) {
+            SaleOrder saleOrder = saleOrderService.findSaleOrderByIdOrThrowNotFound(createSaleRequest.getSaleOrderId());
+
+            if (saleOrder.getStatus() != SaleOrderStatus.ACCEPTED) {
+                throw new CreateSaleNotAllowedException("not allowed to create sale from sale order with status " + saleOrder.getStatus());
+            }
+
+        }
     }
 
     @SuppressWarnings("Duplicates")
@@ -78,10 +109,10 @@ public class CreateSaleCommandImpl implements CreateSaleCommand {
         sale.setSalesman(salesmanService.findSalesmanByIdOrThrowNotFound(createSaleRequest.getSalesmanId()));
 
         sale.setPaymentType(createSaleRequest.getPaymentType());
-        sale.setEntryDate(localDateUtil.fromString(createSaleRequest.getEntryDate()));
+        sale.setEntryDate(createSaleRequest.getEntryDate());
 
         if (createSaleRequest.getPaymentType() == PaymentType.CREDIT) {
-            sale.setDueDate(localDateUtil.fromString(createSaleRequest.getDueDate()));
+            sale.setDueDate(createSaleRequest.getDueDate());
             sale.setTerm(createSaleRequest.getTerm());
         }
 
@@ -125,6 +156,8 @@ public class CreateSaleCommandImpl implements CreateSaleCommand {
             saleDetail.setQuantity(product.getQuantity());
             saleDetail.setTotal(calculateSaleDetailTotal(product));
 
+            saleDetails.add(saleDetail);
+
             BigDecimal discount = discountUtil.calculateDiscount(product.getPrice(), product.getDiscountFormat(), product.getDiscount());
             BigDecimal priceAfterDiscount = product.getPrice().subtract(discount);
             BigDecimal tax = taxUtil.calculateTax(priceAfterDiscount, product.getTaxFormat(), product.getTax());
@@ -157,4 +190,5 @@ public class CreateSaleCommandImpl implements CreateSaleCommand {
         if (createSaleRequest.getSaleOrderId() == null) return null;
         return saleOrderService.findSaleOrderByIdOrThrowNotFound(createSaleRequest.getSaleOrderId());
     }
+
 }

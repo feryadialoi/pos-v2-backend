@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.request.LoginRequest;
 import com.gdi.posbackend.model.request.RefreshTokenRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
@@ -32,7 +32,7 @@ public class AuthController extends BaseController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return response("refresh token success", authService.refreshToken(refreshTokenRequest));
     }
 

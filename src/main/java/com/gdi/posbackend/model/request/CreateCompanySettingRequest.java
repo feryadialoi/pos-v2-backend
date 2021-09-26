@@ -2,6 +2,7 @@ package com.gdi.posbackend.model.request;
 
 import com.gdi.posbackend.entity.enums.CompanySettingCategory;
 import com.gdi.posbackend.entity.enums.CompanySettingValueType;
+import com.gdi.posbackend.validation.constraint.CompanyExists;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -14,19 +15,16 @@ import javax.validation.constraints.NotNull;
 @Data
 public class CreateCompanySettingRequest {
 
-    @NotNull
     @NotBlank
+    @CompanyExists
     private String companyId;
 
-    @NotNull
     @NotBlank
     private String displayName;
 
-    @NotNull
     @NotBlank
     private String settingName;
 
-    @NotNull
     @NotBlank
     private String settingValue;
 

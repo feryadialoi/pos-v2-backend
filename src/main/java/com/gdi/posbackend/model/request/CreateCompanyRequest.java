@@ -11,39 +11,31 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class CreateCompanyRequest {
-    @NotNull
+
     @NotBlank
     private String name;
 
-    @NotNull
     @NotBlank
     private String address;
 
-    @NotNull
     @NotBlank
     private String phone;
 
-    @NotNull
     @NotBlank
     private String bankName;
 
-    @NotNull
     @NotBlank
     private String bankBranch;
 
-    @NotNull
     @NotBlank
     private String bankAccountNumber;
 
-    @NotNull
     @NotBlank
     private String taxableFirmName;
 
-    @NotNull
     @NotBlank
     private String taxableFirmAddress;
 
-    @NotNull
     @NotBlank
     private String taxIdentificationNumber;
 }

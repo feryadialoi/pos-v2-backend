@@ -7,6 +7,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Feryadialoi
@@ -33,4 +34,9 @@ public class ProductStockDetail extends BaseEntity {
 
     @Column(name = "batch")
     private String batch;
+
+    @OneToMany(mappedBy = "productStockDetail")
+    @ToString.Exclude
+    private List<ProductStockMutation> productStockMutations;
+
 }

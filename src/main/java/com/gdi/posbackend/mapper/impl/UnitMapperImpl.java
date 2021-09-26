@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UnitMapperImpl implements UnitMapper {
+
     @Override
     public UnitResponse mapUnitToUnitResponse(Unit unit) {
         if (unit == null) return null;
@@ -19,4 +20,5 @@ public class UnitMapperImpl implements UnitMapper {
                 .name(unit.getName())
                 .build();
     }
+
 }

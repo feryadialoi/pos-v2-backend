@@ -3,7 +3,6 @@ package com.gdi.posbackend.service.impl;
 import com.gdi.posbackend.command.warehouse.*;
 import com.gdi.posbackend.entity.ProductStock;
 import com.gdi.posbackend.entity.Warehouse;
-import com.gdi.posbackend.exception.WarehouseNotFoundException;
 import com.gdi.posbackend.mapper.WarehouseMapper;
 import com.gdi.posbackend.model.commandparam.warehouse.*;
 import com.gdi.posbackend.model.criteria.WarehouseCriteria;
@@ -96,7 +95,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public WarehouseWithDetailedProductStockResponse getWarehouseWithProductStock(String warehouseId, String productStockId) {
         Warehouse warehouse = findWarehouseByIdOrThrowNotFound(warehouseId);
 
-        ProductStock productStock = productStockService.getProductStockByWarehouseIdAndId(warehouseId, productStockId);
+        ProductStock productStock = productStockService.getProductStockByIdAndWarehouseId(productStockId, warehouseId);
 
         return warehouseMapper.mapWarehouseToWarehouseWithProductStockResponse(warehouse, productStock);
     }

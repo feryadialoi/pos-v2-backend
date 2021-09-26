@@ -2,6 +2,7 @@ package com.gdi.posbackend.model.request;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 public class UpdateCompanyRequestWithChartOfAccountRequest {
 
+    @Valid
     private List<CompanySettingOfCompanySettingWithChartOfAccountRequest> companySettings;
 
 

@@ -1,6 +1,7 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
+import com.gdi.posbackend.entity.enums.Authority;
 import com.gdi.posbackend.model.criteria.SaleCriteria;
 import com.gdi.posbackend.model.request.CreateSaleRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,6 +33,7 @@ public class SaleController extends BaseController {
         return response("get sales success", saleService.getSales(saleCriteria, pageable));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN','CREATE_SALE')")
     @PostMapping
     public ResponseEntity<ApiResponse<DetailedSaleResponse>> createSale(@Valid @RequestBody CreateSaleRequest createSaleRequest) {
         return response("create sale success", saleService.createSale(createSaleRequest));

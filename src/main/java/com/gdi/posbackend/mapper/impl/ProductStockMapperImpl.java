@@ -1,15 +1,11 @@
 package com.gdi.posbackend.mapper.impl;
 
 import com.gdi.posbackend.entity.ProductStock;
-import com.gdi.posbackend.entity.ProductStockDetail;
-import com.gdi.posbackend.mapper.ProductMapper;
-import com.gdi.posbackend.mapper.ProductStockMapper;
-import com.gdi.posbackend.mapper.UnitMapper;
-import com.gdi.posbackend.mapper.WarehouseMapper;
+import com.gdi.posbackend.mapper.*;
 import com.gdi.posbackend.model.response.DetailedProductStockResponse;
-import com.gdi.posbackend.model.response.ProductStockDetailResponse;
 import com.gdi.posbackend.model.response.ProductStockResponse;
-import lombok.AllArgsConstructor;
+import com.gdi.posbackend.model.response.SimplifiedProductStockResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -19,12 +15,19 @@ import java.util.stream.Collectors;
  * @date 9/6/2021 3:12 PM
  */
 @Component
-@AllArgsConstructor
 public class ProductStockMapperImpl implements ProductStockMapper {
 
-    private final WarehouseMapper warehouseMapper;
-    private final UnitMapper unitMapper;
-    private final ProductMapper productMapper;
+    @Autowired
+    private WarehouseMapper warehouseMapper;
+
+    @Autowired
+    private UnitMapper unitMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private ProductStockDetailMapper productStockDetailMapper;
 
     @Override
     public ProductStockResponse mapProductStockToProductStockResponse(ProductStock productStock) {
@@ -41,22 +44,22 @@ public class ProductStockMapperImpl implements ProductStockMapper {
     public DetailedProductStockResponse mapProductStockToDetailedProductStockResponse(ProductStock productStock) {
         return DetailedProductStockResponse.builder()
                 .id(productStock.getId())
-                .product(productMapper.mapProductToProductResponse(productStock.getProduct()))
+                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
                 .stock(productStock.getStock())
                 .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
-                .productStockDetails(
-                        productStock.getProductStockDetails().stream()
-                                .map(this::mapProductStockDetailToProductStockDetailResponse)
-                                .collect(Collectors.toList())
-                )
+                .productStockDetails(productStock.getProductStockDetails().stream()
+                                             .map(productStockDetailMapper::mapProductStockDetailToSimplifiedProductStockDetailResponse)
+                                             .collect(Collectors.toList()))
                 .build();
     }
 
-    private ProductStockDetailResponse mapProductStockDetailToProductStockDetailResponse(ProductStockDetail productStockDetail) {
-        return ProductStockDetailResponse.builder()
-                .id(productStockDetail.getId())
-                .batch(productStockDetail.getBatch())
-                .quantity(productStockDetail.getQuantity())
+    @Override
+    public SimplifiedProductStockResponse mapProductStockToSimplifiedProductStockResponse(ProductStock productStock) {
+        return SimplifiedProductStockResponse.builder()
+                .id(productStock.getId())
+                .product(productMapper.mapProductToSimplifiedProductResponse(productStock.getProduct()))
+                .stock(productStock.getStock())
+                .unit(unitMapper.mapUnitToUnitResponse(productStock.getUnit()))
                 .build();
     }
 

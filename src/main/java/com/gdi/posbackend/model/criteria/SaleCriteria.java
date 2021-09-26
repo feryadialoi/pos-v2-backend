@@ -1,6 +1,12 @@
 package com.gdi.posbackend.model.criteria;
 
+import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.entity.enums.SaleStatus;
 import lombok.Data;
+import lombok.Value;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 /**
  * @author Feryadialoi
@@ -8,4 +14,14 @@ import lombok.Data;
  */
 @Data
 public class SaleCriteria {
+    private String code;
+    private String salesmanName;
+    private String customerName;
+    private SaleStatus status;
+
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    private LocalDate startDate;
+
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    private LocalDate endDate;
 }

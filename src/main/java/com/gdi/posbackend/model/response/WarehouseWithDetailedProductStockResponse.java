@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WarehouseWithDetailedProductStockResponse {
     private WarehouseResponse warehouse;
-    private DetailedProductStockOfWarehouseWithDetailedProductStockResponse productStock;
+    private ProductStockResponse productStock;
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SupplierMapperImpl implements SupplierMapper {
+
     @Override
     public SupplierResponse mapSupplierToSupplierResponse(Supplier supplier) {
         if (supplier == null) return null;
@@ -30,4 +31,5 @@ public class SupplierMapperImpl implements SupplierMapper {
                 .taxIdentificationNumber(supplier.getTaxIdentificationNumber())
                 .build();
     }
+
 }

@@ -93,4 +93,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return serviceExecutor.execute(UpdatePurchaseOrderStatusCommand.class, new UpdatePurchaseOrderStatusCommandParam(purchaseOrderId, updatePurchaseOrderStatusRequest));
     }
 
+    @Override
+    public Long purchaseOrderCountBySupplier(Supplier supplier) {
+        return purchaseOrderRepository.countBySupplier(supplier);
+    }
+
 }

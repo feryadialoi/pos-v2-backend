@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 @Entity
 @Table(name = "roles")
 @SQLDelete(sql = "UPDATE roles SET deleted_date = NOW() WHERE id = ?")
@@ -30,18 +29,6 @@ public class Role extends BaseEntity {
         this(name, displayName, description, null);
     }
 
-    public Role(String name, String displayName, String description, List<Permission> permissions) {
-        this.name = name;
-        this.displayName = displayName;
-        this.description = description;
-        this.permissions = permissions;
-    }
-
-    @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    private String id;
-
     @Column(name = "name")
     private String name;
 
@@ -51,22 +38,11 @@ public class Role extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE,
-                    CascadeType.REFRESH
-            },
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_permissions",
-            joinColumns = {
-                    @JoinColumn(name = "role_id", referencedColumnName = "id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "permission_id", referencedColumnName = "id")
-            }
+            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")}
     )
     private List<Permission> permissions;
 

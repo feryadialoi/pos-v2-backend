@@ -1,6 +1,6 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.PurchaseCriteria;
 import com.gdi.posbackend.model.request.CreatePurchaseRequest;
 import com.gdi.posbackend.model.response.ApiResponse;

@@ -1,8 +1,9 @@
 package com.gdi.posbackend.controller.v1;
 
-import com.gdi.posbackend.controller.BaseController;
+import com.gdi.posbackend.controller.core.BaseController;
 import com.gdi.posbackend.model.criteria.SaleOrderCriteria;
 import com.gdi.posbackend.model.request.CreateSaleOrderRequest;
+import com.gdi.posbackend.model.request.UpdateSaleOrderStatusRequest;
 import com.gdi.posbackend.model.response.ApiResponse;
 import com.gdi.posbackend.model.response.DetailedSaleOrderResponse;
 import com.gdi.posbackend.model.response.SaleOrderResponse;
@@ -39,6 +40,11 @@ public class SaleOrderController extends BaseController {
     @PostMapping
     public ResponseEntity<ApiResponse<DetailedSaleOrderResponse>> createSaleOrder(@Valid @RequestBody CreateSaleOrderRequest createSaleOrderRequest) {
         return response("create sale order success", saleOrderService.createSaleOrder(createSaleOrderRequest));
+    }
+
+    @PutMapping("/{saleOrderId}/status")
+    public Object updateSaleOrderStatus(@PathVariable(name = "saleOrderId") String saleOrderId, @Valid @RequestBody UpdateSaleOrderStatusRequest updateSaleOrderStatusRequest) {
+        return response("update sale order status success", saleOrderService.updateSaleOrderStatus(saleOrderId, updateSaleOrderStatusRequest));
     }
 
 }

@@ -1,15 +1,23 @@
 package com.gdi.posbackend.model.request;
 
+import com.gdi.posbackend.config.DateConfig;
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.PaymentType;
-import com.gdi.posbackend.validation.RegexValidationRule;
-import com.gdi.posbackend.validation.constraint.ProductOfCreatePurchaseRequestConstraint;
+import com.gdi.posbackend.validation.constraint.PurchaseOrderExistsIfPresent;
+import com.gdi.posbackend.validation.constraint.PurchaseOrderPresentUnused;
+import com.gdi.posbackend.validation.constraint.SupplierExists;
+import com.gdi.posbackend.validation.groups.FirstOrder;
+import com.gdi.posbackend.validation.groups.SecondOrder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.GroupSequence;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,23 +25,24 @@ import java.util.List;
  * @date 8/20/2021 1:43 AM
  */
 @Data
+@GroupSequence({FirstOrder.class, SecondOrder.class})
 public class CreatePurchaseRequest {
 
-    @NotNull
-    @NotBlank
-    private String supplierId;
-
+    @PurchaseOrderExistsIfPresent(groups = {FirstOrder.class})
+    @PurchaseOrderPresentUnused(groups = {SecondOrder.class})
     private String purchaseOrderId;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
-    @NotNull
     @NotBlank
-    private String entryDate;
+    @SupplierExists
+    private String supplierId;
 
-    @Pattern(regexp = RegexValidationRule.dateStringFormat, message = RegexValidationRule.dateStringFormatMessage)
     @NotNull
-    @NotBlank
-    private String dueDate;
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    private LocalDate entryDate;
+
+    @NotNull
+    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    private LocalDate dueDate;
 
     private Integer term;
 
@@ -52,8 +61,9 @@ public class CreatePurchaseRequest {
 
     private String otherFeeDescription;
 
+    @Valid
     @NotNull
-    @ProductOfCreatePurchaseRequestConstraint
+    @Size(min = 1)
     private List<ProductOfCreatePurchaseRequest> products;
 
     private PurchaseStatus status;

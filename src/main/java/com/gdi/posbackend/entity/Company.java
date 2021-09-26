@@ -1,12 +1,12 @@
 package com.gdi.posbackend.entity;
 
+import com.gdi.posbackend.entity.auth.User;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Feryadialoi
@@ -49,5 +49,13 @@ public class Company extends BaseEntity {
 
     @Column(name = "tax_identification_number")
     private String taxIdentificationNumber;
+
+    @OneToMany(mappedBy = "company")
+    @ToString.Exclude
+    private List<User> users;
+
+    @OneToMany(mappedBy = "company")
+    @ToString.Exclude
+    private List<Employee> employees;
 
 }

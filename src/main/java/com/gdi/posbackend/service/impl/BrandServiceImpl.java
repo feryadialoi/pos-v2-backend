@@ -71,8 +71,8 @@ public class BrandServiceImpl implements BrandService {
     public String deleteBrand(String brandId) {
         Brand brand = findBrandByIdOrThrowNotFound(brandId);
 
-        if (brandRepository.productCountByBrandId(brandId) > 0 ) {
-            throw new BrandDeleteNotAllowedException("brand with id " + brandId + " has relasionship and already used in another table");
+        if (brandRepository.productCountByBrandId(brandId) > 0) {
+            throw new BrandDeleteNotAllowedException("brand with id " + brandId + " has relationship and already used in another table");
         }
 
         brandRepository.delete(brand);

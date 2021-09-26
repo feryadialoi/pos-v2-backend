@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ProductGoodsReceipt extends BaseEntity {
     private String batch;
 
     @Column(name = "entry_date")
-    private LocalDateTime entryDate;
+    private LocalDate entryDate;
 
     @OneToMany(mappedBy = "productGoodsReceipt")
     @ToString.Exclude

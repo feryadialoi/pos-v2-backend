@@ -1,4 +1,4 @@
-package com.gdi.posbackend.controller;
+package com.gdi.posbackend.controller.core;
 
 import com.gdi.posbackend.model.response.ApiResponse;
 import lombok.Builder;

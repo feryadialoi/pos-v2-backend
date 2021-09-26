@@ -51,12 +51,14 @@ public class SaleOrderDetail extends BaseEntity {
     @Column(name = "tax")
     private BigDecimal tax;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tax_format", columnDefinition = "enum('PERCENT','AMOUNT')")
     private TaxFormat taxFormat;
 
     @Column(name = "discount")
     private BigDecimal discount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "discount_format", columnDefinition = "enum('PERCENT','AMOUNT')")
     private DiscountFormat discountFormat;
 
