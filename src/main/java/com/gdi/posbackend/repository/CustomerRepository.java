@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author Feryadialoi
  * @date 9/3/2021 11:23 AM
  */
-public interface CustomerRepository extends JpaRepository<Customer, String>, JpaSpecificationExecutor<String> {
+public interface CustomerRepository extends JpaRepository<Customer, String>, JpaSpecificationExecutor<Customer> {
+
 }
