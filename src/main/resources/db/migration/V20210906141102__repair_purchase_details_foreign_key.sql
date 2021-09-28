@@ -1,5 +1,5 @@
 alter table purchase_details
-    drop key fk_purchase_details_purchase_id;
+    drop foreign key fk_purchase_details_purchase_id;
 
 
 alter table purchase_details
