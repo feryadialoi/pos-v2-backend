@@ -19,6 +19,7 @@ public class ApplicationUserDetails implements UserDetails {
 
     private String id;
     private Collection<? extends GrantedAuthority> authorities;
+    @ToString.Exclude
     private String password;
     private String username;
     private boolean accountNonExpired;
