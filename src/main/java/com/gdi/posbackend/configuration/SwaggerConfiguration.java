@@ -1,4 +1,4 @@
-package com.gdi.posbackend.config;
+package com.gdi.posbackend.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfiguration {
     @Bean
     public Docket apiDocs() {
         return new Docket(DocumentationType.OAS_30)

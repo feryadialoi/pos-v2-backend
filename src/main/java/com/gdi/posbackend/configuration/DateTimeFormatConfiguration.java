@@ -1,4 +1,4 @@
-package com.gdi.posbackend.config;
+package com.gdi.posbackend.configuration;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
  * @date 9/13/2021 2:07 PM
  */
 @Configuration
-public class DateConfig {
+public class DateTimeFormatConfiguration {
 
     public static final String dateFormat = "yyyy-MM-dd";
     public static final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
