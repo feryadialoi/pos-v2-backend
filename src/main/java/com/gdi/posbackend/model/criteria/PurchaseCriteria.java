@@ -1,9 +1,8 @@
 package com.gdi.posbackend.model.criteria;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import lombok.Data;
-import lombok.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -18,9 +17,9 @@ public class PurchaseCriteria {
     private String supplierName;
     private PurchaseStatus status;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate endDate;
 }

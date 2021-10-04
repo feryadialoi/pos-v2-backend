@@ -1,12 +1,10 @@
 package com.gdi.posbackend.model.criteria;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.EmployeeStatus;
 import com.gdi.posbackend.entity.enums.Gender;
 import com.gdi.posbackend.entity.enums.Religion;
 import lombok.Data;
-import lombok.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -23,7 +21,7 @@ public class EmployeeCriteria {
     private String nationalIdentificationNumber;
     private String placeOfBirth;
 
-    @DateTimeFormat(pattern = DateConfig.dateTimeFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateTimeFormat)
     private LocalDateTime dateOfBirth;
 
     private String address;
@@ -31,7 +29,7 @@ public class EmployeeCriteria {
     private Religion religion;
     private String education;
 
-    @DateTimeFormat(pattern = DateConfig.dateTimeFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateTimeFormat)
     private LocalDateTime joinDate;
     private String phone;
     private String phone2;

@@ -1,6 +1,6 @@
 package com.gdi.posbackend.model.criteria;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.SaleReturnStatus;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,9 +16,9 @@ public class SaleReturnCriteria {
 
     private SaleReturnStatus status;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate endDate;
 }

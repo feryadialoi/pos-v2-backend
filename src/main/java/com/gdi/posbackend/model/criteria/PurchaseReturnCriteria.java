@@ -1,6 +1,6 @@
 package com.gdi.posbackend.model.criteria;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,9 +12,9 @@ import java.time.LocalDate;
  */
 @Data
 public class PurchaseReturnCriteria {
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate endDate;
 }
