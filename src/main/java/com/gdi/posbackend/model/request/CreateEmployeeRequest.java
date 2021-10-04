@@ -1,6 +1,6 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.EmployeeStatus;
 import com.gdi.posbackend.entity.enums.Gender;
 import com.gdi.posbackend.entity.enums.Religion;
@@ -14,7 +14,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * @author Feryadialoi
@@ -45,7 +44,7 @@ public class CreateEmployeeRequest {
     @ApiModelProperty(required = true)
     private String placeOfBirth;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     @NotNull
     @ApiModelProperty(required = true)
     private LocalDate dateOfBirth;
@@ -65,7 +64,7 @@ public class CreateEmployeeRequest {
     @ApiModelProperty(required = true)
     private String education;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     @NotNull
     @ApiModelProperty(required = true)
     private LocalDate joinDate;

@@ -1,6 +1,6 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.PurchaseStatus;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.validation.constraint.PurchaseOrderExistsIfPresent;
@@ -37,11 +37,11 @@ public class CreatePurchaseRequest {
     private String supplierId;
 
     @NotNull
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate entryDate;
 
     @NotNull
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate dueDate;
 
     private Integer term;

@@ -1,6 +1,6 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.PaymentType;
 import com.gdi.posbackend.entity.enums.SaleOrderStatus;
 import com.gdi.posbackend.validation.constraint.CustomerExists;
@@ -31,11 +31,11 @@ public class CreateSaleOrderRequest {
     @SalesmanExists
     private String salesmanId;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     @NotNull
     private LocalDate entryDate;
 
-    @DateTimeFormat(pattern = DateConfig.dateFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateFormat)
     private LocalDate dueDate;
 
     private Integer term;

@@ -1,8 +1,7 @@
 package com.gdi.posbackend.model.request;
 
-import com.gdi.posbackend.config.DateConfig;
+import com.gdi.posbackend.configuration.DateTimeFormatConfiguration;
 import com.gdi.posbackend.entity.enums.PaymentType;
-import com.gdi.posbackend.entity.enums.SaleOrderStatus;
 import com.gdi.posbackend.entity.enums.SaleStatus;
 import com.gdi.posbackend.validation.constraint.CustomerExists;
 import com.gdi.posbackend.validation.constraint.SaleOrderExistsIfPresent;
@@ -11,7 +10,6 @@ import com.gdi.posbackend.validation.constraint.SalesmanExists;
 import com.gdi.posbackend.validation.groups.FirstOrder;
 import com.gdi.posbackend.validation.groups.SecondOrder;
 import lombok.Data;
-import lombok.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.GroupSequence;
@@ -21,7 +19,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -45,7 +42,7 @@ public class CreateSaleRequest {
     private String salesmanId;
 
     @NotNull
-    @DateTimeFormat(pattern = DateConfig.dateTimeFormat)
+    @DateTimeFormat(pattern = DateTimeFormatConfiguration.dateTimeFormat)
     private LocalDate entryDate;
 
     private LocalDate dueDate;
