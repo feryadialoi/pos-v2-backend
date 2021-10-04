@@ -18,7 +18,6 @@ import com.gdi.posbackend.model.response.DetailedSaleResponse;
 import com.gdi.posbackend.repository.SaleRepository;
 import com.gdi.posbackend.service.*;
 import com.gdi.posbackend.util.DiscountUtil;
-import com.gdi.posbackend.util.LocalDateUtil;
 import com.gdi.posbackend.util.RunningNumberCodeUtil;
 import com.gdi.posbackend.util.TaxUtil;
 import lombok.AllArgsConstructor;
@@ -45,7 +44,6 @@ public class CreateSaleCommandImpl implements CreateSaleCommand {
 
     // ** util
     private final RunningNumberCodeUtil runningNumberCodeUtil;
-    private final LocalDateUtil localDateUtil;
     private final DiscountUtil discountUtil;
     private final TaxUtil taxUtil;
 
